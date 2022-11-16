@@ -28,22 +28,31 @@ const SideNav = ({ getCurTime }) => {
                     <span className="tooltip">Search</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <Link to="/" className="link">
                     <i class='bx bx-home-alt-2'></i>
                     <span className="links_name">Home</span>
-                    </a>
+                    </Link>
                     <span className="tooltip">Home</span>
                 </li>
                 <li>
-                <a href="#">
+                <Link to='/subscriptions' className="link">
                     <i class='bx bx-carousel'></i>
                     <span className="links_name">Subscriptions</span>
-                </a>
+                </Link>
                 <span className="tooltip">Subscriptions</span>
+                </li>
+                <li>
+                <Link to="history" className="link">
+                    <i class='bx bx-history'></i>
+                    <span className="links_name">History</span>
+                </Link>
+                <span className="tooltip">History</span>
                 </li>
                 <li className="profile">
                     <div className="profile-details">
-                    <img src="profile.jpg" alt="profileImg" />
+                    <Link to="/profile">
+                        <img src="profile.jpg" alt="profileImg" />
+                    </Link>
                     <div className="name_job">
                         <div className="name">Prem Shahi</div>
                         <div className="job">Web designer</div>

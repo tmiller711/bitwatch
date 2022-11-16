@@ -125,7 +125,7 @@ color: #FFF;
 background: #FFF;
 color: #11101d;
 }
-.sidebar li a{
+.sidebar li a.link{
 display: flex;
 height: 100%;
 width: 100%;
@@ -135,7 +135,7 @@ text-decoration: none;
 transition: all 0.4s ease;
 background: #11101D;
 }
-.sidebar li a:hover{
+.sidebar li a.link:hover{
 background: #FFF;
 }
 .sidebar li a .links_name{
