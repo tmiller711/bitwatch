@@ -1,10 +1,21 @@
 import React from "react";
 import { render } from "react-dom";
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import SideNav from "./components/SideNav"
+import HomePage from "./pages/HomePage"
+import "./css/sidenav.css"
 
 function App() {
 	
 	return (
-		<h1>Test hello</h1>
+		<>
+			<SideNav/>
+			<div className="content">
+				<Routes>
+					<Route path="/" element={<HomePage />} />
+				</Routes>
+			</div>
+		</>
 	)
 }
 
