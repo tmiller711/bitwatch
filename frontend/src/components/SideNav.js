@@ -3,6 +3,26 @@ import {Routes, Route, useNavigate, Link} from 'react-router-dom';
 // import '../css/sidenav.css';
 
 const SideNav = ({ getCurTime }) => {
+    const [username, setUsername] = useState('')
+    const [name, setName] = useState('')
+    const [profilePic, setProfilePic] = useState('')
+
+    useEffect(() => {
+        const getAccountDetails = async () => {
+            const res = await fetch('/api/account/getuser/')
+            if (res.ok) {
+                const data = await res.json()
+
+                setName(data.name)
+                setUsername(data.username)
+                setProfilePic(data.profilePic)
+            } else {
+                setName("Login")
+            }
+        }
+
+        getAccountDetails()
+    }, [])
 
     const changeSideBarClass = () => {
         let sideNav = document.querySelector(".sidebar");
@@ -29,21 +49,21 @@ const SideNav = ({ getCurTime }) => {
                 </li>
                 <li>
                     <Link to="/" className="link">
-                    <i class='bx bx-home-alt-2'></i>
+                    <i className='bx bx-home-alt-2'></i>
                     <span className="links_name">Home</span>
                     </Link>
                     <span className="tooltip">Home</span>
                 </li>
                 <li>
                 <Link to='/subscriptions' className="link">
-                    <i class='bx bx-carousel'></i>
+                    <i className='bx bx-carousel'></i>
                     <span className="links_name">Subscriptions</span>
                 </Link>
                 <span className="tooltip">Subscriptions</span>
                 </li>
                 <li>
                 <Link to="history" className="link">
-                    <i class='bx bx-history'></i>
+                    <i className='bx bx-history'></i>
                     <span className="links_name">History</span>
                 </Link>
                 <span className="tooltip">History</span>
@@ -51,14 +71,16 @@ const SideNav = ({ getCurTime }) => {
                 <li className="profile">
                     <div className="profile-details">
                     <Link to="/profile">
-                        <img src="profile.jpg" alt="profileImg" />
+                        <img src={profilePic} alt="bad" />
                     </Link>
                     <div className="name_job">
-                        <div className="name">Prem Shahi</div>
-                        <div className="job">Web designer</div>
+                        <div className="name">{name}</div>
+                        <div className="username">{username}</div>
                     </div>
                     </div>
-                    <i className='bx bx-log-out' id="log_out" ></i>
+                    <a href="/logout">
+                        <i className='bx bx-log-out' id="log_out" ></i>
+                    </a>
                 </li>
             </ul>
         </div>

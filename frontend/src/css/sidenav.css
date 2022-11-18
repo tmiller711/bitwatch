@@ -152,7 +152,7 @@ opacity: 1;
 pointer-events: auto;
 }
 .sidebar li a:hover .links_name,
-.sidebar li a:hover i{
+.sidebar li a.link:hover i{
 transition: all 0.5s ease;
 color: #11101D;
 }
@@ -189,13 +189,15 @@ border-radius: 6px;
 margin-right: 10px;
 }
 .sidebar li.profile .name,
-.sidebar li.profile .job{
+.sidebar li.profile .username{
+opacity: 0;
 font-size: 15px;
 font-weight: 400;
 color: #fff;
 white-space: nowrap;
+transition: all 0.5s ease;
 }
-.sidebar li.profile .job{
+.sidebar li.profile .username{
 font-size: 12px;
 }
 .sidebar .profile #log_out{
@@ -206,13 +208,20 @@ transform: translateY(-50%);
 background: #1d1b31;
 width: 100%;
 height: 60px;
+opacity: 0;
 line-height: 60px;
 border-radius: 0px;
 transition: all 0.5s ease;
 }
+
 .sidebar.open .profile #log_out{
 width: 50px;
+opacity: 1;
 background: none;
+}
+.sidebar.open li.profile .name,
+.sidebar.open li.profile .username{
+    opacity: 1;
 }
 .sidebar.open ~ .content {
     width: calc(100% - 250px);
