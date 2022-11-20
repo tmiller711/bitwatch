@@ -6,7 +6,10 @@ import HomePage from "./pages/HomePage"
 import Subscriptions from "./pages/Subscriptions"
 import History from "./pages/History"
 import Profile from "./pages/Profile"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
 import "./css/sidenav.css"
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
 	
@@ -16,6 +19,8 @@ function App() {
 			<div className="content">
 				<Routes>
 					<Route path="/" element={<HomePage />} />
+					<Route path="/login" element={<Login />} />
+					<Route path='/register' element={<Register />} />
 					<Route path="/subscriptions" element={<Subscriptions />} />
 					<Route path="/history" element={<History />} />
 					<Route path="/profile" element={<Profile />} />

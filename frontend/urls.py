@@ -6,5 +6,7 @@ urlpatterns = [
     path('subscriptions/', index),
     path('history/', index),
     path('profile/', index),
-    path('logout/', logout_account)
+    path('logout/', logout_account),
+    path('login/', index),
+    path('register/', index)
 ]

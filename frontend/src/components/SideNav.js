@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {Routes, Route, useNavigate, Link} from 'react-router-dom';
-// import '../css/sidenav.css';
+import '../css/sidenav.css';
 
 const SideNav = ({ getCurTime }) => {
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [profilePic, setProfilePic] = useState('')
+    const [loggedIn, setLoggedIn] = useState(false)
 
     useEffect(() => {
         const getAccountDetails = async () => {
@@ -16,6 +17,7 @@ const SideNav = ({ getCurTime }) => {
                 setName(data.name)
                 setUsername(data.username)
                 setProfilePic(data.profilePic)
+                setLoggedIn(true)
             } else {
                 setName("Login")
             }
@@ -32,6 +34,25 @@ const SideNav = ({ getCurTime }) => {
     const changeSearchClass = () => {
         let searchBtn = document.querySelector(".bx-search");
         searchBtn.classList.toggle("open");
+    }
+
+    const profile = () => {
+        return (
+        <>
+            <div className="profile-details">
+                <Link to="/profile">
+                    <img src={profilePic} alt="bad" />
+                </Link>
+                <div className="name_job">
+                    <div className="name">{name}</div>
+                    <div className="username">{username}</div>
+                </div>
+            </div>
+            <a href="/logout">
+                <i className='bx bx-log-out' id="log_out" ></i>
+            </a>
+        </>
+        )
     }
 
     return (
@@ -69,18 +90,7 @@ const SideNav = ({ getCurTime }) => {
                 <span className="tooltip">History</span>
                 </li>
                 <li className="profile">
-                    <div className="profile-details">
-                    <Link to="/profile">
-                        <img src={profilePic} alt="bad" />
-                    </Link>
-                    <div className="name_job">
-                        <div className="name">{name}</div>
-                        <div className="username">{username}</div>
-                    </div>
-                    </div>
-                    <a href="/logout">
-                        <i className='bx bx-log-out' id="log_out" ></i>
-                    </a>
+                    {loggedIn == true ? profile() : <Link to="login/">Log In</Link>} 
                 </li>
             </ul>
         </div>

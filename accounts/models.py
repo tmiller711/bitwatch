@@ -40,7 +40,7 @@ class Account(AbstractBaseUser):
     name = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=30, blank=True)
     theme = models.CharField(max_length=30, default="light")
-    profile_pic = models.ImageField(null=True, blank=True)
+    profile_pic = models.ImageField(null=True, blank=True, default="default.png")
 
     date_joined = models.DateTimeField(
         verbose_name="date joined", auto_now_add=True)
