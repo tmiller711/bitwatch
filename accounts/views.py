@@ -1,11 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
+from django.contrib import messages
 
 from .models import Account
 from .serializers import LoginAccountSerializer, RegisterAccountSerializer
+from .tokens import accounts_activation_token
 
 # Create your views here.
 class GetUser(APIView):
@@ -50,7 +57,42 @@ class Register(APIView):
             account = Account(email=email, username=username)
             account.set_password(password)
             account.save()
-            # activate_email(request, account, email)
+            activate_email(request, account, email)
             return Response({"Account Created": "Good Stuff cuh"}, status=status.HTTP_201_CREATED)
 
+        return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
+    
+def activate(request, uidb64, token):
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = Account.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and accounts_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        
+        login(request, user)
+
+        return redirect('/')
+    else:
+        # alert the user of bad activation link
+        print("bad activate link")
+    return redirect('/')
+
+def activate_email(request, user, to_email):
+    mail_subject = "Activate your user accounts"
+    message = render_to_string("template_activate_account.html", {
+        'user': user.username,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': accounts_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http'
+    })
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    if email.send():
+        pass
+    else:
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)

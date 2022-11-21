@@ -107,6 +107,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_FROM = 'timeappdjango@gmail.com'
+EMAIL_HOST_USER = 'timeappdjango@gmail.com'
+EMAIL_HOST_PASSWORD = 'vhjzfamoomeidfuy'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
