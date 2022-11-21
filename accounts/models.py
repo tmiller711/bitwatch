@@ -1,7 +1,8 @@
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager
-
+from django.conf import settings
+import os
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -33,7 +34,8 @@ class MyAccountManager(BaseUserManager):
         return user
 
 def upload_path(instance, filename):
-    return '/'.join(['images', str(instance.username), filename])
+    filename = (f"{instance.username}.png")
+    return '/'.join(['images', filename])
 
 # Create your models here.
 class Account(AbstractBaseUser):
@@ -42,7 +44,7 @@ class Account(AbstractBaseUser):
     name = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=30, blank=True)
     theme = models.CharField(max_length=30, default="light")
-    profile_pic = models.ImageField(null=True, blank=True, default="default.png", upload_to=upload_path)
+    profile_pic = models.ImageField(null=True, blank=True, default="images/default.png", upload_to=upload_path)
 
     date_joined = models.DateTimeField(
         verbose_name="date joined", auto_now_add=True)
@@ -65,3 +67,8 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    @property
+    def remove_profile_pic(self):
+        if self.profile_pic.name != 'images/default.png':
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(self.profile_pic.name)))
