@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 
 from .models import Account
-from .serializers import LoginAccountSerializer, RegisterAccountSerializer
+from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer
 from .tokens import accounts_activation_token
 
 # Create your views here.
@@ -61,6 +61,23 @@ class Register(APIView):
             return Response({"Account Created": "Good Stuff cuh"}, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
+
+class EditProfile(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = EditProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            user = request.user
+            profile_pic = request.data.get('profile_pic')
+            name = request.data.get('name')
+            user.name = name
+            if profile_pic != None:
+                user.profile_pic = profile_pic
+            user.save()
+            data = {"profilePic": request.user.profile_pic.url}
+
+            return Response(data, status=status.HTTP_200_OK)
+        
+        return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 def activate(request, uidb64, token):
     User = get_user_model()

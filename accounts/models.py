@@ -32,6 +32,8 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+def upload_path(instance, filename):
+    return '/'.join(['images', str(instance.username), filename])
 
 # Create your models here.
 class Account(AbstractBaseUser):
@@ -40,7 +42,7 @@ class Account(AbstractBaseUser):
     name = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=30, blank=True)
     theme = models.CharField(max_length=30, default="light")
-    profile_pic = models.ImageField(null=True, blank=True, default="default.png")
+    profile_pic = models.ImageField(null=True, blank=True, default="default.png", upload_to=upload_path)
 
     date_joined = models.DateTimeField(
         verbose_name="date joined", auto_now_add=True)

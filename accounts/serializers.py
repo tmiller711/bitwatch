@@ -13,3 +13,9 @@ class LoginAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('email', 'password')
+
+
+class EditProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('name', 'profile_pic')
