@@ -49,25 +49,27 @@ const Profile = ({ getCookie }) => {
     }
 
     return (
-        <>
-        <h3>Profile</h3>
-        <img src={profilePic} className="profile-pic"></img>
-        <Form className="profile" onSubmit={onSubmit}>
-            <Form.Label>Image</Form.Label>
-            <Form.Control
-                type="file"
-                accept=".png,.jpeg,.jpg"
-                onChange={(e) => setNewProfilePic(e.target.files[0])}
-            />
-            <Form.Label>Name</Form.Label>
-            <Form.Control 
-                type='text'
-                defaultValue={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <Button type="submit">Save</Button>
-        </Form>
-        </>
+        <div className="profile">
+            <div className="picture">
+                <h3>Profile</h3>
+                <img src={profilePic} className="profile-pic"></img>
+            </div>
+            <Form className="profile-form" onSubmit={onSubmit}>
+                <Form.Label>Image</Form.Label>
+                <Form.Control
+                    type="file"
+                    accept=".png,.jpeg,.jpg"
+                    onChange={(e) => setNewProfilePic(e.target.files[0])}
+                />
+                <Form.Label>Name</Form.Label>
+                <Form.Control 
+                    type='text'
+                    defaultValue={name}
+                    onChange={(e) => setName(e.target.value)}
+                />
+                <Button type="submit">Save</Button>
+            </Form>
+        </div>
     )
 }
 

@@ -1,3 +1,16 @@
+.profile {
+    display: flex;
+    margin-left: 50px;
+}
+
+.picture {
+    
+}
+
+.profile-form {
+    margin-top: 40px;
+}
+
 .profile-pic {
     height: 300px;
     width: 300px;
