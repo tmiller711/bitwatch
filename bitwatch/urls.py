@@ -22,7 +22,8 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('frontend.urls')),
-    path('api/account/', include('accounts.urls'))
+    path('api/account/', include('accounts.urls')),
+    path('api/video/', include('videos.urls')),
 ]
 
 # if you go to /images/whatever it loads static files

@@ -83,11 +83,17 @@ const SideNav = ({ getCurTime }) => {
                 <span className="tooltip">Subscriptions</span>
                 </li>
                 <li>
-                <Link to="history" className="link">
+                <Link to="/history" className="link">
                     <i className='bx bx-history'></i>
                     <span className="links_name">History</span>
                 </Link>
                 <span className="tooltip">History</span>
+                </li>
+                <li className="upload">
+                <Link to="/upload" className="link">
+                    <i class='bx bx-upload'></i>
+                    <span className="links_name">Upload</span>
+                </Link>
                 </li>
                 <li className="profile">
                     {loggedIn == true ? profile() : <Link to="login/">Log In</Link>} 

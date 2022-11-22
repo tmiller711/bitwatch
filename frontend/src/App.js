@@ -8,6 +8,7 @@ import History from "./pages/History"
 import Profile from "./pages/Profile"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
+import Upload from "./pages/Upload"
 import "./css/sidenav.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -40,6 +41,7 @@ function App() {
 					<Route path="/subscriptions" element={<Subscriptions />} />
 					<Route path="/history" element={<History />} />
 					<Route path="/profile" element={<Profile getCookie={getCookie} />} />
+					<Route path="/upload" element={<Upload getCookie={getCookie}/>} />
 				</Routes>
 			</div>
 		</>

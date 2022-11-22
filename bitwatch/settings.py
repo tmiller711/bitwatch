@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'frontend.apps.FrontendConfig',
-    'accounts.apps.AccountsConfig'
+    'accounts.apps.AccountsConfig',
+    'videos.apps.VideosConfig',
 ]
 
 MIDDLEWARE = [

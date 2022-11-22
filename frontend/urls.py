@@ -8,5 +8,6 @@ urlpatterns = [
     path('profile/', index),
     path('logout/', logout_account),
     path('login/', index),
-    path('register/', index)
+    path('register/', index),
+    path('upload/', index),
 ]
