@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "../css/watch.css";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 const Watch = ({ getCookie }) => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -11,6 +13,7 @@ const Watch = ({ getCookie }) => {
     const [views, setViews] = useState(0)
     const [likes, setLikes] = useState(0)
     const [dislikes, setDislikes] = useState(0)
+    const [profilePic, setProfilePic] = useState()
 
     const [uploader, setUploader] = useState('')
     const [subscribers, setSubscribers] = useState('')
@@ -20,7 +23,7 @@ const Watch = ({ getCookie }) => {
             const video = await fetchVideo()
             
             setTitle(video.title)
-            setVideo(`http://127.0.0.1:8000${video.video}`)
+            setVideo(video.video)
             setDescription(video.description)
             setLikes(video.likes)
             setDislikes(video.dislikes)
@@ -51,30 +54,38 @@ const Watch = ({ getCookie }) => {
     }
 
     const fetchUploader = async (id) => {
-        console.log(title)
         const res = await fetch(`/api/account/getuser/${id}`)
         if (res.ok) {
             const data = await res.json()
 
             setUploader(data.username)
             setSubscribers(data.subscribers)
+            setProfilePic(data.profilePic)
         }
     }
 
-    // const getUrl = () => {
-    //     return `${video}`
-    // }
-
-    return (
-        <div className="video-section">
+    const getVideo = () => {
+        if (video != "") {
+            return (
             <video className="video-player" controls>
-                <source src="http://127.0.0.1:8000/media/videos/test_video.mp4" type="video/mp4" />
+                <source src={video} type="video/mp4" />
                 {/* <source src="movie.ogg" type="video/ogg" /> */}
                 Your browser does not support the video tag.
             </video>
+        )
+        }
+    }
+
+    return (
+        <div className="video-section">
+            {getVideo()} 
             <h3 className="title">{title}</h3>
             <div className="interaction">
-                <h4 className="user">{uploader}</h4>
+                <div className="uploader">
+                    <img src={profilePic} className="profile-pic" />
+                    <h4 className="user">{uploader}<br /><p className="subscribers">{subscribers} Subscribers</p></h4>
+                    <Button className="subscribe">Subscribe</Button>
+                </div>
                 <h4 className="likes"><i class='bx bx-upvote'></i>{likes}</h4>
                 <h4 className="dislikes"><i class='bx bx-downvote'></i>{dislikes}</h4>
             </div>
