@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import index, logout_account
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('login/', index),
     path('register/', index),
     path('upload/', index),
+    path('watch/', index)
 ]

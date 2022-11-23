@@ -45,6 +45,7 @@ class Account(AbstractBaseUser):
     phone = models.CharField(max_length=30, blank=True)
     theme = models.CharField(max_length=30, default="light")
     profile_pic = models.ImageField(null=True, blank=True, default="images/default.png", upload_to=upload_path)
+    subscribers = models.PositiveIntegerField(default=0)
 
     date_joined = models.DateTimeField(
         verbose_name="date joined", auto_now_add=True)

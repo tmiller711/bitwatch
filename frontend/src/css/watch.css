@@ -1,0 +1,11 @@
+.video-section {
+    /* display: flex; */
+}
+
+.video-player {
+    width: 80%;
+}
+
+.interaction {
+    display: flex;
+}

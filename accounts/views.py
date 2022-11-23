@@ -16,10 +16,19 @@ from .tokens import accounts_activation_token
 
 # Create your views here.
 class GetUser(APIView):
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         # if user is signed in return their info
         if request.user.is_authenticated:
-            data = {"name": request.user.name, "username": request.user.username, "profilePic": request.user.profile_pic.url}
+            data = {"name": request.user.name, "username": request.user.username, "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
+            return Response(data, status=status.HTTP_200_OK)
+        
+        else:
+            return Response({"Not": "Logged IN"}, status=status.HTTP_404_NOT_FOUND)
+
+class GetUserByID(APIView):
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            data = {"name": request.user.name, "username": request.user.username, "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
             return Response(data, status=status.HTTP_200_OK)
         
         else:
