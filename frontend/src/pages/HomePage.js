@@ -6,7 +6,7 @@ const HomePage = (props) => {
 	return (
 		<>
 			<h1>Homepage</h1>
-			<Link to="/watch?v=b6adf0a9-1fd5-409f-bfb8-f5fd895601fc">
+			<Link to="/watch?v=78f0d57b-494e-47c9-babf-54dfbda7051e">
 				<p>test video</p>
 			</Link>
 		</>

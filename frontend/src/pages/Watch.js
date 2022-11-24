@@ -76,6 +76,30 @@ const Watch = ({ getCookie }) => {
         }
     }
 
+    const interactVideo = async (interaction) => {
+        const videoID = query
+        const csrftoken = getCookie("csrftoken")
+
+        const res = await fetch(`/api/video/interact/${videoID}`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                "interaction": interaction
+            })
+        })
+
+        if (res.ok) {
+            const data = await res.json()
+            setLikes(data.likes)
+            setDislikes(data.dislikes)
+        } else {
+            alert("Error")
+        }
+    }
+
     return (
         <div className="video-section">
             {getVideo()} 
@@ -86,8 +110,8 @@ const Watch = ({ getCookie }) => {
                     <h4 className="user">{uploader}<br /><p className="subscribers">{subscribers} Subscribers</p></h4>
                     <Button className="subscribe">Subscribe</Button>
                 </div>
-                <h4 className="likes"><i class='bx bx-upvote'></i>{likes}</h4>
-                <h4 className="dislikes"><i class='bx bx-downvote'></i>{dislikes}</h4>
+                <h4 className="likes"><i className='bx bx-upvote like' onClick={() => interactVideo('like')}></i>{likes}</h4>
+                <h4 className="dislikes"><i className='bx bx-downvote dislike' onClick={() => interactVideo('dislike')}></i>{dislikes}</h4>
             </div>
         </div>
     )

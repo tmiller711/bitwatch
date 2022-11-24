@@ -36,3 +36,8 @@
 .interaction .likes {
     margin-left: 60%;
 }
+
+.interaction .like,
+.interaction .dislike {
+    cursor: pointer;
+}

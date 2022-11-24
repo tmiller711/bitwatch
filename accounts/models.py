@@ -1,8 +1,12 @@
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager
+from django.contrib.auth import get_user_model
 from django.conf import settings
 import os
+from django.db.models import F
+
+# from videos.models import Video
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -32,6 +36,7 @@ class MyAccountManager(BaseUserManager):
         user.is_superuser = True
         user.save(using=self._db)
         return user
+
 
 def upload_path(instance, filename):
     filename = (f"{instance.username}.png")
@@ -73,3 +78,88 @@ class Account(AbstractBaseUser):
     def remove_profile_pic(self):
         if self.profile_pic.name != 'images/default.png':
             os.remove(os.path.join(settings.MEDIA_ROOT, str(self.profile_pic.name)))
+    
+class VideoInteraction(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    liked_videos = models.ManyToManyField('videos.Video', related_name='liked_videos')
+    disliked_videos = models.ManyToManyField('videos.Video', related_name='disliked_videos')
+
+    @classmethod
+    def like_video(self, current_user, video):
+        object, create = self.objects.get_or_create(
+            user = current_user
+        )
+
+        if video in object.liked_videos.all():
+            object.liked_videos.remove(video)
+            video.likes = F('likes') - 1
+        elif video in object.disliked_videos.all():
+            object.disliked_videos.remove(video)
+            object.liked_videos.add(video)
+            video.dislikes = F('dislikes') - 1
+            video.likes = F('likes') + 1
+        else:
+            object.liked_videos.add(video)
+            video.likes = F('likes') + 1
+
+        video.save()
+
+    @classmethod
+    def dislike_video(self, current_user, video):
+        object, create = self.objects.get_or_create(
+            user = current_user
+        )
+        if video in object.disliked_videos.all():
+            object.disliked_videos.remove(video)
+            video.dislikes = F('dislikes') - 1
+        elif video in object.liked_videos.all():
+            object.liked_videos.remove(video)
+            object.disliked_videos.add(video)
+            video.dislikes = F('dislikes') + 1
+            video.likes = F('likes') - 1
+        else:
+            object.disliked_videos.add(video)
+            video.dislikes = F('dislikes') + 1
+        
+        video.save()
+    
+    # possibly add method to like, unlike, etc that not only removes but also increments likes/dislikes on video
+    # @classmethod
+    # def unlike(object, video):
+    #     object.liked_videos.remove(video)
+    #     video.likes = F('likes') - 1
+
+    @property
+    def get_liked_vids(self):
+        return self.liked_videos
+
+    def __str__(self):
+        return self.user.username
+
+# class LikedVideos(models.Model):
+#     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+#     liked_videos = models.ManyToManyField('videos.Video')
+
+#     @classmethod
+#     def like_video(self, current_user, video):
+#         object, create = self.objects.get_or_create(
+#             user = current_user
+#         )
+#         object.liked_videos.add(video)
+
+#     def __str__(self):
+#         return self.user.username
+
+# class DislikedVideos(models.Model):
+#     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+#     disliked_videos = models.ManyToManyField('videos.Video')
+
+#     @classmethod
+#     def dislike_video(self, current_user, video):
+#         object, create = self.objects.get_or_create(
+#             user = current_user
+#         )
+#         object.disliked_videos.add(video)
+
+#     def __str__(self):
+#         return self.user.username

@@ -15,8 +15,7 @@ class Video(models.Model):
     views = models.PositiveIntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
-    tag = models.ManyToManyField('Tag')
-
+    tag = models.ManyToManyField('Tag', blank=True)
 
     def __str__(self):
         return self.title
