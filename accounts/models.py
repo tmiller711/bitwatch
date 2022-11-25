@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 import os
 from django.db.models import F
+import uuid
 
 # from videos.models import Video
 
@@ -39,11 +40,12 @@ class MyAccountManager(BaseUserManager):
 
 
 def upload_path(instance, filename):
-    filename = (f"{instance.username}.png")
+    filename = (f"{instance.id}.png")
     return '/'.join(['images', filename])
 
 # Create your models here.
 class Account(AbstractBaseUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=100, blank=True)

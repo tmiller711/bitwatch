@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 import uuid
 
 def upload_path(instance, filename):
-    filename = (f"{str(instance.title)}.mp4")
+    filename = (f"{str(instance.id)}.mp4")
     return '/'.join(['videos', filename])
 
 class Video(models.Model):
