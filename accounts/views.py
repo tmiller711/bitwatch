@@ -80,9 +80,7 @@ class EditProfile(APIView):
             name = request.data.get('name')
             user.name = name
             if profile_pic != None:
-                # remove old picture
-                user.remove_profile_pic
-                user.profile_pic = profile_pic
+                user.update_profile_pic(user, profile_pic)
             user.save()
             data = {"profilePic": request.user.profile_pic.url}
 

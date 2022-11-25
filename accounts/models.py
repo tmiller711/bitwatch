@@ -76,10 +76,12 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    @property
-    def remove_profile_pic(self):
-        if self.profile_pic.name != 'images/default.png':
-            os.remove(os.path.join(settings.MEDIA_ROOT, str(self.profile_pic.name)))
+    @classmethod
+    def update_profile_pic(self, user, new_pic):
+        if user.profile_pic.name != 'images/default.png':
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(user.profile_pic.name)))
+        user.profile_pic = new_pic
+        user.save()
     
 class VideoInteraction(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
