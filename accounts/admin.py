@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Account, VideoInteraction
+from .models import Account, VideoInteraction, Subscriptions
 
 
 class AccountAdmin(UserAdmin):
@@ -17,3 +17,4 @@ class AccountAdmin(UserAdmin):
 
 admin.site.register(Account, AccountAdmin)
 admin.site.register(VideoInteraction)
+admin.site.register(Subscriptions)

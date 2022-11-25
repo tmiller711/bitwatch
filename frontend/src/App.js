@@ -30,6 +30,25 @@ function App() {
         }
         return cookieValue;
 	}
+
+	const subscribe = async (subToID) => {
+		const res = await fetch(`/api/account/subscribe/${subToID}`)
+		if (res.ok) {
+			return true
+		} else {
+			return false
+		}
+	}
+
+	const unsubscribe = async (unsubID) => {
+		const res = await fetch(`/api/account/unsubscribe/${unsubID}`)
+
+		if (res.ok) {
+			return true
+		} else {
+			return false
+		}
+	}
 	
 	return (
 		<>
@@ -43,7 +62,8 @@ function App() {
 					<Route path="/history" element={<History />} />
 					<Route path="/profile" element={<Profile getCookie={getCookie} />} />
 					<Route path="/upload" element={<Upload getCookie={getCookie} />} />
-					<Route path="/watch" element={<Watch getCookie={getCookie} />} />
+					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
+													unsubscribe={unsubscribe} />} />
 				</Routes>
 			</div>
 		</>

@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 const Upload = ({ getCookie }) => {
     const [title, setTitle] = useState('')
     const [video, setVideo] = useState()
+    const [thumbnail, setThumbnail] = useState()
     const [description, setDescription] = useState('')
     const [tag, setTag] = useState('')
 
@@ -30,6 +31,7 @@ const Upload = ({ getCookie }) => {
         uploadData.append('description', description)
         // uploadData.append('tag', tag)
         uploadData.append('video', video, video.name)
+        uploadData.append('thumbnail', thumbnail, thumbnail.name)
         
         const res = await fetch("/api/video/upload", {
             method: "POST",
@@ -59,6 +61,12 @@ const Upload = ({ getCookie }) => {
                     type="file"
                     accept=".mp4"
                     onChange={(e) => setVideo(e.target.files[0])}
+                />
+                <Form.Label>Thumbnail</Form.Label>
+                <Form.Control
+                    type="file"
+                    accept=".png, .jpeg, .jpg"
+                    onChange={(e) => setThumbnail(e.target.files[0])}
                 />
                 <Form.Label>Description</Form.Label>
                 <Form.Control

@@ -10,7 +10,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib import messages
 
-from .models import Account
+from .models import Account, Subscriptions
 from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer
 from .tokens import accounts_activation_token
 
@@ -27,13 +27,13 @@ class GetUser(APIView):
 
 class GetUserByID(APIView):
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            data = {"name": request.user.name, "username": request.user.username, "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
-            return Response(data, status=status.HTTP_200_OK)
-        
-        else:
-            return Response({"Not": "Logged IN"}, status=status.HTTP_404_NOT_FOUND)
+        uploader = Account.objects.get(id=self.kwargs['id'])
+        subscription_status = Subscriptions.subscription_status(request.user, uploader)
 
+        data = {"name": uploader.name, "username": uploader.username, "profilePic": uploader.profile_pic.url, "subscribers": uploader.subscribers,
+                "subscription_status": subscription_status}
+        return Response(data, status=status.HTTP_200_OK)
+        
 class Login(APIView):
     def post(self, request, format=None):
         email = request.data.get('email')
@@ -79,7 +79,6 @@ class EditProfile(APIView):
             profile_pic = request.data.get('profile_pic')
             name = request.data.get('name')
             user.name = name
-            print(request.user.profile_pic.name)
             if profile_pic != None:
                 # remove old picture
                 user.remove_profile_pic
@@ -90,6 +89,28 @@ class EditProfile(APIView):
             return Response(data, status=status.HTTP_200_OK)
         
         return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class Subscribe(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            id = self.kwargs['id']
+            subscribe_to = Account.objects.get(id=id)
+            Subscriptions.subscribe(request.user, subscribe_to)
+
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class Unsubscribe(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            id = self.kwargs['id']
+            unsub_from = Account.objects.get(id=id)
+            Subscriptions.unsubscribe(request.user, unsub_from)
+
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 def activate(request, uidb64, token):
     User = get_user_model()

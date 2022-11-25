@@ -122,7 +122,7 @@ class VideoInteraction(models.Model):
             video.dislikes = F('dislikes') + 1
         
         video.save()
-    
+
     # possibly add method to like, unlike, etc that not only removes but also increments likes/dislikes on video
     # @classmethod
     # def unlike(object, video):
@@ -136,30 +136,37 @@ class VideoInteraction(models.Model):
     def __str__(self):
         return self.user.username
 
-# class LikedVideos(models.Model):
-#     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-#     liked_videos = models.ManyToManyField('videos.Video')
+class Subscriptions(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    subscriptions = models.ManyToManyField(get_user_model(), blank=True, related_name='subs')
 
-#     @classmethod
-#     def like_video(self, current_user, video):
-#         object, create = self.objects.get_or_create(
-#             user = current_user
-#         )
-#         object.liked_videos.add(video)
+    @classmethod 
+    def subscribe(self, user, subscribe_to):
+        object, create = self.objects.get_or_create(
+            user = user
+        )
+        object.subscriptions.add(subscribe_to)
+        subscribe_to.subscribers = F('subscribers') + 1
+        subscribe_to.save()
 
-#     def __str__(self):
-#         return self.user.username
+    @classmethod
+    def unsubscribe(self, user, unsubscribe_from):
+        object, create = self.objects.get_or_create(
+            user = user
+        )
+        object.subscriptions.remove(unsubscribe_from)
+        unsubscribe_from.subscribers = F('subscribers') - 1
+        unsubscribe_from.save()
 
-# class DislikedVideos(models.Model):
-#     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-#     disliked_videos = models.ManyToManyField('videos.Video')
-
-#     @classmethod
-#     def dislike_video(self, current_user, video):
-#         object, create = self.objects.get_or_create(
-#             user = current_user
-#         )
-#         object.disliked_videos.add(video)
-
-#     def __str__(self):
-#         return self.user.username
+    @classmethod
+    def subscription_status(self, user, check_user):
+        object, create = self.objects.get_or_create(
+            user = user
+        )
+        if check_user in object.subscriptions.all():
+            return True
+        else:
+            return False
+        
+    def __str__(self):
+        return self.user.username
