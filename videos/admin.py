@@ -4,7 +4,7 @@ from .models import Video, Tag
 
 class VideoAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
-    fields = ('id', 'uploader', 'title', 'video', 'description',
+    fields = ('id', 'uploader', 'title', 'video', 'thumbnail', 'description',
                 'views', 'likes', 'dislikes', 'tag')
 
 admin.site.register(Video, VideoAdmin)

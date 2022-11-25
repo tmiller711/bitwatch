@@ -14,8 +14,9 @@ class UploadVideo(APIView):
             title = request.data.get('title')
             description = request.data.get('description')
             video = request.data.get('video')
+            thumbnail = request.data.get('thumbnail')
 
-            new_vid = Video(uploader=request.user, title=title, description=description, video=video)
+            new_vid = Video(uploader=request.user, title=title, description=description, video=video, thumbnail=thumbnail)
             new_vid.save()
 
             return Response({"Success": "Video Uploaded"}, status=status.HTTP_201_CREATED)
