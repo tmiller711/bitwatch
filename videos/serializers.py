@@ -7,6 +7,8 @@ class UploadVideoSerializer(serializers.ModelSerializer):
         fields = ('title', 'description', 'video')
 
 class GetVideoSerializer(serializers.ModelSerializer):
+    uploaded_ago = serializers.ReadOnlyField()
+    
     class Meta:
         model = Video
-        fields = ('uploader', 'title', 'description', 'video', 'views', 'likes', 'dislikes')
+        fields = ('uploader', 'title', 'description', 'video', 'views', 'likes', 'dislikes', 'uploaded_ago')

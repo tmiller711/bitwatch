@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
+import "../css/videointeraction.css"
 
 const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie }) => {
     const [likes, setLikes] = useState(0)

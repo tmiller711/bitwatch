@@ -1,0 +1,35 @@
+.interaction {
+    display: flex;
+}
+
+.uploader {
+    display: flex;
+}
+
+.uploader .profile-pic {
+    height: 35px;
+    width: 35px;
+    border-radius: 4px;
+}
+
+.uploader .subscribers {
+    font-size: 10px;
+}
+
+.uploader .subscribe {
+    height: 30px;
+    width: 60px;
+    font-size: 10px;
+    text-align: center;
+    border-radius: 30px;
+    margin-left: 30px;
+}
+
+.interaction .likes {
+    margin-left: 60%;
+}
+
+.interaction .like,
+.interaction .dislike {
+    cursor: pointer;
+}

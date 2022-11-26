@@ -12,11 +12,13 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
     const [video, setVideo] = useState('')
     const [description, setDescription] = useState('')
     const [views, setViews] = useState(0)
+    const [uploadedAgo, setUploadedAgo] = useState('')
 
     useEffect(() => {
         const getVideo = async () => {
             const video = await fetchVideo(query)
             
+            setUploadedAgo(video.uploaded_ago)
             setTitle(video.title)
             setVideo(video.video)
             setDescription(video.description)
@@ -47,8 +49,8 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
                                 query={query} getCookie={getCookie} />}
             </div>
             <div className="description-section">
-                <p>This is the description</p>
-                <p>Views: {views}</p>
+                <p className="views">{views} views {uploadedAgo}</p>
+                <p>{description}</p>
             </div>
         </>
     )

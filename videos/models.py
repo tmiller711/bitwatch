@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 import uuid
+from datetime import datetime
 
 def video_path(instance, filename):
     filename = (f"{str(instance.id)}.mp4")
@@ -21,9 +22,23 @@ class Video(models.Model):
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
     tag = models.ManyToManyField('Tag', blank=True)
+    uploaded = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+    
+    @property
+    def uploaded_ago(self):
+        time = datetime.now()
+        if self.uploaded.day == time.day:
+            return str(time.hour - self.uploaded.hour) + " hours ago"
+        else:
+            if self.uploaded.month == time.month:
+                return str(time.day - self.uploaded.day) + " days ago"
+            else:
+                if self.uploaded.year == time.year:
+                    return str(time.month - self.uploaded.month) + " months ago"
+        return self.uploaded
 
 
 class Tag(models.Model):
