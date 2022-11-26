@@ -88,6 +88,12 @@ class EditProfile(APIView):
         
         return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class GetSubscriptions(APIView):
+    def get(self, request, format=None):
+        subscriptions = Subscriptions.objects.get(user = request.user)
+        subscriptions.get_subscriptions(request.user)
+        return Response({"test":"test2"})
+
 class Subscribe(APIView):
     def get(self, request, *args, **kwargs):
         try:

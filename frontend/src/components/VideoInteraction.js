@@ -23,6 +23,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
             fetchUploader(video.uploader)
         }
 
+        interactVideo('view')
         getVideo()
     }, [])
 

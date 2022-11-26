@@ -85,6 +85,7 @@ class Account(AbstractBaseUser):
     
 class VideoInteraction(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    history = models.ManyToManyField('videos.Video', related_name='history')
     liked_videos = models.ManyToManyField('videos.Video', related_name='liked_videos')
     disliked_videos = models.ManyToManyField('videos.Video', related_name='disliked_videos')
 
@@ -125,6 +126,15 @@ class VideoInteraction(models.Model):
             object.disliked_videos.add(video)
             video.dislikes = F('dislikes') + 1
         
+        video.save()
+    
+    @classmethod
+    def add_view(self, user, video):
+        object, create = self.objects.get_or_create(
+            user = user
+        )
+        object.history.add(video)
+        video.views = F('views') + 1
         video.save()
 
     # possibly add method to like, unlike, etc that not only removes but also increments likes/dislikes on video
@@ -171,6 +181,12 @@ class Subscriptions(models.Model):
             return True
         else:
             return False
+        
+    # @classmethod
+    # def get_subscriptions(self, user):
+    #     object = self.objects.get(user=user)
+    #     print(object.subscriptions.all())
+    #     # print(self.user)
         
     def __str__(self):
         return self.user.username

@@ -45,6 +45,9 @@ class VideoInteract(APIView):
 
             elif interaction == "dislike":
                 VideoInteraction.dislike_video(request.user, video)
+
+            elif interaction == "view":
+                VideoInteraction.add_view(request.user, video)
             
             # need to update the video after changing likes/dislikes
             video = Video.objects.get(id=video.id)

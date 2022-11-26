@@ -20,6 +20,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe }) => {
             setTitle(video.title)
             setVideo(video.video)
             setDescription(video.description)
+            setViews(video.views)
         }
 
         getVideo()
@@ -66,6 +67,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe }) => {
             </div>
             <div className="description-section">
                 <p>This is the description</p>
+                <p>Views: {views}</p>
             </div>
         </>
     )
