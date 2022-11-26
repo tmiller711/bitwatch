@@ -13,8 +13,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
 
     useEffect(() => {
         const getVideo = async () => {
-            const video = await fetchVideo()
-            console.log(video)
+            const video = await fetchVideo(query)
             
             setLikes(video.likes)
             setDislikes(video.dislikes)
@@ -31,7 +30,6 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
         const res = await fetch(`/api/account/getuser/${id}`)
         if (res.ok) {
             const data = await res.json()
-            console.log(data)
 
             setUploader(data.username)
             setSubscribers(data.subscribers)

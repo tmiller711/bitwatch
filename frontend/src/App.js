@@ -49,6 +49,24 @@ function App() {
 			return false
 		}
 	}
+
+    const fetchVideo = async (query) => {
+        const csrftoken = getCookie('csrftoken')
+
+        const res = await fetch('/api/video/get', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                id: query
+            })
+        })
+
+        const data = await res.json()
+        return data
+    }
 	
 	return (
 		<>
@@ -59,11 +77,11 @@ function App() {
 					<Route path="/login" element={<Login />} />
 					<Route path='/register' element={<Register />} />
 					<Route path="/subscriptions" element={<Subscriptions />} />
-					<Route path="/history" element={<History />} />
+					<Route path="/history" element={<History fetchVideo={fetchVideo} />} />
 					<Route path="/profile" element={<Profile getCookie={getCookie} />} />
 					<Route path="/upload" element={<Upload getCookie={getCookie} />} />
 					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
-													unsubscribe={unsubscribe} />} />
+													unsubscribe={unsubscribe} fetchVideo={fetchVideo} />} />
 				</Routes>
 			</div>
 		</>

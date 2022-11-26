@@ -142,6 +142,12 @@ class VideoInteraction(models.Model):
     # def unlike(object, video):
     #     object.liked_videos.remove(video)
     #     video.likes = F('likes') - 1
+    @classmethod
+    def get_history(self, user):
+        object, create = self.objects.get_or_create(
+            user=user
+        )
+        return object.history.all().values('id')
 
     @property
     def get_liked_vids(self):

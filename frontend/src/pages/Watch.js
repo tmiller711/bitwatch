@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import VideoInteraction from "../components/VideoInteraction";
 
-const Watch = ({ getCookie, subscribe, unsubscribe }) => {
+const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState(searchParams.get('v'))
     const [title, setTitle] = useState('')
@@ -15,7 +15,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe }) => {
 
     useEffect(() => {
         const getVideo = async () => {
-            const video = await fetchVideo()
+            const video = await fetchVideo(query)
             
             setTitle(video.title)
             setVideo(video.video)
@@ -25,25 +25,6 @@ const Watch = ({ getCookie, subscribe, unsubscribe }) => {
 
         getVideo()
     }, [])
-
-    const fetchVideo = async () => {
-        const csrftoken = getCookie('csrftoken')
-
-        const res = await fetch('/api/video/get', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({
-                id: query
-            })
-        })
-
-        const data = await res.json()
-        return data
-    }
-
 
     const getVideo = () => {
         if (video != "") {
