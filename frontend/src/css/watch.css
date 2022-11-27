@@ -1,16 +1,19 @@
+.watch {
+    width: 80%;
+    overflow: hidden;
+}
 .video-section {
-    /* display: flex; */
     overflow: auto;
 }
 
 .video-player {
-    width: 80%;
+    width: 100%;
 }
 
 .description-section {
     /* display: flex; */
     height: 70px;
-    width: 80%;
+    width: 100%;
     background-color: #D2D2D4;
     border-radius: 7px;
     padding: 7px;

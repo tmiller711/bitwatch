@@ -4,6 +4,7 @@ import "../css/watch.css";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import VideoInteraction from "../components/VideoInteraction";
+import Comments from "../components/Comments";
 
 const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -18,6 +19,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
         const getVideo = async () => {
             const video = await fetchVideo(query)
             
+            console.log(video)
             setUploadedAgo(video.uploaded_ago)
             setTitle(video.title)
             setVideo(video.video)
@@ -41,7 +43,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
     }
 
     return (
-        <>
+        <div className="watch">
             <div className="video-section">
                 {getVideo()} 
                 <h3 className="title">{title}</h3>
@@ -52,7 +54,8 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
                 <p className="views">{views} views - {uploadedAgo}</p>
                 <p>{description}</p>
             </div>
-        </>
+            <Comments videoID={query} />
+        </div>
     )
 }
 

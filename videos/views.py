@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from .serializers import UploadVideoSerializer, GetVideoSerializer
+from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video
 from accounts.models import VideoInteraction, Account
 
@@ -39,6 +39,15 @@ class GetVideo(APIView):
 
         serializer = GetVideoSerializer(video)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class GetComments(APIView):
+    def get(self, request, *args, **kwargs):
+        video = Video.objects.get(id=self.kwargs['id'])
+        comments = video.comments.all()
+        data = CommentsSerializer(comments, many=True).data
+
+        print(data)
+        return Response(data, status=status.HTTP_200_OK)
 
 class VideoInteract(APIView):
     def post(self, request, *args, **kwargs):

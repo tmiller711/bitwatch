@@ -1,0 +1,13 @@
+.comment {
+    width: 100%;
+    height: auto;
+    background-color: #D2D2D4;
+    margin-bottom: 10px;
+    padding-top: 3px;
+    padding-left: 3px;
+    border-radius: 7px;
+}
+
+.add-comment-form {
+    margin-bottom: 10px;
+}
