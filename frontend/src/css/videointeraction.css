@@ -2,6 +2,15 @@
     display: flex;
 }
 
+a.channel-link {
+    text-decoration: none;
+    color: black;
+}
+
+a.channel-link:hover {
+    color: gray;
+}
+
 .uploader {
     display: flex;
 }

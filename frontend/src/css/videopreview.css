@@ -32,7 +32,7 @@
     font-size: 20px;
     text-decoration: none;
 }
-img.profile-pic {
+div.info img.profile-pic {
     width: 35px;
     height: 35px;
 }
@@ -46,5 +46,4 @@ img.profile-pic {
     float:right;
     text-align: right;
     padding-right: 7px;
-    color: yello;
 }

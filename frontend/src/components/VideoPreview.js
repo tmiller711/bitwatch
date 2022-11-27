@@ -10,6 +10,8 @@ const VideoPreview = ({ video }) => {
     const [uploadedAgo, setUploadedAgo] = useState('')
     const [profilePic, setProfilePic] = useState()
     const [link, setLink] = useState('')
+    const [channelID, setChannelID] = useState()
+    const [yourVideo, setYourVideo] = useState()
 
     useEffect(() => {
         setThumbnail(video.thumbnail)
@@ -17,6 +19,7 @@ const VideoPreview = ({ video }) => {
         setViews(video.views)
         setUploadedAgo(video.uploaded_ago)
         setLink(`/watch?v=${video.id}`)
+        setChannelID(video.uploader)
 
         fetchUploader(video.uploader)
 
@@ -41,7 +44,9 @@ const VideoPreview = ({ video }) => {
                     <p className="title">{title}</p>
                 </div>
                 <div class="uploader">
-                    <p>{uploader}</p>
+                    <Link to={`/channel?c=${channelID}`} className="channel-link">
+                        <p>{uploader}</p>
+                    </Link>
                 </div>
                 <div className="views">
                     <p>{views} views - {uploadedAgo}</p>

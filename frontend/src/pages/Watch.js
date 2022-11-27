@@ -49,7 +49,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
                                 query={query} getCookie={getCookie} />}
             </div>
             <div className="description-section">
-                <p className="views">{views} views {uploadedAgo}</p>
+                <p className="views">{views} views - {uploadedAgo}</p>
                 <p>{description}</p>
             </div>
         </>

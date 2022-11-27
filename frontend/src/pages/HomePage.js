@@ -16,7 +16,7 @@ const HomePage = (props) => {
 		fetchVideos()
 	}, [])
 
-	const test = () => {
+	const mapVideos = () => {
 		return (
 			<>
 			{videos.map((video) => (
@@ -28,7 +28,7 @@ const HomePage = (props) => {
 
 	return (
 		<>
-			{videos != undefined ? test() : null}
+			{videos != undefined ? mapVideos() : null}
 		</>
 	)
 }

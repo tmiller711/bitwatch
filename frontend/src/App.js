@@ -5,11 +5,11 @@ import SideNav from "./components/SideNav"
 import HomePage from "./pages/HomePage"
 import Subscriptions from "./pages/Subscriptions"
 import History from "./pages/History"
-import Profile from "./pages/Profile"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Upload from "./pages/Upload"
 import Watch from "./pages/Watch"
+import Channel from "./pages/Channel";
 import "./css/sidenav.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -78,10 +78,10 @@ function App() {
 					<Route path='/register' element={<Register />} />
 					<Route path="/subscriptions" element={<Subscriptions />} />
 					<Route path="/history" element={<History fetchVideo={fetchVideo} />} />
-					<Route path="/profile" element={<Profile getCookie={getCookie} />} />
 					<Route path="/upload" element={<Upload getCookie={getCookie} />} />
 					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
 													unsubscribe={unsubscribe} fetchVideo={fetchVideo} />} />
+					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
 				</Routes>
 			</div>
 		</>

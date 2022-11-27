@@ -10,5 +10,6 @@ urlpatterns = [
     path('login/', index),
     path('register/', index),
     path('upload/', index),
-    path('watch/', index)
+    path('watch/', index),
+    path('channel/', index)
 ]

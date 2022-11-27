@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import "../css/videointeraction.css"
+import { Link } from 'react-router-dom';
 
 const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie }) => {
     const [likes, setLikes] = useState(0)
@@ -11,6 +12,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
 
     const [uploader, setUploader] = useState('')
     const [subscribers, setSubscribers] = useState('')
+    const [yourVideo, setYourVideo] = useState()
 
     useEffect(() => {
         const getVideo = async () => {
@@ -36,6 +38,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
             setSubscribers(data.subscribers)
             setProfilePic(data.profilePic)
             setSubscriptionStatus(data.subscription_status)
+            setYourVideo(data.isYou)
         }
     }
 
@@ -95,8 +98,13 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
         <div className="interaction">
             <div className="uploader">
                 <img src={profilePic} className="profile-pic" />
-                <h4 className="user">{uploader}<br /><p className="subscribers">{subscribers} Subscribers</p></h4>
-                {subscriptionButton()}
+                <Link to={`/channel?c=${uploaderID}`} className="channel-link">
+                    <h4 className="user">{uploader}<br /><p className="subscribers">{subscribers} Subscribers</p></h4>
+                </Link>
+                {yourVideo == false ?
+                    subscriptionButton()
+                    : null
+                }
             </div>
             <h4 className="likes"><i className='bx bx-upvote like' onClick={() => interactVideo('like')}></i>{likes}</h4>
             <h4 className="dislikes"><i className='bx bx-downvote dislike' onClick={() => interactVideo('dislike')}></i>{dislikes}</h4>

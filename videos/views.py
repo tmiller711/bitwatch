@@ -5,7 +5,7 @@ from rest_framework import status
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer
 from .models import Video
-from accounts.models import VideoInteraction
+from accounts.models import VideoInteraction, Account
 
 class UploadVideo(APIView):
     def post(self, request, format=None):
@@ -65,3 +65,12 @@ class VideoInteract(APIView):
 
         except:
             return Response({"message": "failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ChannelVideos(APIView):
+    def get(self, request, *args, **kwargs):
+        channel = Account.objects.get(id=self.kwargs['id'])
+        videos = Video.objects.filter(uploader=channel)
+
+        data = GetVideoSerializer(videos, many=True).data
+        
+        return Response(data, status=status.HTTP_200_OK)

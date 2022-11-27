@@ -19,7 +19,8 @@ class GetUser(APIView):
     def get(self, request, *args, **kwargs):
         # if user is signed in return their info
         if request.user.is_authenticated:
-            data = {"name": request.user.name, "username": request.user.username, "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
+            data = {"id": request.user.id, "name": request.user.name, "username": request.user.username, 
+                        "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
             return Response(data, status=status.HTTP_200_OK)
         
         else:
@@ -27,11 +28,14 @@ class GetUser(APIView):
 
 class GetUserByID(APIView):
     def get(self, request, *args, **kwargs):
-        uploader = Account.objects.get(id=self.kwargs['id'])
-        subscription_status = Subscriptions.subscription_status(request.user, uploader)
+        user = Account.objects.get(id=self.kwargs['id'])
+        is_you = False
+        if request.user == user:
+           is_you = True 
+        subscription_status = Subscriptions.subscription_status(request.user, user)
 
-        data = {"name": uploader.name, "username": uploader.username, "profilePic": uploader.profile_pic.url, "subscribers": uploader.subscribers,
-                "subscription_status": subscription_status}
+        data = {"id": user.id, "name": user.name, "username": user.username, "profilePic": user.profile_pic.url, "subscribers": user.subscribers,
+                "subscription_status": subscription_status, "isYou": is_you}
         return Response(data, status=status.HTTP_200_OK)
         
 class Login(APIView):
@@ -93,6 +97,10 @@ class History(APIView):
         data = VideoInteraction.get_history(request.user)
         print(data)
         return Response(data, status=status.HTTP_200_OK)
+
+class Channel(APIView):
+    def get(self, request, *args, **kwargs):
+        print(self.kwargs['id'])
 
 class GetSubscriptions(APIView):
     def get(self, request, format=None):

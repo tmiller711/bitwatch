@@ -7,6 +7,7 @@ const SideNav = ({ getCurTime }) => {
     const [name, setName] = useState('')
     const [profilePic, setProfilePic] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
+    const [url, setUrl] = useState('')
 
     useEffect(() => {
         const getAccountDetails = async () => {
@@ -18,6 +19,7 @@ const SideNav = ({ getCurTime }) => {
                 setUsername(data.username)
                 setProfilePic(data.profilePic)
                 setLoggedIn(true)
+                setUrl(`/channel?c=${data.id}`)
             } else {
                 setName("Login")
             }
@@ -40,7 +42,7 @@ const SideNav = ({ getCurTime }) => {
         return (
         <>
             <div className="profile-details">
-                <Link to="/profile">
+                <Link to={url}>
                     <img src={profilePic} alt="bad" />
                 </Link>
                 <div className="name_job">
@@ -56,7 +58,7 @@ const SideNav = ({ getCurTime }) => {
     }
 
     return (
-        <div className="sidebar">
+        <div className="sidebar open">
             <div className="logo-details">
             <i className='bx bxl-c-plus-plus icon'></i>
                 <div className="logo_name">BitWatch</div>
