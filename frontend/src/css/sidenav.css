@@ -59,6 +59,7 @@ line-height: 60px;
 .sidebar .nav-list{
 margin-top: 20px;
 height: 100%;
+padding: 0;
 }
 .sidebar li{
 position: relative;
