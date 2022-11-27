@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import VideoPreview from "../components/VideoPreview";
 
 const HomePage = (props) => {
+	const [videos, setVideos] = useState()
+
+	useEffect(() => {
+        const fetchVideos = async () => {
+            const res = await fetch('/api/video/getvideos')
+            const data = await res.json()
+            
+			setVideos(data)
+        }
+
+		fetchVideos()
+	}, [])
+
+	const test = () => {
+		return (
+			<>
+			{videos.map((video) => (
+				<VideoPreview key={video.id} video={video} /> 
+			))}
+			</>
+		)
+	}
 
 	return (
 		<>
-			<h1>Homepage</h1>
-			<Link to="/watch?v=73a8b864-8ec1-4afb-825a-39e8d5cf1038">
-				<p>test video</p>
-			</Link>
+			{videos != undefined ? test() : null}
 		</>
 	)
 }

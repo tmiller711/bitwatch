@@ -1,0 +1,50 @@
+.video-preview {
+    height: 300px;
+    width: 400px;
+    background-color: #D2D2D4;
+    border-radius: 9px;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+.video-link {
+    text-decoration: none;
+    color: black;
+}
+.video-link:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.thumbnail {
+    height: 225px;
+    width: 400px;
+    border-radius: 9px;
+}
+
+.info {
+    display: flex;
+    padding-top: 5px;
+}
+
+.title {
+    font-size: 20px;
+    text-decoration: none;
+}
+img.profile-pic {
+    width: 35px;
+    height: 35px;
+}
+
+.uploader {
+    padding-left: 5px;
+    float: left;
+}
+
+.views {
+    float:right;
+    text-align: right;
+    padding-right: 7px;
+    color: yello;
+}

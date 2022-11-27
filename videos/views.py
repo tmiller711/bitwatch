@@ -23,6 +23,14 @@ class UploadVideo(APIView):
         else:
             print('fail')
             return Response({"message": "upload failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+class GetVideos(APIView):
+    def get(self, request, format=None):
+        videos = Video.objects.all()
+
+        data = GetVideoSerializer(videos, many=True).data
+        
+        return Response(data, status=status.HTTP_200_OK)
         
 
 class GetVideo(APIView):
