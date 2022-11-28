@@ -49,6 +49,16 @@ class GetComments(APIView):
         print(data)
         return Response(data, status=status.HTTP_200_OK)
 
+class AddComment(APIView):
+    def post(self, request, *args, **kwargs):
+        video = Video.objects.get(id=self.kwargs['id'])
+        comment = request.data['comment']
+        new_comment = video.add_comment(self.kwargs['id'], request.user, comment)
+
+        data = CommentsSerializer(new_comment).data
+
+        return Response(data, status=status.HTTP_200_OK)
+
 class VideoInteract(APIView):
     def post(self, request, *args, **kwargs):
         video = Video.objects.get(id=self.kwargs['id'])

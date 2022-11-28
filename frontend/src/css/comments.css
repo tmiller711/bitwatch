@@ -9,5 +9,13 @@
 }
 
 .add-comment-form {
+    display: flex;
     margin-bottom: 10px;
+}
+
+#submit-button {
+    display: none;
+}
+#submit-button.active {
+    display: inline;
 }

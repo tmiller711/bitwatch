@@ -63,15 +63,23 @@ class Video(models.Model):
                     return str(time.month - self.uploaded.month) + " months ago"
         return self.uploaded
     
-    @classmethod
-    def get_comments(self, video_id):
-        object = self.objects.get(id=video_id)
+    # @classmethod
+    # def get_comments(self, video_id):
+    #     object = self.objects.get(id=video_id)
     
-        return object.comments.all()
+    #     return object.comments.all()
 
     @classmethod
-    def add_comment(self):
-        pass
+    def add_comment(self, videoID, user, text):
+        comment = Comment.objects.create(
+            user = user,
+            text = text
+        )
+
+        video = self.objects.get(id=videoID)
+        video.comments.add(comment)
+
+        return comment
 
 
 class Tag(models.Model):

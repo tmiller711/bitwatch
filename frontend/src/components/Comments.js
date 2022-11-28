@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react"
 import Comment from "./Comment"
 import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
 
-const Comments = ({ videoID }) => {
+const Comments = ({ videoID, getCookie }) => {
     const [comments, setComments] = useState()
     const [numOfComments, setNumOfComments] = useState(0)
+
+    const [newComment, setNewComment] = useState("")
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -22,23 +25,52 @@ const Comments = ({ videoID }) => {
         return (
             <>
                 {comments.map((comment) => (
-                    <Comment key={comment.user} comment={comment} />
+                    <Comment key={comment.id} comment={comment} />
                 ))} 
             </>
         )
     }
 
+    const addComment = async (e) => {
+        e.preventDefault()
+        const csrftoken = getCookie('csrftoken')
+
+        const res = await fetch(`/api/video/addcomment/${videoID}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify({
+                comment: newComment
+            })
+        }).then(async res => {
+            if (res.ok) {
+                const data = await res.json()
+                setComments([...comments, data])
+            }
+        })
+        .catch(error => console.log(error))
+    }
+
+    const changeFormClass = () => {
+        let commentForm = document.querySelector("#submit-button")
+        commentForm.classList.toggle('active')
+    }
+
     return (
         <>
         <h1>{numOfComments} Comments:</h1>
-        <Form className="add-comment-form">
+        <Form className="add-comment-form" onSubmit={addComment}>
             <Form.Control
                 type="text"
                 placeholder="Add a comment..."
+                onChange={(e) => {setNewComment(e.target.value)}}
+                onFocus={(e) => changeFormClass()}
+                // onBlur={() => changeFormClass()}
             />
-            {/* when they highlight the text input pop up the buttont to submit the comment */}
+            <Button type="submit" id="submit-button">Comment</Button>
         </Form>
-        {/* make add comment and list the number of comments */}
         {comments != undefined ? mapComments() : null}
         </>
     )
