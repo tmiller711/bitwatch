@@ -227,8 +227,10 @@ background: none;
     opacity: 1;
 }
 .sidebar.open ~ .content {
-    width: calc(100% - 235px);
-    left: 235px;
+    /* width: calc(100% - 235px); */
+    /* left: 235px; */
+    filter: brightness(30%);
+    pointer-events: none;
 }
 @media (max-width: 420px) {
 .sidebar li .tooltip{
