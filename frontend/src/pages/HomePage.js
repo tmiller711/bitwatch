@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import VideoPreview from "../components/VideoPreview";
+import "../css/homepage.css"
 
 const HomePage = (props) => {
 	const [videos, setVideos] = useState()
@@ -27,9 +28,9 @@ const HomePage = (props) => {
 	}
 
 	return (
-		<>
+		<div className="homepage">
 			{videos != undefined ? mapVideos() : null}
-		</>
+		</div>
 	)
 }
 

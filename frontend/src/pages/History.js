@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import VideoPreview from "../components/VideoPreview";
+import "../css/history.css"
 
 const History = ({ fetchVideo }) => {
     const [videos, setVideos] = useState([])
@@ -10,6 +12,7 @@ const History = ({ fetchVideo }) => {
             
             for (let i = 0; i < history.length; i++) {
                 const data = await fetchVideo(history[i].id)
+                console.log(data)
                 setVideos(current => [...current, data])
             }
         }
@@ -17,17 +20,20 @@ const History = ({ fetchVideo }) => {
         fetchHistory()
     }, [])
 
-    const displayVideos = () => {
-        for (let i = 0; i < videos.length; i++) {
-            return <h2>{videos[i].title}</h2>
-        }
-    }
+	const mapVideos = () => {
+		return (
+			<>
+			{videos.map((video) => (
+				<VideoPreview key={video.id} video={video} /> 
+			))}
+			</>
+		)
+	}
 
     return (
-        <>
-        <h1>This is the history page</h1>
-        {displayVideos()}
-        </>
+        <div className="history">
+        {videos != undefined ? mapVideos() : null}
+        </div>
     )
 }
 

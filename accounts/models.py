@@ -85,9 +85,9 @@ class Account(AbstractBaseUser):
     
 class VideoInteraction(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    history = models.ManyToManyField('videos.Video', related_name='history')
-    liked_videos = models.ManyToManyField('videos.Video', related_name='liked_videos')
-    disliked_videos = models.ManyToManyField('videos.Video', related_name='disliked_videos')
+    history = models.ManyToManyField('videos.Video', related_name='history', blank=True)
+    liked_videos = models.ManyToManyField('videos.Video', related_name='liked_videos', blank=True)
+    disliked_videos = models.ManyToManyField('videos.Video', related_name='disliked_videos', blank=True)
 
     @classmethod
     def like_video(self, current_user, video):

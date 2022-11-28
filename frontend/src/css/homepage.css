@@ -1,0 +1,11 @@
+.homepage {
+    display: grid;
+    gap: 0px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.sidebar.open .homepage {
+    display: none;
+    grid-template-columns: 1fr 1fr 1fr;
+}

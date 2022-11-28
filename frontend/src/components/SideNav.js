@@ -58,7 +58,7 @@ const SideNav = ({ getCurTime }) => {
     }
 
     return (
-        <div className="sidebar open">
+        <div className="sidebar">
             <div className="logo-details">
             <i className='bx bxl-c-plus-plus icon'></i>
                 <div className="logo_name">BitWatch</div>

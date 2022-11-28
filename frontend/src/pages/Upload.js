@@ -42,7 +42,10 @@ const Upload = ({ getCookie }) => {
         }).then(async res => {
             if (res.ok) {
                 const data = await res.json()
+                alert("Successfully updated")
                 setProfilePic(data.profilePic)
+            } else {
+                alert("Error uploading video")
             }
         })
         .catch(error => console.log(error))

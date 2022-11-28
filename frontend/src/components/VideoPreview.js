@@ -36,8 +36,8 @@ const VideoPreview = ({ video }) => {
     }
 
     return (
-        <Link to={link} className="video-link">
-            <div className="video-preview">
+        <div className="video-preview">
+            <Link to={link} className="video-link">
                 <img src={thumbnail} className="thumbnail" />
                 <div className="info">
                     <img src={profilePic} className="profile-pic" />
@@ -51,8 +51,8 @@ const VideoPreview = ({ video }) => {
                 <div className="views">
                     <p>{views} views - {uploadedAgo}</p>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     )
 }
 
