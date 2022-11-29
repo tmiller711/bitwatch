@@ -60,9 +60,11 @@ const SideNav = ({ getCurTime }) => {
     return (
         <div className="sidebar">
             <div className="logo-details">
-            <i className='bx bxl-c-plus-plus icon'></i>
-                <div className="logo_name">BitWatch</div>
-                <i className='bx bx-menu' id="btn" onClick={changeSideBarClass}></i>
+                <Link to="/" className="logo-link">
+                        <i className='bx bxl-c-plus-plus icon'></i>
+                            <div className="logo_name">BitWatch</div>
+                        <i className='bx bx-menu' id="btn" onClick={changeSideBarClass}></i>
+                </Link>
             </div>
             <ul className="nav-list">
                 <li>
