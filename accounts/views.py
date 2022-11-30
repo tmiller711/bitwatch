@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 
 from .models import Account, Subscriptions, VideoInteraction
-from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer
+from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer
 from .tokens import accounts_activation_token
 
 # Create your views here.
@@ -95,7 +95,6 @@ class EditProfile(APIView):
 class History(APIView):
     def get(self, request, format=None):
         data = VideoInteraction.get_history(request.user)
-        print(data)
         return Response(data, status=status.HTTP_200_OK)
 
 class Channel(APIView):
@@ -104,9 +103,16 @@ class Channel(APIView):
 
 class GetSubscriptions(APIView):
     def get(self, request, format=None):
-        subscriptions = Subscriptions.objects.get(user = request.user)
-        subscriptions.get_subscriptions(request.user)
-        return Response({"test":"test2"})
+        subscriptions = Subscriptions.get_subscriptions(request.user)
+
+        data = []
+        for i, user in enumerate(subscriptions):
+            data.append({'id': user.id, 'username': user.username, 'profilePic': user.profile_pic.url})
+            # data[i] = {}
+        
+        print(data)
+        
+        return Response(data, status=status.HTTP_200_OK)
 
 class Subscribe(APIView):
     def get(self, request, *args, **kwargs):

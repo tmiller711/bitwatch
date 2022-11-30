@@ -29,6 +29,7 @@ const HomePage = (props) => {
 
 	return (
 		<div className="homepage">
+			{console.log(videos)}
 			{videos != undefined ? mapVideos() : null}
 		</div>
 	)

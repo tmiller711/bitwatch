@@ -188,11 +188,11 @@ class Subscriptions(models.Model):
         else:
             return False
         
-    # @classmethod
-    # def get_subscriptions(self, user):
-    #     object = self.objects.get(user=user)
-    #     print(object.subscriptions.all())
-    #     # print(self.user)
+    @classmethod
+    def get_subscriptions(self, user):
+        object = self.objects.get(user=user)
+        return object.subscriptions.all()
+        # print(self.user)
         
     def __str__(self):
         return self.user.username

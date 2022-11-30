@@ -12,7 +12,6 @@ const History = ({ fetchVideo }) => {
             
             for (let i = 0; i < history.length; i++) {
                 const data = await fetchVideo(history[i].id)
-                console.log(data)
                 setVideos(current => [...current, data])
             }
         }
