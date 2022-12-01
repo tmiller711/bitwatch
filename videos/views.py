@@ -4,19 +4,27 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
-from .models import Video
+from .models import Video, Tag
 from accounts.models import VideoInteraction, Account
 
 class UploadVideo(APIView):
     def post(self, request, format=None):
         serializer = UploadVideoSerializer(data=request.data)
+        print(request.data)
         if serializer.is_valid():
             title = request.data.get('title')
             description = request.data.get('description')
             video = request.data.get('video')
             thumbnail = request.data.get('thumbnail')
+            tags = request.data.get('tags')
+            # print(serializer)
 
             new_vid = Video(uploader=request.user, title=title, description=description, video=video, thumbnail=thumbnail)
+            new_vid.save()
+
+            tag = Tag.objects.get(name=tags)
+            new_vid.tags.add(tag.id)
+            
             new_vid.save()
 
             return Response({"Success": "Video Uploaded"}, status=status.HTTP_201_CREATED)

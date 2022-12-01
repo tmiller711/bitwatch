@@ -33,6 +33,16 @@ class Comment(models.Model):
                     return str(time.month - self.created.month) + " months ago"
         return self.created
 
+class Tag(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def get_tag(self, name):
+        return Tag.objects.get(name=name)
+
 class Video(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     uploader = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -43,7 +53,7 @@ class Video(models.Model):
     views = models.PositiveIntegerField(default=0)
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
-    tag = models.ManyToManyField('Tag', blank=True)
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True)
     uploaded = models.DateTimeField(auto_now_add=True)
     comments = models.ManyToManyField(Comment, blank=True)
 
@@ -81,9 +91,3 @@ class Video(models.Model):
 
         return comment
 
-
-class Tag(models.Model):
-    name = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.name

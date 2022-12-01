@@ -29,7 +29,7 @@ const Upload = ({ getCookie }) => {
         const uploadData = new FormData();
         uploadData.append('title', title);
         uploadData.append('description', description)
-        // uploadData.append('tag', tag)
+        uploadData.append('tags', [tag])
         uploadData.append('video', video, video.name)
         uploadData.append('thumbnail', thumbnail, thumbnail.name)
         
@@ -42,7 +42,7 @@ const Upload = ({ getCookie }) => {
         }).then(async res => {
             if (res.ok) {
                 const data = await res.json()
-                alert("Successfully updated")
+                alert("Successfully uploaded")
                 setProfilePic(data.profilePic)
             } else {
                 alert("Error uploading video")

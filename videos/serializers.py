@@ -1,10 +1,18 @@
 from rest_framework import serializers
-from .models import Video, Comment
+from .models import Video, Comment, Tag
+
+class TagSerializer(serializers.ModelSerializer):
+    # name = serializers.CharField()
+    class Meta:
+        model = Tag
+        fields = ('name',)
 
 class UploadVideoSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, read_only=True)
+
     class Meta:
         model = Video
-        fields = ('title', 'description', 'video')
+        fields = ('title', 'description', 'video', 'tags')
 
 class GetVideoSerializer(serializers.ModelSerializer):
     uploaded_ago = serializers.ReadOnlyField()
