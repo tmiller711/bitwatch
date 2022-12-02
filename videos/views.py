@@ -17,7 +17,6 @@ class UploadVideo(APIView):
             video = request.data.get('video')
             thumbnail = request.data.get('thumbnail')
             tags = request.data.get('tags')
-            # print(serializer)
 
             new_vid = Video(uploader=request.user, title=title, description=description, video=video, thumbnail=thumbnail)
             new_vid.save()
@@ -54,8 +53,19 @@ class GetComments(APIView):
         comments = video.comments.all()
         data = CommentsSerializer(comments, many=True).data
 
-        print(data)
         return Response(data, status=status.HTTP_200_OK)
+
+class DeleteVideo(APIView):
+    # check if the user is signed in 
+    def get(self, request, *args, **kwargs):
+        try:
+            video_id = self.kwargs['id']
+            video = Video.objects.get(user=request.user, id=video_id)
+            video.delete()
+            
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AddComment(APIView):
     def post(self, request, *args, **kwargs):

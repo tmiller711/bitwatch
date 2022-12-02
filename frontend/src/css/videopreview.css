@@ -47,3 +47,9 @@ div.info img.profile-pic {
     text-align: right;
     padding-right: 7px;
 }
+
+.delete-vid-button {
+    margin-left: 283px;
+    width: 35px;
+    height: 35px;
+}

@@ -106,7 +106,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
 		return (
 			<>
 			{videos.map((video) => (
-				<VideoPreview key={video.id} video={video} /> 
+				<VideoPreview key={video.id} video={video} edit={true} /> 
 			))}
 			</>
 		)
@@ -123,7 +123,9 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                 </div>
                 <div className="buttons">
                     {yourChannel == true ? 
+                        <>
                         <Button className="edit-channel" onClick={handleShow}>Edit Channel</Button> 
+                        </>
                         : subscriptionButton()
                     }
                 </div>

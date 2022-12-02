@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../css/videopreview.css"
 import { Link } from 'react-router-dom';
+import Button from "react-bootstrap/Button"
 
-const VideoPreview = ({ video }) => {
+const VideoPreview = ({ video, edit=false }) => {
     const [thumbnail, setThumbnail] = useState()
     const [title, setTitle] = useState('')
     const [uploader, setUploader] = useState('')
@@ -35,6 +36,15 @@ const VideoPreview = ({ video }) => {
         }
     }
 
+    const deleteVideo = async () => {
+        console.log("tet")
+        const res = await fetch(`/api/video/delete/${video.id}`)
+        if (!res.ok) {
+            alert("Error deleting video")
+        }
+
+    }
+
     return (
         <div className="video-preview">
             <Link to={link} className="video-link">
@@ -42,6 +52,7 @@ const VideoPreview = ({ video }) => {
                 <div className="info">
                     <img src={profilePic} className="profile-pic" />
                     <p className="title">{title}</p>
+                    {edit == true ? <Button className="delete-vid-button" onClick={() => deleteVideo()}>X</Button> : null}
                 </div>
                 <div class="uploader">
                     <Link to={`/channel?c=${channelID}`} className="channel-link">
