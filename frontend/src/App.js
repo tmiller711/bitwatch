@@ -10,6 +10,8 @@ import Register from "./pages/Register"
 import Upload from "./pages/Upload"
 import Watch from "./pages/Watch"
 import Channel from "./pages/Channel";
+import Playlists from "./pages/Playlists";
+import ViewPlaylist from "./pages/ViewPlaylist";
 import "./css/sidenav.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -82,6 +84,8 @@ function App() {
 					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
 													unsubscribe={unsubscribe} fetchVideo={fetchVideo} />} />
 					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
+					<Route path="/playlists" element={<Playlists />} />
+					<Route path="/playlist" element={<ViewPlaylist />} />
 				</Routes>
 			</div>
 		</>

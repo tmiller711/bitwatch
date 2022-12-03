@@ -53,6 +53,7 @@ class Account(AbstractBaseUser):
     theme = models.CharField(max_length=30, default="light")
     profile_pic = models.ImageField(null=True, blank=True, default="images/default.png", upload_to=upload_path)
     subscribers = models.PositiveIntegerField(default=0)
+    playlists = models.ManyToManyField('accounts.Playlist', blank=True)
 
     date_joined = models.DateTimeField(
         verbose_name="date joined", auto_now_add=True)
@@ -192,7 +193,15 @@ class Subscriptions(models.Model):
     def get_subscriptions(self, user):
         object = self.objects.get(user=user)
         return object.subscriptions.all()
-        # print(self.user)
         
     def __str__(self):
         return self.user.username
+
+class Playlist(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    videos = models.ManyToManyField('videos.Video')
+
+    def __str__(self):
+        return self.name

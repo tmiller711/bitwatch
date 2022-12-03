@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 
 from .models import Account, Subscriptions, VideoInteraction
-from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer
+from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer
 from .tokens import accounts_activation_token
 
 # Create your views here.
@@ -91,6 +91,13 @@ class EditProfile(APIView):
             return Response(data, status=status.HTTP_200_OK)
         
         return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+class GetPlaylists(APIView):
+    def get(self, request, format=None):
+        playlists = request.user.playlists.all()
+        data = PlaylistSerializer(playlists, many=True).data
+        
+        return Response(data)
 
 class History(APIView):
     def get(self, request, format=None):

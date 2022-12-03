@@ -11,5 +11,7 @@ urlpatterns = [
     path('register/', index),
     path('upload/', index),
     path('watch/', index),
-    path('channel/', index)
+    path('channel/', index),
+    path('playlists/', index),
+    path('playlist/', index)
 ]

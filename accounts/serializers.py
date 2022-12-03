@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, Subscriptions
+from .models import Account, Subscriptions, Playlist
 from django.contrib.auth import get_user_model
 
 
@@ -24,3 +24,13 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscriptions
         fields = ('subscriptions',)
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField(read_only=True)
+
+    def get_username(self, obj):
+        return obj.creator.username
+
+    class Meta:
+        model = Playlist
+        fields = ('id', 'name', 'creator', 'username', 'videos')

@@ -5,7 +5,7 @@ from rest_framework import status
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video, Tag
-from accounts.models import VideoInteraction, Account
+from accounts.models import VideoInteraction, Account, Playlist
 
 class UploadVideo(APIView):
     def post(self, request, format=None):
@@ -33,12 +33,22 @@ class UploadVideo(APIView):
 
 class GetVideos(APIView):
     def get(self, request, format=None):
-        videos = Video.objects.all()
+        videos = Video.objects.all().order_by('uploaded')
 
         data = GetVideoSerializer(videos, many=True).data
         
         return Response(data, status=status.HTTP_200_OK)
-        
+
+class PlaylistVideos(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            playlist = Playlist.objects.get(id=self.kwargs['id'])
+            videos = GetVideoSerializer(playlist.videos.all(), many=True).data
+
+            return Response(videos, status=status.HTTP_200_OK)
+
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetVideo(APIView):
     def post(self, request, format=None):
