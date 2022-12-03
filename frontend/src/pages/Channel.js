@@ -106,7 +106,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
 		return (
 			<>
 			{videos.map((video) => (
-				<VideoPreview key={video.id} video={video} edit={true} /> 
+				<VideoPreview key={video.id} video={video} edit={yourChannel} /> 
 			))}
 			</>
 		)

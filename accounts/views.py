@@ -104,9 +104,9 @@ class History(APIView):
         data = VideoInteraction.get_history(request.user)
         return Response(data, status=status.HTTP_200_OK)
 
-class Channel(APIView):
-    def get(self, request, *args, **kwargs):
-        print(self.kwargs['id'])
+# class Channel(APIView):
+#     def get(self, request, *args, **kwargs):
+#         print(self.kwargs['id'])
 
 class GetSubscriptions(APIView):
     def get(self, request, format=None):

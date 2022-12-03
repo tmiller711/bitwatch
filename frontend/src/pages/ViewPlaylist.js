@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
+import VideoPreview from "../components/VideoPreview"
 
 const ViewPlaylist = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -18,9 +19,19 @@ const ViewPlaylist = () => {
         fetchVideos()
     }, [])
 
+	const mapVideos = () => {
+		return (
+			<>
+			{videos.map((video) => (
+				<VideoPreview key={video.id} video={video} /> 
+			))}
+			</>
+		)
+	}
+
     return (
         <>
-        {console.log(videos)}
+            {videos != undefined ? mapVideos() : null}
         </>
     )
 }
