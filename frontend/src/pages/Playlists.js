@@ -26,7 +26,7 @@ const Playlists = () => {
     }
 
     return (
-        <div className="playlists">
+        <div className="homepage">
             {playlists != undefined ? mapPlaylists() : null}
         </div>
     )

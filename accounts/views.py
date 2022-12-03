@@ -11,6 +11,7 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 
 from .models import Account, Subscriptions, VideoInteraction, Playlist
+from videos.models import Video
 from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer
 from .tokens import accounts_activation_token
 
@@ -118,6 +119,17 @@ class CreatePlaylist(APIView):
         data = PlaylistSerializer(playlist).data
 
         return Response(data, status=status.HTTP_200_OK)
+
+class UpdatePlaylist(APIView):
+    def post(self, request, *args, **kwargs):
+        playlist = Playlist.objects.get(id=self.kwargs['id'])
+        video = Video.objects.get(id=request.data.get('video'))
+        if video in playlist.videos.all():
+            playlist.videos.remove(video)
+        elif video not in playlist.videos.all():
+            playlist.videos.add(video)
+
+        return Response()
 
 class GetSubscriptions(APIView):
     def get(self, request, format=None):

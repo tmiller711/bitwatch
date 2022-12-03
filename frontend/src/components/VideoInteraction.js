@@ -115,7 +115,18 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
 
     const updatePlaylist = async (id) => {
         // e.preventDefault()
-        console.log(id)
+        const csrftoken = getCookie('csrftoken')
+
+        const res = await fetch(`/api/account/updateplaylist/${id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": 'application/json',
+                "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify({
+                video: query
+            })
+        })
     }
 
     const createPlaylist = async (e) => {
@@ -140,6 +151,18 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
                 setPlaylists([...playlists, data])
             }
         })
+    }
+
+    const checkVideoInPlaylist = (playlist) => {
+        const videos = playlist.videos
+
+        for (let i = 0; i < videos.length; i++) {
+            if (query == videos[i]) {
+                return true
+            }
+        }
+
+        return false
     }
 
     return (
@@ -172,7 +195,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
                         {playlists != undefined ? playlists.map((playlist) => (
                             <>
                                 <InputGroup>
-                                <InputGroup.Checkbox onClick={(e) => updatePlaylist(playlist.id)} />
+                                <InputGroup.Checkbox defaultChecked={checkVideoInPlaylist(playlist)} onClick={(e) => updatePlaylist(playlist.id)} />
                                 <Form.Control
                                     value={playlist.name}
                                     readOnly
