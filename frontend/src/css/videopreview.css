@@ -23,6 +23,11 @@
     border-radius: 9px;
 }
 
+.profile-pic {
+    object-fit: cover;
+    border-radius: 6px;
+}
+
 .info {
     display: flex;
     padding-top: 5px;

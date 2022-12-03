@@ -10,7 +10,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib import messages
 
-from .models import Account, Subscriptions, VideoInteraction
+from .models import Account, Subscriptions, VideoInteraction, Playlist
 from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer
 from .tokens import accounts_activation_token
 
@@ -107,6 +107,17 @@ class History(APIView):
 # class Channel(APIView):
 #     def get(self, request, *args, **kwargs):
 #         print(self.kwargs['id'])
+
+class CreatePlaylist(APIView):
+    def post(self, request, format=None):
+        name = request.data['name']
+        playlist = Playlist(creator=request.user, name=name)
+        playlist.save()
+        request.user.playlists.add(playlist)
+
+        data = PlaylistSerializer(playlist).data
+
+        return Response(data, status=status.HTTP_200_OK)
 
 class GetSubscriptions(APIView):
     def get(self, request, format=None):

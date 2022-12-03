@@ -1,5 +1,5 @@
 .interaction {
-    display: flex;
+    width: 100%;
 }
 
 a.channel-link {
@@ -13,11 +13,12 @@ a.channel-link:hover {
 
 .uploader {
     display: flex;
+    float: left;
 }
 
 .uploader .profile-pic {
-    height: 35px;
-    width: 35px;
+    height: 45px;
+    width: 45px;
     border-radius: 4px;
 }
 
@@ -34,11 +35,31 @@ a.channel-link:hover {
     margin-left: 30px;
 }
 
-.interaction .likes {
-    margin-left: 60%;
+div.interact {
+    display: flex;
+    float: right;
+    align-items: center;
 }
 
-.interaction .like,
-.interaction .dislike {
+.interact .like,
+.interact .dislike {
     cursor: pointer;
+}
+
+.interact .save {
+    display: flex;
+    cursor: pointer;
+    width: 70px;
+    font-size: 20px;
+    margin-left: 10px;
+    background-color: #D2D2D4;
+    border-radius: 15px;
+}
+
+.interact .save:hover {
+    background-color: #737E80;
+}
+
+.playlist-form {
+    text-align: center;
 }

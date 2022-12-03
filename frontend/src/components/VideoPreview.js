@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../css/videopreview.css"
 import { Link } from 'react-router-dom';
 import Button from "react-bootstrap/Button"
+import CloseButton from "react-bootstrap/CloseButton"
+import Dropdown from "react-bootstrap/Dropdown"
 
 const VideoPreview = ({ video, edit=false }) => {
     const [thumbnail, setThumbnail] = useState()
@@ -53,6 +55,7 @@ const VideoPreview = ({ video, edit=false }) => {
                     <img src={profilePic} className="profile-pic" />
                     <p className="title">{title}</p>
                     {edit == true ? <Button className="delete-vid-button" onClick={() => deleteVideo()}>X</Button> : null}
+                    {/* {edit == true ? <CloseButton className="delete-vid-button" onClick={() => deleteVideo()} />: null} */}
                 </div>
                 <div class="uploader">
                     <Link to={`/channel?c=${channelID}`} className="channel-link">

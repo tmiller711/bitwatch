@@ -13,7 +13,7 @@
     display: flex;
 }
 
-.profile-pic {
+.channel-details .profile-pic {
     object-fit: cover;
     width: 100px;
     height: 100px;

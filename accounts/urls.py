@@ -1,13 +1,14 @@
 from django.urls import path
 import uuid
 
-from .views import GetUser, GetUserByID, Login, Register, activate, EditProfile, Subscribe, Unsubscribe, GetSubscriptions, History, GetPlaylists
+from .views import GetUser, GetUserByID, Login, Register, activate, EditProfile, Subscribe, Unsubscribe, GetSubscriptions, History, GetPlaylists, CreatePlaylist
 
 urlpatterns = [
     path('getuser/<uuid:id>/', GetUserByID.as_view()),
     path('getuser/', GetUser.as_view()),
     path('history/', History.as_view()),
     # path('channel/<uuid:id>/', Channel.as_view()),
+    path('createplaylist/', CreatePlaylist.as_view()),
     path('subscribe/<uuid:id>', Subscribe.as_view()),
     path('unsubscribe/<uuid:id>', Unsubscribe.as_view()),
     path('subscriptions/', GetSubscriptions.as_view()),

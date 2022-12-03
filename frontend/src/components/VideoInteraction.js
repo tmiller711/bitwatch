@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
 import "../css/videointeraction.css"
 import { Link } from 'react-router-dom';
 
@@ -9,10 +12,14 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
     const [profilePic, setProfilePic] = useState()
     const [uploaderID, setUploaderID] = useState()
     const [subscriptionStatus, setSubscriptionStatus] = useState(false)
+    const [show, setShow] = useState(false)
 
     const [uploader, setUploader] = useState('')
     const [subscribers, setSubscribers] = useState('')
     const [yourVideo, setYourVideo] = useState()
+
+    const [playlists, setPlaylists] = useState()
+    const [newPlaylist, setNewPlaylist] = useState('')
 
     useEffect(() => {
         const getVideo = async () => {
@@ -25,9 +32,21 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
             fetchUploader(video.uploader)
         }
 
+        const fetchPlaylists = async () => {
+            const res = await fetch('/api/account/getplaylists')
+            const data = await res.json()
+
+            setPlaylists(data)
+            console.log(data)
+        }
+
+        fetchPlaylists()
         interactVideo('view')
         getVideo()
     }, [])
+    
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const fetchUploader = async (id) => {
         const res = await fetch(`/api/account/getuser/${id}`)
@@ -94,6 +113,35 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
         }
     }
 
+    const updatePlaylist = async (id) => {
+        // e.preventDefault()
+        console.log(id)
+    }
+
+    const createPlaylist = async (e) => {
+        if (newPlaylist == '') {
+            alert("Please input a playlist name")
+            return
+        }
+        const csrftoken = getCookie('csrftoken')
+
+        const res = await fetch('/api/account/createplaylist/', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                name: newPlaylist
+            })
+        }).then(async res => {
+            if (res.ok) {
+                const data = await res.json()
+                setPlaylists([...playlists, data])
+            }
+        })
+    }
+
     return (
         <div className="interaction">
             <div className="uploader">
@@ -106,8 +154,48 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
                     : null
                 }
             </div>
-            <h4 className="likes"><i className='bx bx-upvote like' onClick={() => interactVideo('like')}></i>{likes}</h4>
-            <h4 className="dislikes"><i className='bx bx-downvote dislike' onClick={() => interactVideo('dislike')}></i>{dislikes}</h4>
+            <div className="interact">
+                <h4 className="likes"><i className='bx bx-upvote like' onClick={() => interactVideo('like')}></i>{likes}</h4>
+                <h4 className="dislikes"><i className='bx bx-downvote dislike' onClick={() => interactVideo('dislike')}></i>{dislikes}</h4>
+                <div className="save" onClick={handleShow}>
+                    <p><i class='bx bx-dots-horizontal-rounded' />Save</p>
+                    {/* <p>Save</p> */}
+                </div>
+            </div>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Channel Settings</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        {playlists != undefined ? playlists.map((playlist) => (
+                            <>
+                                <InputGroup>
+                                <InputGroup.Checkbox onClick={(e) => updatePlaylist(playlist.id)} />
+                                <Form.Control
+                                    value={playlist.name}
+                                    readOnly
+                                />
+                                </InputGroup>
+                            </>
+                        )) : null}
+                        <Form.Label>Create Playlist</Form.Label>
+                        <Form.Control
+                            type='text'
+                            onChange={(e) => setNewPlaylist(e.target.value)}
+                        />
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button onClick={createPlaylist}>
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     )
 }
