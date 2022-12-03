@@ -23,3 +23,18 @@ body {
     transition: all 0.5s ease;
     background-color: #E4E5EA;
 }
+
+body::-webkit-scrollbar {
+    width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #D2D2D4;
+    border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #0C151C;
+    border-radius: 20px;
+    border: 2px solid #D2D2D4; 
+}
