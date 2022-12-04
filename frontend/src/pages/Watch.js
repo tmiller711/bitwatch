@@ -42,6 +42,11 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
         }
     }
 
+    const changeDescriptionClass = () => {
+        const description = document.querySelector('.description-section')
+        description.classList.toggle('active')
+    }
+
     return (
         <div className="watch">
             <div className="video-section">
@@ -50,7 +55,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideo }) => {
                 {<VideoInteraction fetchVideo={fetchVideo} subscribe={subscribe} unsubscribe={unsubscribe}
                                 query={query} getCookie={getCookie} />}
             </div>
-            <div className="description-section">
+            <div className="description-section" onClick={changeDescriptionClass}>
                 <p className="views">{views} views - {uploadedAgo}</p>
                 <p>{description}</p>
             </div>

@@ -10,9 +10,16 @@ const Comment = ({ comment }) => {
 
     }, [])
 
+    const changeCommentClass = (e) => {
+        e.target.parentNode.classList.toggle('active')
+    }
+
     return (
-        <div className="comment">
-            <p><Link to={channelLink} className="channel-link">{comment.username}</Link> - {comment.created_ago}</p>
+        <div className="comment" onClick={changeCommentClass}>
+            <div className="channel-link">
+                <p><Link to={channelLink} className="channel-link">{comment.username} - {comment.created_ago} </Link></p>
+            </div>
+            {/* <br /> */}
             <p>{comment.text}</p>
         </div>
     )

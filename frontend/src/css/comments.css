@@ -1,11 +1,24 @@
 .comment {
     width: 100%;
-    height: auto;
+    height: 70px;
     background-color: #D2D2D4;
     margin-bottom: 10px;
     padding-top: 3px;
     padding-left: 3px;
     border-radius: 7px;
+    overflow: hidden;
+}
+
+.comment:hover {
+    background-color: #737E80;
+}
+
+.comment.active {
+    height: auto;
+}
+
+a.channel-link:hover {
+    color: white;
 }
 
 .add-comment-form {

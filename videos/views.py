@@ -55,6 +55,7 @@ class GetVideo(APIView):
         video = Video.objects.get(id=request.data.get('id'))
 
         serializer = GetVideoSerializer(video)
+        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GetComments(APIView):

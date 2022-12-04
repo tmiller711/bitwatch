@@ -47,7 +47,7 @@ const Comments = ({ videoID, getCookie }) => {
         }).then(async res => {
             if (res.ok) {
                 const data = await res.json()
-                setComments([...comments, data])
+                setComments([data, ...comments])
                 e.target.reset()
             }
         })
