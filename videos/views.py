@@ -33,7 +33,7 @@ class UploadVideo(APIView):
 
 class GetVideos(APIView):
     def get(self, request, format=None):
-        videos = Video.objects.all().order_by('uploaded')
+        videos = Video.objects.all().order_by('uploaded').reverse()
 
         data = GetVideoSerializer(videos, many=True).data
         
@@ -60,7 +60,7 @@ class GetVideo(APIView):
 class GetComments(APIView):
     def get(self, request, *args, **kwargs):
         video = Video.objects.get(id=self.kwargs['id'])
-        comments = video.comments.all()
+        comments = video.comments.all().order_by('created').reverse()
         data = CommentsSerializer(comments, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)
