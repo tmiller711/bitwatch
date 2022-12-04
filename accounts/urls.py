@@ -1,7 +1,8 @@
 from django.urls import path
 import uuid
 
-from .views import GetUser, GetUserByID, Login, Register, activate, EditProfile, Subscribe, Unsubscribe, GetSubscriptions, History, GetPlaylists, CreatePlaylist, UpdatePlaylist
+from .views import (GetUser, GetUserByID, Login, Register, activate, EditProfile, Subscribe, Unsubscribe, GetSubscriptions, History, GetUserPlaylists, CreatePlaylist, UpdatePlaylist,
+                    PlaylistByID)
 
 urlpatterns = [
     path('getuser/<uuid:id>/', GetUserByID.as_view()),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('login/', Login.as_view()),
     path('register/', Register.as_view()),
     path('profile/', EditProfile.as_view()),
-    path('getplaylists/', GetPlaylists.as_view()),
+    path('getplaylists/<uuid:id>', PlaylistByID.as_view()),
+    path('getplaylists/', GetUserPlaylists.as_view()),
     path('activate/<uidb64>/<token>', activate, name='activate'),
 ]

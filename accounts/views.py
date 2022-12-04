@@ -93,11 +93,19 @@ class EditProfile(APIView):
         
         return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-class GetPlaylists(APIView):
+class GetUserPlaylists(APIView):
     def get(self, request, format=None):
         playlists = request.user.playlists.all()
         data = PlaylistSerializer(playlists, many=True).data
         
+        return Response(data)
+
+class PlaylistByID(APIView):
+    def get(self, request, *args, **kwargs):
+        channel = Account.objects.get(id=self.kwargs['id'])
+        playlists = channel.playlists.all()
+        data = PlaylistSerializer(playlists, many=True).data
+
         return Response(data)
 
 class History(APIView):

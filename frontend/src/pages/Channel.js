@@ -47,7 +47,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         }
 
         const fetchPlaylists = async () => {
-            const res = await fetch('/api/account/getplaylists')
+            const res = await fetch(`/api/account/getplaylists/${query}`)
             const data = await res.json()
 
             setPlaylists(data)
