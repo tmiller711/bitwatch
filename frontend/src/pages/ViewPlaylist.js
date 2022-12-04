@@ -31,7 +31,10 @@ const ViewPlaylist = () => {
 
     return (
         <>
+        <h1>Playlist: {query}</h1>
+        <div className="homepage">
             {videos != undefined ? mapVideos() : null}
+        </div>
         </>
     )
 }

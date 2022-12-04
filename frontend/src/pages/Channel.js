@@ -3,7 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Form from "react-bootstrap/Form";
 import Modal from 'react-bootstrap/Modal'
+import Nav from 'react-bootstrap/Nav';
 import VideoPreview from "../components/VideoPreview";
+import PlaylistPreview from "../components/PlaylistPreview";
 import "../css/channel.css"
 
 const Channel = ({ getCookie, subscribe, unsubscribe }) => {
@@ -19,6 +21,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [yourChannel, setYourChannel] = useState(false)
     const [show, setShow] = useState(false)
     const [videos, setVideos] = useState()
+    const [playlists, setPlaylists] = useState()
 
     useEffect(() => {
         const getAccountDetails = async () => {
@@ -43,6 +46,14 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
             setVideos(data)
         }
 
+        const fetchPlaylists = async () => {
+            const res = await fetch('/api/account/getplaylists')
+            const data = await res.json()
+
+            setPlaylists(data)
+        }
+
+        fetchPlaylists()
         getAccountDetails()
         getChannelVideos()
     }, [])
@@ -111,6 +122,24 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
 			</>
 		)
 	}
+    
+    const mapPlaylists = () => {
+        return (
+        <>
+            {playlists.map((playlist) => (
+                <PlaylistPreview key={playlist.id} playlist={playlist} />
+            ))} 
+        </>
+        )
+    }
+
+    const changeActiveClass = (eventKey) => {
+        let channelPlaylists = document.querySelector(".channel-playlists")
+        let channelVideos = document.querySelector(".channel-videos")
+
+        channelPlaylists.classList.toggle('active')
+        channelVideos.classList.toggle('active')
+    }
 
     return (
         <div className="channel">
@@ -130,9 +159,22 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                     }
                 </div>
             </div>
-            <div className="channel-videos">
+            <Nav fill variant="tabs" defaultActiveKey="show-videos" onSelect={changeActiveClass}>
+                <Nav.Item>
+                    <Nav.Link eventKey="show-videos">Videos</Nav.Link>
+                    {/* when they click on one make it update the classname of of something to make either the videos or the playlists appear */}
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="show-playlists">Playlists</Nav.Link>
+                </Nav.Item>
+            </Nav>
+            <div className="channel-videos active">
                 {/* map to all of their videos */}
                 {videos != undefined ? mapVideos() : null}
+            </div>
+
+            <div className="channel-playlists">
+                {playlists != undefined ? mapPlaylists() : null}
             </div>
 
             <Modal show={show} onHide={handleClose}>
