@@ -25,12 +25,13 @@ const SideNav = ({ getCurTime }) => {
             }
         }
 
+        detectClick()
         getAccountDetails()
     }, [])
 
     const changeSideBarClass = () => {
-        let sideNav = document.querySelector(".sidebar");
-        sideNav.classList.toggle("open");
+        let sideBar = document.querySelector(".sidebar");
+        sideBar.classList.toggle("open");
     }
 
     const changeSearchClass = () => {
@@ -55,6 +56,18 @@ const SideNav = ({ getCurTime }) => {
             </a>
         </>
         )
+    }
+    
+    const detectClick = () => {
+        let sideBar = document.querySelector(".sidebar")
+        document.addEventListener("click", (event) => {
+            if (sideBar.classList == "sidebar open") {
+                console.log(event.target.classList)
+                if (event.target.classList.value == "") {
+                    sideBar.classList.remove("open")
+                }
+            }
+        })
     }
 
     return (
@@ -105,6 +118,7 @@ const SideNav = ({ getCurTime }) => {
                     <i class='bx bx-upload'></i>
                     <span className="links_name">Upload</span>
                 </Link>
+                <span className="tooltip">Upload</span>
                 </li>
                 <li className="profile">
                     {loggedIn == true ? profile() : <Link to="login/">Log In</Link>} 
