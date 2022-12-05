@@ -39,6 +39,13 @@ class GetVideos(APIView):
         
         return Response(data, status=status.HTTP_200_OK)
 
+    def post(self, request, format=None):
+        search = request.data.get('search')
+        videos = Video.objects.filter(title=search)
+        data = GetVideoSerializer(videos, many=True).data
+
+        return Response(data, status=status.HTTP_200_OK)
+
 class PlaylistVideos(APIView):
     def get(self, request, *args, **kwargs):
         try:
@@ -55,7 +62,6 @@ class GetVideo(APIView):
         video = Video.objects.get(id=request.data.get('id'))
 
         serializer = GetVideoSerializer(video)
-        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GetComments(APIView):

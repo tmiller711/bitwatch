@@ -13,5 +13,6 @@ urlpatterns = [
     path('watch/', index),
     path('channel/', index),
     path('playlists/', index),
-    path('playlist/', index)
+    path('playlist/', index),
+    path('search/', index)
 ]

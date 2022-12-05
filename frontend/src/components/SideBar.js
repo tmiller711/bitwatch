@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {Routes, Route, useNavigate, Link} from 'react-router-dom';
+import Form from "react-bootstrap/Form"
 import '../css/sidebar.css';
 
 const SideNav = ({ getCurTime }) => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [profilePic, setProfilePic] = useState('')
     const [loggedIn, setLoggedIn] = useState(false)
     const [url, setUrl] = useState('')
+    const [searchTerm, setSearchTerm] = useState('')
 
     useEffect(() => {
         const getAccountDetails = async () => {
@@ -62,12 +65,16 @@ const SideNav = ({ getCurTime }) => {
         let sideBar = document.querySelector(".sidebar")
         document.addEventListener("click", (event) => {
             if (sideBar.classList == "sidebar open") {
-                console.log(event.target.classList)
                 if (event.target.classList.value == "") {
                     sideBar.classList.remove("open")
                 }
             }
         })
+    }
+
+    const search = (e) => {
+        e.preventDefault()
+        navigate(`/search?q=${searchTerm}`)
     }
 
     return (
@@ -81,9 +88,11 @@ const SideNav = ({ getCurTime }) => {
             </div>
             <ul className="nav-list">
                 <li>
-                    <i className='bx bx-search' ></i>
-                    <input type="text" placeholder="Search..." />
-                    <span className="tooltip">Search</span>
+                    <Form onSubmit={search}>
+                        <i className='bx bx-search' ></i>
+                        <input type="text" className="search" placeholder="Search..." onChange={(e) => setSearchTerm(e.target.value)}/>
+                        <span className="tooltip">Search</span>
+                    </Form>
                 </li>
                 <li>
                     <Link to="/" className="link">

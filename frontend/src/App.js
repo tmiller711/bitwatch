@@ -12,6 +12,7 @@ import Watch from "./pages/Watch"
 import Channel from "./pages/Channel";
 import Playlists from "./pages/Playlists";
 import ViewPlaylist from "./pages/ViewPlaylist";
+import Search from "./pages/Search";
 import "./css/sidebar.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -86,6 +87,7 @@ function App() {
 					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
 					<Route path="/playlists" element={<Playlists />} />
 					<Route path="/playlist" element={<ViewPlaylist />} />
+					<Route path="/search" element={<Search getCookie={getCookie} />} />
 				</Routes>
 			</div>
 		</>
