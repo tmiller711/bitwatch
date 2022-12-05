@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import SideNav from "./components/SideNav"
+import SideBar from "./components/SideBar"
 import HomePage from "./pages/HomePage"
 import Subscriptions from "./pages/Subscriptions"
 import History from "./pages/History"
@@ -12,7 +12,7 @@ import Watch from "./pages/Watch"
 import Channel from "./pages/Channel";
 import Playlists from "./pages/Playlists";
 import ViewPlaylist from "./pages/ViewPlaylist";
-import "./css/sidenav.css"
+import "./css/sidebar.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
@@ -72,7 +72,7 @@ function App() {
 	
 	return (
 		<>
-			<SideNav/>
+			<SideBar/>
 			<div className="content">
 				<Routes>
 					<Route path="/" element={<HomePage />} />

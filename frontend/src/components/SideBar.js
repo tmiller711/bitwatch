@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Routes, Route, useNavigate, Link} from 'react-router-dom';
-import '../css/sidenav.css';
+import '../css/sidebar.css';
 
 const SideNav = ({ getCurTime }) => {
     const [username, setUsername] = useState('')

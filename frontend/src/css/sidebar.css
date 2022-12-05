@@ -170,6 +170,9 @@ font-size: 18px;
 border-radius: 12px;
 }
 
+.sidebar li.upload {
+    transform: translateY(470px);
+}
 .sidebar li.profile{
 position: fixed;
 height: 60px;
