@@ -27,10 +27,14 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
 
 class PlaylistSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField(read_only=True)
+    thumbnail = serializers.SerializerMethodField(read_only=True)
 
     def get_username(self, obj):
         return obj.creator.username
 
+    def get_thumbnail(self, obj):
+        return str(obj.videos.all()[0].thumbnail)
+
     class Meta:
         model = Playlist
-        fields = ('id', 'name', 'creator', 'username', 'videos')
+        fields = ('id', 'name', 'creator', 'username', 'videos', 'private', 'thumbnail')

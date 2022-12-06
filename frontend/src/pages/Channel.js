@@ -10,7 +10,7 @@ import "../css/channel.css"
 
 const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [query, setQuery] = useState(searchParams.get('c'))
+    const [query, setQuery] = useState()
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [profilePic, setProfilePic] = useState()
@@ -24,6 +24,8 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [playlists, setPlaylists] = useState()
 
     useEffect(() => {
+        setQuery(searchParams.get('c'))
+
         const getAccountDetails = async () => {
             const res = await fetch(`/api/account/getuser/${query}`)
             if (res.ok) {
@@ -56,7 +58,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         fetchPlaylists()
         getAccountDetails()
         getChannelVideos()
-    }, [])
+    }, [query, searchParams])
     
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);

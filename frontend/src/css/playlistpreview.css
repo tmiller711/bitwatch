@@ -17,10 +17,35 @@
     color: black;
 }
 
-.thumbnail {
+div.img-container {
+    position: relative;
+    display: inline-block;
     height: 225px;
-    width: 400px;
+    width: 100%;
     border-radius: 9px;
+}
+.img-container .thumbnail {
+    height: 100%;
+    width: 100%;
+}
+
+.img-container .overlay {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    background: rgba(0, 0, 0, .6);
+    width: 50%;
+    height: 100%;
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    border-radius: 9px;
+}
+
+.overlay p {
+    margin-top: 50%;
+    transform: translateY(-50%);
 }
 
 .name {

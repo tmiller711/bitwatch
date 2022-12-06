@@ -202,6 +202,7 @@ class Playlist(models.Model):
     creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     videos = models.ManyToManyField('videos.Video')
+    private = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

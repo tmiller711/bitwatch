@@ -74,6 +74,9 @@ const SideNav = ({ getCurTime }) => {
 
     const search = (e) => {
         e.preventDefault()
+        if (searchTerm == "") {
+            return
+        }
         navigate(`/search?q=${searchTerm}`)
         let sideBar = document.querySelector(".sidebar")
         sideBar.classList.remove("open")

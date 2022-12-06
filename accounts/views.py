@@ -103,7 +103,12 @@ class GetUserPlaylists(APIView):
 class PlaylistByID(APIView):
     def get(self, request, *args, **kwargs):
         channel = Account.objects.get(id=self.kwargs['id'])
-        playlists = channel.playlists.all()
+        if channel == request.user:
+            playlists = channel.playlists.all()
+        else:
+            playlists = Playlist.objects.filter(creator=channel, private=False)
+
+        print(playlists)
         data = PlaylistSerializer(playlists, many=True).data
 
         return Response(data)
@@ -120,7 +125,12 @@ class History(APIView):
 class CreatePlaylist(APIView):
     def post(self, request, format=None):
         name = request.data['name']
-        playlist = Playlist(creator=request.user, name=name)
+        if request.data.get('status') == "true":
+            privateStatus = True
+        else:
+            privateStatus = False
+
+        playlist = Playlist(creator=request.user, name=name, private=privateStatus)
         playlist.save()
         request.user.playlists.add(playlist)
 

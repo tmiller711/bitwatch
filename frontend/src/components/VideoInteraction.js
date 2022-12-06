@@ -20,6 +20,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
 
     const [playlists, setPlaylists] = useState()
     const [newPlaylist, setNewPlaylist] = useState('')
+    const [privateStatus, setPrivateStatus] = useState('true')
 
     useEffect(() => {
         const getVideo = async () => {
@@ -37,7 +38,6 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
             const data = await res.json()
 
             setPlaylists(data)
-            console.log(data)
         }
 
         fetchPlaylists()
@@ -143,7 +143,8 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
                 'X-CSRFToken': csrftoken
             },
             body: JSON.stringify({
-                name: newPlaylist
+                name: newPlaylist,
+                status: privateStatus
             })
         }).then(async res => {
             if (res.ok) {
@@ -208,6 +209,10 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
                             type='text'
                             onChange={(e) => setNewPlaylist(e.target.value)}
                         />
+                        <Form.Select onChange={(e) => setPrivateStatus(e.target.value)}>
+                        <option value={true}>Private</option>
+                        <option value={false}>Public</option>
+                        </Form.Select>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

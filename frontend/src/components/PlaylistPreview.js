@@ -7,7 +7,13 @@ const PlaylistPreview = ({ id, playlist }) => {
     return (
         <div className="playlist-preview">
             <Link to={`/playlist?list=${playlist.id}`} className="playlist-link">
-                <img className="thumbnail"/>
+                <div className="img-container">
+                    <img className="thumbnail" src={`/media/${playlist.thumbnail}`} />
+                    {console.log(playlist)}
+                    <div className="overlay">
+                        <p>{playlist.private == true ? "Private" : "Public"}</p>
+                    </div>
+                </div>
                 <p className="name">{playlist.name}</p>
                 <p className="user">
                     <Link to={`/channel?c=${playlist.creator}`} className="channel-link">
