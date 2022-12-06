@@ -26,8 +26,8 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
         const getVideo = async () => {
             const video = await fetchVideo(query)
             
-            setLikes(video.likes)
-            setDislikes(video.dislikes)
+            setLikes(video.num_likes)
+            setDislikes(video.num_dislikes)
             setUploaderID(video.uploader)
 
             fetchUploader(video.uploader)
@@ -61,7 +61,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
         }
     }
 
-    const interactVideo = async (interaction) => {
+    const interactVideo = async (action) => {
         const videoID = query
         const csrftoken = getCookie("csrftoken")
 
@@ -72,14 +72,14 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
                 'X-CSRFToken': csrftoken
             },
             body: JSON.stringify({
-                "interaction": interaction
+                "action": action
             })
         })
 
         if (res.ok) {
             const data = await res.json()
-            setLikes(data.likes)
-            setDislikes(data.dislikes)
+            setLikes(data.num_likes)
+            setDislikes(data.num_dislikes)
         } else {
             alert("Error")
         }

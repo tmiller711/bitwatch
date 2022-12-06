@@ -59,14 +59,14 @@ class PlaylistVideos(APIView):
 
 class GetVideo(APIView):
     def post(self, request, format=None):
-        video = Video.objects.get(id=request.data.get('id'))
+        video = Video.objects.get(video_id=request.data.get('id'))
 
         serializer = GetVideoSerializer(video)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GetComments(APIView):
     def get(self, request, *args, **kwargs):
-        video = Video.objects.get(id=self.kwargs['id'])
+        video = Video.objects.get(video_id=self.kwargs['id'])
         comments = video.comments.all().order_by('created').reverse()
         data = CommentsSerializer(comments, many=True).data
 
@@ -77,7 +77,7 @@ class DeleteVideo(APIView):
     def get(self, request, *args, **kwargs):
         try:
             video_id = self.kwargs['id']
-            video = Video.objects.get(user=request.user, id=video_id)
+            video = Video.objects.get(user=request.user, video_id=video_id)
             video.delete()
             
             return Response(status=status.HTTP_200_OK)
@@ -86,7 +86,7 @@ class DeleteVideo(APIView):
 
 class AddComment(APIView):
     def post(self, request, *args, **kwargs):
-        video = Video.objects.get(id=self.kwargs['id'])
+        video = Video.objects.get(video_id=self.kwargs['id'])
         comment = request.data['comment']
         new_comment = video.add_comment(self.kwargs['id'], request.user, comment)
 
@@ -96,29 +96,49 @@ class AddComment(APIView):
 
 class VideoInteract(APIView):
     def post(self, request, *args, **kwargs):
-        video = Video.objects.get(id=self.kwargs['id'])
-        if video == None:
-            return Response({"Error": "Video does not exist"}, status=status.HTTP_404_NOT_FOUND)
-        
+        video_id = self.kwargs['id']
         try:
-            interaction = self.request.data['interaction']
-            if interaction == "like":
-                VideoInteraction.like_video(request.user, video)
+            video = Video.objects.get(video_id=video_id)
+            action = request.data.get('action')
+            if action == 'like':
+                video.like(request.user)
+            elif action == 'dislike':
+                video.dislike(request.user)
+            elif action == 'view':
+                video.add_view()
+            else:
+                return Response({"message": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 
-            elif interaction == "dislike":
-                VideoInteraction.dislike_video(request.user, video)
+            video.refresh_from_db()
+            num_likes = video.num_likes
+            num_dislikes = video.num_dislikes
 
-            elif interaction == "view":
-                VideoInteraction.add_view(request.user, video)
-            
-            # need to update the video after changing likes/dislikes
-            video = Video.objects.get(id=video.id)
-            data = {'likes': int(video.likes), 'dislikes': int(video.dislikes)}
-            
-            return Response(data, status=status.HTTP_200_OK)
-
+            return Response({"num_likes": num_likes, "num_dislikes": num_dislikes}, status=status.HTTP_200_OK)
         except:
-            return Response({"message": "failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # video = Video.objects.get(id=self.kwargs['id'])
+        # if video == None:
+        #     return Response({"Error": "Video does not exist"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # try:
+        #     interaction = self.request.data['interaction']
+        #     if interaction == "like":
+        #         VideoInteraction.like_video(request.user, video)
+
+        #     elif interaction == "dislike":
+        #         VideoInteraction.dislike_video(request.user, video)
+
+        #     elif interaction == "view":
+        #         VideoInteraction.add_view(request.user, video)
+            
+        #     # need to update the video after changing likes/dislikes
+        #     video = Video.objects.get(id=video.id)
+        #     data = {'likes': int(video.likes), 'dislikes': int(video.dislikes)}
+            
+        #     return Response(data, status=status.HTTP_200_OK)
+
+        # except:
+        #     return Response({"message": "failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ChannelVideos(APIView):
     def get(self, request, *args, **kwargs):

@@ -21,15 +21,15 @@ const VideoPreview = ({ video, edit=false }) => {
         setTitle(video.title)
         setViews(video.views)
         setUploadedAgo(video.uploaded_ago)
-        setLink(`/watch?v=${video.id}`)
+        setLink(`/watch?v=${video.video_id}`)
         setChannelID(video.uploader)
 
         fetchUploader(video.uploader)
 
     }, [])
 
-    const fetchUploader = async (id) => {
-        const res = await fetch(`/api/account/getuser/${id}`)
+    const fetchUploader = async (video_id) => {
+        const res = await fetch(`/api/account/getuser/${video_id}`)
         if (res.ok) {
             const data = await res.json()
 
@@ -40,7 +40,7 @@ const VideoPreview = ({ video, edit=false }) => {
 
     const deleteVideo = async () => {
         console.log("tet")
-        const res = await fetch(`/api/video/delete/${video.id}`)
+        const res = await fetch(`/api/video/delete/${video.video_id}`)
         if (!res.ok) {
             alert("Error deleting video")
         }

@@ -19,7 +19,7 @@ class GetVideoSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Video
-        fields = ('id', 'uploader', 'title', 'description', 'video', 'thumbnail', 'views', 'likes', 'dislikes', 'uploaded_ago')
+        fields = ('video_id', 'uploader', 'title', 'description', 'video', 'thumbnail', 'views', 'num_likes', 'num_dislikes', 'uploaded_ago')
 
 class CommentsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField(read_only=True)

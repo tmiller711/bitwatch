@@ -89,73 +89,13 @@ class VideoInteraction(models.Model):
     history = models.ManyToManyField('videos.Video', related_name='history', blank=True)
     liked_videos = models.ManyToManyField('videos.Video', related_name='liked_videos', blank=True)
     disliked_videos = models.ManyToManyField('videos.Video', related_name='disliked_videos', blank=True)
-
-    @classmethod
-    def like_video(self, current_user, video):
-        object, create = self.objects.get_or_create(
-            user = current_user
-        )
-
-        if video in object.liked_videos.all():
-            object.liked_videos.remove(video)
-            video.likes = F('likes') - 1
-        elif video in object.disliked_videos.all():
-            object.disliked_videos.remove(video)
-            object.liked_videos.add(video)
-            video.dislikes = F('dislikes') - 1
-            video.likes = F('likes') + 1
-        else:
-            object.liked_videos.add(video)
-            video.likes = F('likes') + 1
-
-        video.save()
-
-    @classmethod
-    def dislike_video(self, current_user, video):
-        object, create = self.objects.get_or_create(
-            user = current_user
-        )
-        if video in object.disliked_videos.all():
-            object.disliked_videos.remove(video)
-            video.dislikes = F('dislikes') - 1
-        elif video in object.liked_videos.all():
-            object.liked_videos.remove(video)
-            object.disliked_videos.add(video)
-            video.dislikes = F('dislikes') + 1
-            video.likes = F('likes') - 1
-        else:
-            object.disliked_videos.add(video)
-            video.dislikes = F('dislikes') + 1
-        
-        video.save()
     
-    @classmethod
-    def add_view(self, user, video):
-        object, create = self.objects.get_or_create(
-            user = user
-        )
-        object.history.add(video)
-        video.views = F('views') + 1
-        video.save()
-
-    # possibly add method to like, unlike, etc that not only removes but also increments likes/dislikes on video
-    # @classmethod
-    # def unlike(object, video):
-    #     object.liked_videos.remove(video)
-    #     video.likes = F('likes') - 1
     @classmethod
     def get_history(self, user):
         object, create = self.objects.get_or_create(
             user=user
         )
         return object.history.all().values('id')
-
-    @property
-    def get_liked_vids(self):
-        return self.liked_videos
-
-    def __str__(self):
-        return self.user.username
 
 class Subscriptions(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
