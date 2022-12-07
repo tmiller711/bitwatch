@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.paginator import Paginator
+
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video, Tag
@@ -33,7 +35,13 @@ class UploadVideo(APIView):
 
 class GetVideos(APIView):
     def get(self, request, format=None):
-        videos = Video.objects.all().order_by('uploaded').reverse()
+        page_num = request.query_params.get('page')
+        if not page_num:
+            page_num = 1
+        
+        paginator = Paginator(Video.objects.all().order_by('uploaded').reverse(), 12)
+        videos = paginator.page(page_num)
+
 
         data = GetVideoSerializer(videos, many=True).data
         

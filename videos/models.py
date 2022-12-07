@@ -5,11 +5,11 @@ from datetime import datetime
 from django.db.models import F
 
 def video_path(instance, filename):
-    filename = (f"{str(instance.id)}.mp4")
+    filename = (f"{str(instance.video_id)}.mp4")
     return '/'.join(['videos', filename])
 
 def thumbnail_path(instance, filename):
-    filename = (f"{str(instance.id)}.png")
+    filename = (f"{str(instance.video_id)}.png")
     return '/'.join(['thumbnails', filename])
 
 class Comment(models.Model):
@@ -52,8 +52,8 @@ class Video(models.Model):
     thumbnail = models.ImageField(upload_to=thumbnail_path)
     description = models.TextField(max_length=1000)
     views = models.PositiveIntegerField(default=0)
-    likes = models.ManyToManyField(get_user_model(), related_name='liked_videos')
-    dislikes = models.ManyToManyField(get_user_model(), related_name='disliked_videos')  
+    likes = models.ManyToManyField(get_user_model(), related_name='liked_videos', blank=True)
+    dislikes = models.ManyToManyField(get_user_model(), related_name='disliked_videos', blank=True)  
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True)
     uploaded = models.DateTimeField(auto_now_add=True)
     comments = models.ManyToManyField(Comment, blank=True)

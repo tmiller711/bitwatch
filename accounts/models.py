@@ -95,7 +95,7 @@ class VideoInteraction(models.Model):
         object, create = self.objects.get_or_create(
             user=user
         )
-        return object.history.all().values('id')
+        return object.history.all().values('video_id')
 
 class Subscriptions(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
