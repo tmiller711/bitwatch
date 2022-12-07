@@ -74,8 +74,16 @@ class GetVideo(APIView):
 
 class GetComments(APIView):
     def get(self, request, *args, **kwargs):
+        page_num = request.query_params.get('page')
+        print(page_num)
+        if not page_num:
+            page_num = 1
+        
         video = Video.objects.get(video_id=self.kwargs['id'])
-        comments = video.comments.all().order_by('created').reverse()
+        paginator = Paginator(video.comments.all().order_by('created').reverse(), 12)
+        comments = paginator.page(page_num)
+
+        # comments = video.comments.all().order_by('created').reverse()
         data = CommentsSerializer(comments, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)

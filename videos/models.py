@@ -81,7 +81,7 @@ class Video(models.Model):
             text = text
         )
 
-        video = self.objects.get(id=video_id)
+        video = self.objects.get(video_id=video_id)
         video.comments.add(comment)
 
         return comment

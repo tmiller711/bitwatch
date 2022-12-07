@@ -4,22 +4,42 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 
 const Comments = ({ videoID, getCookie }) => {
-    const [comments, setComments] = useState()
+    const [comments, setComments] = useState([])
     const [numOfComments, setNumOfComments] = useState(0)
+    const [page, setPage] = useState(1)
 
     const [newComment, setNewComment] = useState("")
 
     useEffect(() => {
         const fetchComments = async () => {
-            const res = await fetch(`/api/video/getcomments/${videoID}`)
+            const res = await fetch(`/api/video/getcomments/${videoID}?page=${page}`)
             const data = await res.json()
             
-            setComments(data)
+            setComments([...comments, ...data])
             setNumOfComments(data.length)
         }
 
         fetchComments()
-    }, [])
+    }, [page])
+
+	useEffect(() => {
+		window.addEventListener('scroll', handleScroll)
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll)
+		}
+	})
+
+	const handleScroll = () => {
+		const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+		const body = document.body;
+		const html = document.documentElement;
+		const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
+		const windowBottom = windowHeight + window.pageYOffset;
+		if (windowBottom >= docHeight) {
+			setPage(page + 1)
+		}
+	}
 
     const mapComments = () => {
         return (
