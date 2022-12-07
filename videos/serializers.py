@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Video, Comment, Tag
+from rest_framework.exceptions import ValidationError
 
 class TagSerializer(serializers.ModelSerializer):
     # name = serializers.CharField()
@@ -8,11 +9,30 @@ class TagSerializer(serializers.ModelSerializer):
         fields = ('name',)
 
 class UploadVideoSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True, read_only=True)
+    tags = serializers.SlugRelatedField(
+        many=True,
+        slug_field="name",
+        queryset=Tag.objects.all()
+    )
 
     class Meta:
         model = Video
-        fields = ('title', 'description', 'video', 'tags')
+        fields = ("title", "description", "video", "thumbnail", "tags")
+
+    def validate(self, data):
+        if not data["title"]:
+            raise ValidationError("Title is required.")
+        if not data["video"]:
+            raise ValidationError("Video is required.")
+        return data
+
+    def create(self, validated_data):
+        tags = validated_data.pop("tags")
+        video = Video.objects.create(**validated_data)
+        for tag in tags:
+            tag, created = Tag.objects.get_or_create(name=tag)
+            video.tags.add
+        return video
 
 class GetVideoSerializer(serializers.ModelSerializer):
     uploaded_ago = serializers.ReadOnlyField()
