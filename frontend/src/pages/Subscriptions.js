@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
+import Spinner from 'react-bootstrap/Spinner'
 import "../css/subscriptions.css"
 
 const Subscriptions = () => {
@@ -31,13 +32,22 @@ const Subscriptions = () => {
         )
     }
 
-    return (
-        <>
-        <h1>Subscriptions Pages</h1>
-        {/* {subscriptions.username} */}
-        {subscriptions != undefined ? mapSubscriptions() : null}
-        </>
-    )
+    if (subscriptions != undefined) {
+        return (
+            <>
+            <h1>Subscriptions Pages</h1>
+            {mapSubscriptions()}
+            </>
+        )
+    } else {
+        return (
+            <div className="loading">
+                <Spinner animation="border" role="status" className="spinner">
+
+                </Spinner>
+            </div>
+        )
+    }
 }
 
 export default Subscriptions

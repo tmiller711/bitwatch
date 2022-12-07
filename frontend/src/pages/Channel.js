@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from "react-bootstrap/Form";
 import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav';
+import Spinner from 'react-bootstrap/Spinner'
 import VideoPreview from "../components/VideoPreview";
 import PlaylistPreview from "../components/PlaylistPreview";
 import "../css/channel.css"
@@ -143,73 +144,84 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         channelVideos.classList.toggle('active')
     }
 
-    return (
-        <div className="channel">
-            <div className="channel-details">
-                <img src={profilePic} className="profile-pic" />
-                <div className="details">
-                    <p className="name">{name}</p>
-                    <p className="username">@{username}</p>
-                    <p className="subscribers">{subscribers} subscribers</p>
+    if (videos != undefined && playlists != undefined && name != ""){
+        return (
+            <div className="channel">
+                <div className="channel-details">
+                    <img src={profilePic} className="profile-pic" />
+                    <div className="details">
+                        <p className="name">{name}</p>
+                        <p className="username">@{username}</p>
+                        <p className="subscribers">{subscribers} subscribers</p>
+                    </div>
+                    <div className="buttons">
+                        {yourChannel == true ? 
+                            <>
+                            <Button className="edit-channel" onClick={handleShow}>Edit Channel</Button> 
+                            </>
+                            : subscriptionButton()
+                        }
+                    </div>
                 </div>
-                <div className="buttons">
-                    {yourChannel == true ? 
-                        <>
-                        <Button className="edit-channel" onClick={handleShow}>Edit Channel</Button> 
-                        </>
-                        : subscriptionButton()
-                    }
+                <Nav fill variant="tabs" defaultActiveKey="show-videos" onSelect={changeActiveClass}>
+                    <Nav.Item>
+                        <Nav.Link eventKey="show-videos">Videos</Nav.Link>
+                        {/* when they click on one make it update the classname of of something to make either the videos or the playlists appear */}
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link eventKey="show-playlists">Playlists</Nav.Link>
+                    </Nav.Item>
+                </Nav>
+                <div className="channel-videos active">
+                    {/* map to all of their videos */}
+                    {mapVideos()}
                 </div>
-            </div>
-            <Nav fill variant="tabs" defaultActiveKey="show-videos" onSelect={changeActiveClass}>
-                <Nav.Item>
-                    <Nav.Link eventKey="show-videos">Videos</Nav.Link>
-                    {/* when they click on one make it update the classname of of something to make either the videos or the playlists appear */}
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link eventKey="show-playlists">Playlists</Nav.Link>
-                </Nav.Item>
-            </Nav>
-            <div className="channel-videos active">
-                {/* map to all of their videos */}
-                {videos != undefined ? mapVideos() : null}
-            </div>
 
-            <div className="channel-playlists">
-                {playlists != undefined ? mapPlaylists() : null}
-            </div>
+                <div className="channel-playlists">
+                    {mapPlaylists()}
+                </div>
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header>
-                    <Modal.Title>Channel Settings</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control
-                            type='text'
-                            defaultValue={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                        <Form.Label>Profile Picture</Form.Label>
-                        <Form.Control
-                            type='file'
-                            accept='.png, .jpg, .jpeg'
-                            onChange={(e) => setNewProfilePic(e.target.files[0])}
-                        />
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button onClick={handleSave}>
-                        Save
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    )
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header>
+                        <Modal.Title>Channel Settings</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form>
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type='text'
+                                defaultValue={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                            <Form.Label>Profile Picture</Form.Label>
+                            <Form.Control
+                                type='file'
+                                accept='.png, .jpg, .jpeg'
+                                onChange={(e) => setNewProfilePic(e.target.files[0])}
+                            />
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={handleClose}>
+                            Close
+                        </Button>
+                        <Button onClick={handleSave}>
+                            Save
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
+        )
+    } else {
+        return (
+            <div classname="loading">
+                <Spinner animation="border" role="status" classname="spinner">
+
+                </Spinner>
+            </div>
+        )
+    }
+    
 }
 
 export default Channel

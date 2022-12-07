@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import VideoPreview from "../components/VideoPreview";
+import Spinner from 'react-bootstrap/Spinner'
 import "../css/history.css"
 
 const History = ({ fetchVideo }) => {
@@ -29,11 +30,21 @@ const History = ({ fetchVideo }) => {
 		)
 	}
 
-    return (
-        <div className="history">
-        {videos != undefined ? mapVideos() : null}
-        </div>
-    )
+    if (videos != undefined) {
+        return (
+            <div className="history">
+                {mapVideos()}
+            </div>
+        )
+    } else {
+        return (
+            <div className="loading">
+                <Spinner animation="border" role="status" className="spinner">
+
+                </Spinner>
+            </div>
+        )
+    }
 }
 
 export default History

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import VideoPreview from "../components/VideoPreview";
+import Spinner from 'react-bootstrap/Spinner'
 
 const Search = ({ getCookie }) => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -42,14 +43,24 @@ const Search = ({ getCookie }) => {
 		)
 	}
 
-    return (
-        <>
-            <h1>Search: {query}</h1>
-            <div className="homepage">
-                {videos != undefined ? mapVideos() : null}
+    if (videos != undefined) {
+        return (
+            <>
+                <h1>Search: {query}</h1>
+                <div className="homepage">
+                    {videos != undefined ? mapVideos() : null}
+                </div>
+            </>
+        )
+    } else {
+        return (
+            <div className="loading">
+                <Spinner animation="border" role="status" className="spinner">
+
+                </Spinner>
             </div>
-        </>
-    )
+        )
+    }
 }
 
 export default Search

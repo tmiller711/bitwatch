@@ -83,7 +83,7 @@ function App() {
 					<Route path="/history" element={<History fetchVideo={fetchVideo} />} />
 					<Route path="/upload" element={<Upload getCookie={getCookie} />} />
 					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
-													unsubscribe={unsubscribe} fetchVideo={fetchVideo} />} />
+													unsubscribe={unsubscribe} fetchVideoFunction={fetchVideo} />} />
 					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
 					<Route path="/playlists" element={<Playlists />} />
 					<Route path="/playlist" element={<ViewPlaylist />} />

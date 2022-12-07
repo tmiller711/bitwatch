@@ -6,11 +6,10 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import "../css/videointeraction.css"
 import { Link } from 'react-router-dom';
 
-const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie }) => {
+const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie }) => {
     const [likes, setLikes] = useState(0)
     const [dislikes, setDislikes] = useState(0)
     const [profilePic, setProfilePic] = useState()
-    const [uploaderID, setUploaderID] = useState()
     const [subscriptionStatus, setSubscriptionStatus] = useState(false)
     const [show, setShow] = useState(false)
 
@@ -23,16 +22,6 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
     const [privateStatus, setPrivateStatus] = useState('true')
 
     useEffect(() => {
-        const getVideo = async () => {
-            const video = await fetchVideo(query)
-            
-            setLikes(video.num_likes)
-            setDislikes(video.num_dislikes)
-            setUploaderID(video.uploader)
-
-            fetchUploader(video.uploader)
-        }
-
         const fetchPlaylists = async () => {
             const res = await fetch('/api/account/getplaylists')
             const data = await res.json()
@@ -42,7 +31,7 @@ const VideoInteraction = ({ subscribe, unsubscribe, fetchVideo, query, getCookie
 
         fetchPlaylists()
         interactVideo('view')
-        getVideo()
+        fetchUploader(uploaderID)
     }, [])
     
     const handleClose = () => setShow(false);

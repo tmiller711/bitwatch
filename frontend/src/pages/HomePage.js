@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import VideoPreview from "../components/VideoPreview";
+import Spinner from 'react-bootstrap/Spinner'
 import "../css/homepage.css"
 
 const HomePage = (props) => {
@@ -47,12 +48,21 @@ const HomePage = (props) => {
 		)
 	}
 
-	return (
-		<div className="homepage">
-			{console.log(videos)}
-			{videos != undefined ? mapVideos() : null}
-		</div>
-	)
+	if (videos != undefined) {
+		return (
+			<div className="homepage">
+				{mapVideos()}
+			</div>
+		)
+	} else {
+		return (
+			<div className="loading">
+                <Spinner animation="border" role="status" className="spinner">
+
+                </Spinner>
+            </div>
+		)
+	}
 }
 
 export default HomePage

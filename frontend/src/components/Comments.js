@@ -3,10 +3,10 @@ import Comment from "./Comment"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 
-const Comments = ({ videoID, getCookie }) => {
-    const [comments, setComments] = useState([])
-    const [numOfComments, setNumOfComments] = useState(0)
-    const [page, setPage] = useState(1)
+const Comments = ({ videoID, getCookie, firstComments }) => {
+    const [comments, setComments] = useState(firstComments)
+    const [numOfComments, setNumOfComments] = useState(firstComments.length)
+    const [page, setPage] = useState(2)
 
     const [newComment, setNewComment] = useState("")
 
@@ -16,7 +16,7 @@ const Comments = ({ videoID, getCookie }) => {
             const data = await res.json()
             
             setComments([...comments, ...data])
-            setNumOfComments(data.length)
+            setNumOfComments(comments.length += data.length)
         }
 
         fetchComments()
@@ -88,11 +88,10 @@ const Comments = ({ videoID, getCookie }) => {
                 placeholder="Add a comment..."
                 onChange={(e) => {setNewComment(e.target.value)}}
                 onFocus={(e) => changeFormClass()}
-                // onBlur={() => changeFormClass()}
             />
             <Button type="submit" id="submit-button">Comment</Button>
         </Form>
-        {comments != undefined ? mapComments() : null}
+        {mapComments()}
         </>
     )
 }

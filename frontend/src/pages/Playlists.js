@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import PlaylistPreview from "../components/PlaylistPreview"
+import Spinner from 'react-bootstrap/Spinner'
 
 const Playlists = () => {
     const [playlists, setPlaylists] = useState()
@@ -25,11 +26,21 @@ const Playlists = () => {
         )
     }
 
-    return (
-        <div className="homepage">
-            {playlists != undefined ? mapPlaylists() : null}
-        </div>
-    )
+    if (playlists != undefined) {
+        return (
+            <div className="homepage">
+                {mapPlaylists()}
+            </div>
+        )
+    } else {
+        return (
+            <div className="loading">
+                <Spinner animation="border" role="status" className="spinner">
+
+                </Spinner>
+            </div>
+        )
+    }
 }
 
 export default Playlists
