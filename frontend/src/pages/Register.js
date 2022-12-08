@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import "../css/registration.css"
 
-const Register = ({ }) => {
+const Register = ({ showAlert }) => {
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -49,9 +49,9 @@ const Register = ({ }) => {
         fetch('/api/account/register/', requestOptions).then((response) => {
             if (response.ok) {
                 navigate("/login", {replace: true})
-                alert("Activation email sent. Please confirm!")
+                showAlert(`Activation email sent to ${email} Please confirm!`)
             } else {
-                alert("Failed")
+                showAlert(`Failed to send activation email to ${email}. Try again later`)
             }
         })
     }

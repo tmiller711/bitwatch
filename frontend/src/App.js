@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { render } from "react-dom";
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import SideBar from "./components/SideBar"
@@ -13,10 +13,13 @@ import Channel from "./pages/Channel";
 import Playlists from "./pages/Playlists";
 import ViewPlaylist from "./pages/ViewPlaylist";
 import Search from "./pages/Search";
+import { Alert } from 'react-bootstrap';
 import "./css/sidebar.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
+	const [alertShow, setAlertShow] = useState(false)
+	const [alertText, setAlertText] = useState('')
 
 	function getCookie(name) {
         let cookieValue = null;
@@ -70,15 +73,25 @@ function App() {
         const data = await res.json()
         return data
     }
+
+	const showAlert = (text) => {
+		setAlertShow(true)
+		setAlertText(text)
+	}
 	
 	return (
 		<>
 			<SideBar/>
 			<div className="content">
+				{alertShow && (
+					<Alert variant="danger" className="alert" onClose={() => setAlertShow(false)} dismissible>
+						{alertText}
+					</Alert>
+				)}
 				<Routes>
 					<Route path="/" element={<HomePage />} />
 					<Route path="/login" element={<Login />} />
-					<Route path='/register' element={<Register />} />
+					<Route path='/register' element={<Register showAlert={showAlert} />} />
 					<Route path="/subscriptions" element={<Subscriptions />} />
 					<Route path="/history" element={<History fetchVideo={fetchVideo} />} />
 					<Route path="/upload" element={<Upload getCookie={getCookie} />} />
