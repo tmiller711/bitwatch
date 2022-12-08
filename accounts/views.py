@@ -9,6 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib import messages
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Account, Subscriptions, VideoInteraction, Playlist
 from videos.models import Video
@@ -30,10 +31,14 @@ class GetUser(APIView):
 class GetUserByID(APIView):
     def get(self, request, *args, **kwargs):
         user = Account.objects.get(id=self.kwargs['id'])
-        is_you = False
-        if request.user == user:
-           is_you = True 
-        subscription_status = Subscriptions.subscription_status(request.user, user)
+           
+        if request.user.is_authenticated:
+            subscription_status = Subscriptions.subscription_status(request.user, user)
+            if request.user == user:
+                is_you = True 
+        else:
+            subscription_status = False
+            is_you = False
 
         data = {"id": user.id, "name": user.name, "username": user.username, "profilePic": user.profile_pic.url, "subscribers": user.subscribers,
                 "subscription_status": subscription_status, "isYou": is_you}
@@ -94,6 +99,8 @@ class EditProfile(APIView):
         return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class GetUserPlaylists(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, format=None):
         playlists = request.user.playlists.all()
         data = PlaylistSerializer(playlists, many=True).data
@@ -101,6 +108,8 @@ class GetUserPlaylists(APIView):
         return Response(data)
 
 class PlaylistByID(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         channel = Account.objects.get(id=self.kwargs['id'])
         if channel == request.user:
@@ -114,6 +123,8 @@ class PlaylistByID(APIView):
         return Response(data)
 
 class History(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, format=None):
         data = VideoInteraction.get_history(request.user)
         return Response(data, status=status.HTTP_200_OK)
@@ -123,6 +134,8 @@ class History(APIView):
 #         print(self.kwargs['id'])
 
 class CreatePlaylist(APIView):
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request, format=None):
         name = request.data['name']
         if request.data.get('status') == "true":
@@ -150,6 +163,8 @@ class UpdatePlaylist(APIView):
         return Response()
 
 class GetSubscriptions(APIView):
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, format=None):
         subscriptions = Subscriptions.get_subscriptions(request.user)
 
@@ -163,6 +178,8 @@ class GetSubscriptions(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class Subscribe(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         try:
             id = self.kwargs['id']
@@ -174,6 +191,8 @@ class Subscribe(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class Unsubscribe(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         try:
             id = self.kwargs['id']

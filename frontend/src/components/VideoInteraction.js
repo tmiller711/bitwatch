@@ -24,9 +24,11 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
     useEffect(() => {
         const fetchPlaylists = async () => {
             const res = await fetch('/api/account/getplaylists')
-            const data = await res.json()
+            if (res.ok) {
+                const data = await res.json()
 
-            setPlaylists(data)
+                setPlaylists(data)
+            }
         }
 
         fetchPlaylists()
@@ -69,6 +71,8 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
             const data = await res.json()
             setLikes(data.num_likes)
             setDislikes(data.num_dislikes)
+        } else if (res.status == 403) {
+            showAlert("Must be signed in to interact with video")
         } else {
             showAlert("Error")
         }
@@ -76,24 +80,25 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
 
     const subscriptionButton = () => {
         const handleSubscribe = async () => {
-            const status = await subscribe(uploaderID)
-            if (status == true) {
+            const res = await subscribe(uploaderID)
+            if (res.ok) {
                 setSubscriptionStatus(true)
                 setSubscribers(subscribers + 1)
-            } else {
-                // add alert that checks if they arent logged in and display that error
-                showAlert("Error")
-            }
+            } else if (res.status == 403) {
+                showAlert("Must be signed in to subscribe")
+            } else (
+                showAlert("Error subscribing")
+            )
         }
 
         const handleUnsubscribe = async () => {
-            const status = await unsubscribe(uploaderID)
-            if (status == true) {
+            const res = await unsubscribe(uploaderID)
+            if (res.ok) {
                 setSubscriptionStatus(false)
                 setSubscribers(subscribers - 1)
-            } else {
-                showAlert("error")
-            }
+            } else (
+                showAlert("Error unsubscribing")
+            )
         }
 
         if (subscriptionStatus == false) {
@@ -140,6 +145,10 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
             if (res.ok) {
                 const data = await res.json()
                 setPlaylists([...playlists, data])
+            } else if (res.status == 403) {
+                showAlert("Must be signed in to create playlist")
+            } else {
+                showAlert("Error creating playlist")
             }
         })
     }

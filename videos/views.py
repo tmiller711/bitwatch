@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.core.paginator import Paginator
 from rest_framework.exceptions import ValidationError
@@ -10,13 +11,15 @@ from .models import Video, Tag
 from accounts.models import VideoInteraction, Account, Playlist
 
 class UploadVideo(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, format=None):
         serializer = UploadVideoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(uploader=request.user)
             return Response({"Success": "Video Uploaded"}, status=status.HTTP_201_CREATED)
         else:
-            raise ValidationError(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GetVideos(APIView):
     def get(self, request, format=None):
@@ -26,7 +29,6 @@ class GetVideos(APIView):
         
         paginator = Paginator(Video.objects.all().order_by('uploaded').reverse(), 12)
         videos = paginator.page(page_num)
-
 
         data = GetVideoSerializer(videos, many=True).data
         
@@ -75,6 +77,8 @@ class GetComments(APIView):
 
 class DeleteVideo(APIView):
     # check if the user is signed in 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         try:
             video_id = self.kwargs['id']
@@ -86,6 +90,8 @@ class DeleteVideo(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class AddComment(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         video = Video.objects.get(video_id=self.kwargs['id'])
         comment = request.data['comment']
@@ -96,6 +102,8 @@ class AddComment(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class VideoInteract(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         video_id = self.kwargs['id']
         try:
@@ -117,29 +125,6 @@ class VideoInteract(APIView):
             return Response({"num_likes": num_likes, "num_dislikes": num_dislikes}, status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        # video = Video.objects.get(id=self.kwargs['id'])
-        # if video == None:
-        #     return Response({"Error": "Video does not exist"}, status=status.HTTP_404_NOT_FOUND)
-        
-        # try:
-        #     interaction = self.request.data['interaction']
-        #     if interaction == "like":
-        #         VideoInteraction.like_video(request.user, video)
-
-        #     elif interaction == "dislike":
-        #         VideoInteraction.dislike_video(request.user, video)
-
-        #     elif interaction == "view":
-        #         VideoInteraction.add_view(request.user, video)
-            
-        #     # need to update the video after changing likes/dislikes
-        #     video = Video.objects.get(id=video.id)
-        #     data = {'likes': int(video.likes), 'dislikes': int(video.dislikes)}
-            
-        #     return Response(data, status=status.HTTP_200_OK)
-
-        # except:
-        #     return Response({"message": "failed"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ChannelVideos(APIView):
     def get(self, request, *args, **kwargs):

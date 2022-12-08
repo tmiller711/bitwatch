@@ -3,15 +3,21 @@ import { Link } from "react-router-dom"
 import Spinner from 'react-bootstrap/Spinner'
 import "../css/subscriptions.css"
 
-const Subscriptions = () => {
+const Subscriptions = ({ showAlert }) => {
     const [subscriptions, setSubscriptions] = useState()
 
     useEffect(() => {
         const fetchSubscriptions = async () =>{
             const res = await fetch('/api/account/subscriptions/')
-            const data = await res.json()
-            
-            setSubscriptions(data)
+            if (res.ok) {
+                const data = await res.json()
+                
+                setSubscriptions(data)
+            } else if (res.status == 403) {
+                showAlert("Must be signed in to view subscriptions")
+            } else {
+                showAlert("Error getting subscriptions")
+            }
         }
 
         fetchSubscriptions()

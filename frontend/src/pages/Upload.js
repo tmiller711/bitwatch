@@ -44,6 +44,8 @@ const Upload = ({ getCookie, showAlert }) => {
                 const data = await res.json()
                 showAlert("Successfully uploaded")
                 setProfilePic(data.profilePic)
+            } else if (res.status == 403) {
+                showAlert("You must be signed in to upload")
             } else {
                 showAlert("Error uploading video")
             }

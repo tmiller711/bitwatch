@@ -2,19 +2,24 @@ import React, { useEffect, useState } from "react"
 import PlaylistPreview from "../components/PlaylistPreview"
 import Spinner from 'react-bootstrap/Spinner'
 
-const Playlists = () => {
+const Playlists = ({ showAlert }) => {
     const [playlists, setPlaylists] = useState()
 
     useEffect(() => {
-        const fetchPlaylists = async () => {
-            const res = await fetch('/api/account/getplaylists')
-            const data = await res.json()
-
-            setPlaylists(data)
-        }
-
         fetchPlaylists()
     }, [])
+
+    const fetchPlaylists = async () => {
+        const res = await fetch('/api/account/getplaylists')
+        if (res.ok) {
+            const data = await res.json()
+            setPlaylists(data)
+        } else if (res.status == 403) {
+            showAlert("Must be signed in to view playlists")
+        } else {
+            showAlert("Error getting playlists")
+        }
+    }
 
     const mapPlaylists = () => {
         return (

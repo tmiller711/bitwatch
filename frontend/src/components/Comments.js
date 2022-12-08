@@ -3,7 +3,7 @@ import Comment from "./Comment"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 
-const Comments = ({ videoID, getCookie, firstComments }) => {
+const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
     const [comments, setComments] = useState(firstComments)
     const [numOfComments, setNumOfComments] = useState(firstComments.length)
     const [page, setPage] = useState(2)
@@ -69,9 +69,10 @@ const Comments = ({ videoID, getCookie, firstComments }) => {
                 const data = await res.json()
                 setComments([data, ...comments])
                 e.target.reset()
+            } else if (res.status == 403) {
+                showAlert("Must be signed in to comment")
             } else {
                 showAlert("Error adding comment")
-                // add login error here too
             }
         })
         .catch(error => console.log(error))

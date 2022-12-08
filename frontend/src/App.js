@@ -39,21 +39,12 @@ function App() {
 
 	const subscribe = async (subToID) => {
 		const res = await fetch(`/api/account/subscribe/${subToID}`)
-		if (res.ok) {
-			return true
-		} else {
-			return false
-		}
+		return res
 	}
 
 	const unsubscribe = async (unsubID) => {
 		const res = await fetch(`/api/account/unsubscribe/${unsubID}`)
-
-		if (res.ok) {
-			return true
-		} else {
-			return false
-		}
+		return res
 	}
 
     const fetchVideo = async (query) => {
@@ -92,13 +83,13 @@ function App() {
 					<Route path="/" element={<HomePage />} />
 					<Route path="/login" element={<Login />} />
 					<Route path='/register' element={<Register showAlert={showAlert} />} />
-					<Route path="/subscriptions" element={<Subscriptions />} />
-					<Route path="/history" element={<History fetchVideo={fetchVideo} />} />
+					<Route path="/subscriptions" element={<Subscriptions showAlert={showAlert} />} />
+					<Route path="/history" element={<History fetchVideo={fetchVideo} showAlert={showAlert} />} />
 					<Route path="/upload" element={<Upload getCookie={getCookie} showAlert={showAlert} />} />
 					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
 													unsubscribe={unsubscribe} fetchVideoFunction={fetchVideo} showAlert={showAlert} />} />
 					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
-					<Route path="/playlists" element={<Playlists />} />
+					<Route path="/playlists" element={<Playlists showAlert={showAlert} />} />
 					<Route path="/playlist" element={<ViewPlaylist />} />
 					<Route path="/search" element={<Search getCookie={getCookie} />} />
 				</Routes>

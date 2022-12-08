@@ -28,8 +28,8 @@ const VideoPreview = ({ video, edit=false }) => {
 
     }, [])
 
-    const fetchUploader = async (video_id) => {
-        const res = await fetch(`/api/account/getuser/${video_id}`)
+    const fetchUploader = async (uploader_id) => {
+        const res = await fetch(`/api/account/getuser/${uploader_id}`)
         if (res.ok) {
             const data = await res.json()
 
