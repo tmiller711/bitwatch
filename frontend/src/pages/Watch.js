@@ -7,7 +7,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import VideoInteraction from "../components/VideoInteraction";
 import Comments from "../components/Comments";
 
-const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction }) => {
+const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState(searchParams.get('v'))
     const [title, setTitle] = useState('')
@@ -67,13 +67,13 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction }) => {
                     {getVideo()} 
                     <h3 className="title">{title}</h3>
                     {<VideoInteraction uploaderID={uploaderID} subscribe={subscribe} unsubscribe={unsubscribe}
-                                    query={query} getCookie={getCookie} />}
+                                    query={query} getCookie={getCookie} showAlert={showAlert} />}
                 </div>
                 <div className="description-section" onClick={changeDescriptionClass}>
                     <p className="views">{views} views - {uploadedAgo}</p>
                     <p>{description}</p>
                 </div>
-                <Comments videoID={query} getCookie={getCookie} firstComments={comments} />
+                <Comments videoID={query} getCookie={getCookie} firstComments={comments} showAlert={showAlert} />
             </div>
         )
     } else {

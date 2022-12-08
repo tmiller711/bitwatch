@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import "../css/videointeraction.css"
 import { Link } from 'react-router-dom';
 
-const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie }) => {
+const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie, showAlert }) => {
     const [likes, setLikes] = useState(0)
     const [dislikes, setDislikes] = useState(0)
     const [profilePic, setProfilePic] = useState()
@@ -70,7 +70,7 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
             setLikes(data.num_likes)
             setDislikes(data.num_dislikes)
         } else {
-            alert("Error")
+            showAlert("Error")
         }
     }
 
@@ -81,7 +81,8 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
                 setSubscriptionStatus(true)
                 setSubscribers(subscribers + 1)
             } else {
-                alert("error")
+                // add alert that checks if they arent logged in and display that error
+                showAlert("Error")
             }
         }
 
@@ -91,7 +92,7 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
                 setSubscriptionStatus(false)
                 setSubscribers(subscribers - 1)
             } else {
-                alert("error")
+                showAlert("error")
             }
         }
 

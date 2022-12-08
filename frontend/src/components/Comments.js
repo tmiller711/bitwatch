@@ -69,6 +69,9 @@ const Comments = ({ videoID, getCookie, firstComments }) => {
                 const data = await res.json()
                 setComments([data, ...comments])
                 e.target.reset()
+            } else {
+                showAlert("Error adding comment")
+                // add login error here too
             }
         })
         .catch(error => console.log(error))

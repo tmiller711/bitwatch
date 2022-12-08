@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const Upload = ({ getCookie }) => {
+const Upload = ({ getCookie, showAlert }) => {
     const [title, setTitle] = useState('')
     const [video, setVideo] = useState()
     const [thumbnail, setThumbnail] = useState()
@@ -42,10 +42,10 @@ const Upload = ({ getCookie }) => {
         }).then(async res => {
             if (res.ok) {
                 const data = await res.json()
-                alert("Successfully uploaded")
+                showAlert("Successfully uploaded")
                 setProfilePic(data.profilePic)
             } else {
-                alert("Error uploading video")
+                showAlert("Error uploading video")
             }
         })
         .catch(error => console.log(error))

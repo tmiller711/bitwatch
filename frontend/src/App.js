@@ -94,9 +94,9 @@ function App() {
 					<Route path='/register' element={<Register showAlert={showAlert} />} />
 					<Route path="/subscriptions" element={<Subscriptions />} />
 					<Route path="/history" element={<History fetchVideo={fetchVideo} />} />
-					<Route path="/upload" element={<Upload getCookie={getCookie} />} />
+					<Route path="/upload" element={<Upload getCookie={getCookie} showAlert={showAlert} />} />
 					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
-													unsubscribe={unsubscribe} fetchVideoFunction={fetchVideo} />} />
+													unsubscribe={unsubscribe} fetchVideoFunction={fetchVideo} showAlert={showAlert} />} />
 					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
 					<Route path="/playlists" element={<Playlists />} />
 					<Route path="/playlist" element={<ViewPlaylist />} />
