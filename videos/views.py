@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video, Tag
-from accounts.models import VideoInteraction, Account, Playlist
+from accounts.models import History, Account, Playlist
 
 class UploadVideo(APIView):
     permission_classes = [IsAuthenticated]
@@ -115,6 +115,8 @@ class VideoInteract(APIView):
                 video.dislike(request.user)
             elif action == 'view':
                 video.add_view()
+                # add video to users history if they are logged in
+                History.add_video(request.user, video)
             else:
                 return Response({"message": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 

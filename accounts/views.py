@@ -11,9 +11,10 @@ from django.core.mail import EmailMessage
 from django.contrib import messages
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Account, Subscriptions, VideoInteraction, Playlist
+from .models import Account, Subscriptions, Playlist, History
 from videos.models import Video
 from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer
+from videos.serializers import GetVideoSerializer
 from .tokens import accounts_activation_token
 
 # Create your views here.
@@ -122,16 +123,13 @@ class PlaylistByID(APIView):
 
         return Response(data)
 
-class History(APIView):
+class GetHistory(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        data = VideoInteraction.get_history(request.user)
-        return Response(data, status=status.HTTP_200_OK)
-
-# class Channel(APIView):
-#     def get(self, request, *args, **kwargs):
-#         print(self.kwargs['id'])
+        data = History.get_history(user=request.user)
+        videos = GetVideoSerializer(data, many=True).data
+        return Response(videos, status=status.HTTP_200_OK)
 
 class CreatePlaylist(APIView):
     permission_classes = [IsAuthenticated]

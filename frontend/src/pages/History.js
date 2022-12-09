@@ -4,7 +4,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import "../css/history.css"
 
 const History = ({ fetchVideo, showAlert }) => {
-    const [videos, setVideos] = useState([])
+    const [videos, setVideos] = useState()
 
     useEffect(() => {
         fetchHistory()
@@ -24,11 +24,7 @@ const History = ({ fetchVideo, showAlert }) => {
         const res = await fetch('/api/account/history')
         if (res.ok) {
             const history = await res.json()
-            
-            for (let i = 0; i < history.length; i++) {
-                const data = await fetchVideo(history[i].id)
-                setVideos(current => [...current, data])
-            }
+            setVideos(history)
         } else if (res.status == 403) {
             showAlert("Must be signed in to view history")
         } else {

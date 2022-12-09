@@ -84,18 +84,26 @@ class Account(AbstractBaseUser):
         user.profile_pic = new_pic
         user.save()
     
-class VideoInteraction(models.Model):
+class History(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    history = models.ManyToManyField('videos.Video', related_name='history', blank=True)
-    liked_videos = models.ManyToManyField('videos.Video', related_name='liked_videos', blank=True)
-    disliked_videos = models.ManyToManyField('videos.Video', related_name='disliked_videos', blank=True)
-    
+    history = models.ManyToManyField('videos.Video', related_name='hist', blank=True)
+
     @classmethod
     def get_history(self, user):
         object, create = self.objects.get_or_create(
             user=user
         )
-        return object.history.all().values('video_id')
+        return object.history.all()
+    
+    @classmethod
+    def add_video(self, user, video):
+        object, create = self.objects.get_or_create(
+            user = user
+        )
+        object.history.add(video)
+
+    def __str__(self):
+        return self.user.username
 
 class Subscriptions(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
