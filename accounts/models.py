@@ -46,7 +46,7 @@ def upload_path(instance, filename):
 # Create your models here.
 class Account(AbstractBaseUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(verbose_name="email", max_length=60, unique=True)
+    email = models.EmailField(verbose_name="email", max_length=60, unique=True, blank=False)
     username = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=100, blank=True)
     phone = models.CharField(max_length=30, blank=True)

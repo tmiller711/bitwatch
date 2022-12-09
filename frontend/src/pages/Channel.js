@@ -65,24 +65,26 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const handleShow = () => setShow(true);
 
     const subscriptionButton = () => {
-        const handleSubscribe = async () => {
-            const status = await subscribe(channelID)
-            if (status == true) {
+        const handleSubscribe = async (uploaderID) => {
+            const res = await subscribe(uploaderID)
+            if (res.ok) {
                 setSubscriptionStatus(true)
                 setSubscribers(subscribers + 1)
-            } else {
-                alert("error")
-            }
+            } else if (res.status == 403) {
+                showAlert("Must be signed in to subscribe")
+            } else (
+                showAlert("Error subscribing")
+            )
         }
 
-        const handleUnsubscribe = async () => {
-            const status = await unsubscribe(channelID)
-            if (status == true) {
+        const handleUnsubscribe = async (uploaderID) => {
+            const res = await unsubscribe(uploaderID)
+            if (res.ok) {
                 setSubscriptionStatus(false)
                 setSubscribers(subscribers - 1)
-            } else {
-                alert("error")
-            }
+            } else (
+                showAlert("Error unsubscribing")
+            )
         }
 
         if (subscriptionStatus == false) {
@@ -127,6 +129,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
 	}
     
     const mapPlaylists = () => {
+        if (playlists) {
         return (
         <>
             {playlists.map((playlist) => (
@@ -134,6 +137,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
             ))} 
         </>
         )
+        }
     }
 
     const changeActiveClass = (eventKey) => {
@@ -144,7 +148,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         channelVideos.classList.toggle('active')
     }
 
-    if (videos != undefined && playlists != undefined && name != ""){
+    if (videos != undefined && username != ""){
         return (
             <div className="channel">
                 <div className="channel-details">

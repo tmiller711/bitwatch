@@ -21,6 +21,7 @@ from .tokens import accounts_activation_token
 class GetUser(APIView):
     def get(self, request, *args, **kwargs):
         # if user is signed in return their info
+        
         if request.user.is_authenticated:
             data = {"id": request.user.id, "name": request.user.name, "username": request.user.username, 
                         "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
@@ -51,9 +52,8 @@ class Login(APIView):
         password = request.data.get('password')
 
         if len(email) > 0 and len(password) > 0:
-            try:
-                account = authenticate(request, email=email, password=password)
-            except:
+            account = authenticate(request, email=email, password=password)
+            if account == None:
                 return Response({"Invalid Credentials": "Could not authenticate user"}, status=status.HTTP_404_NOT_FOUND)
 
             login(request, account)
@@ -78,7 +78,13 @@ class Register(APIView):
             account.set_password(password)
             account.save()
             activate_email(request, account, email)
-            return Response({"Account Created": "Good Stuff cuh"}, status=status.HTTP_201_CREATED)
+
+            url = request.build_absolute_uri('/api/account/activate/')
+            uid = urlsafe_base64_encode(force_bytes(account.pk))
+            token = accounts_activation_token.make_token(account)
+            activation_link = f'{url}{uid}/{token}'
+
+            return Response({'url': activation_link, 'token': token}, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -219,6 +225,7 @@ def activate(request, uidb64, token):
     else:
         # alert the user of bad activation link
         print("bad activate link")
+
     return redirect('/')
 
 def activate_email(request, user, to_email):
