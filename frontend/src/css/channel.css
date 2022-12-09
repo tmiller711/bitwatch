@@ -31,10 +31,8 @@
 }
 
 .buttons {
-    display: flex;
-    flex-direction: column;
-    margin-right: 0;
-    float: right;
+    position: absolute;
+    right: 8px;
 }
 
 .subscribe {

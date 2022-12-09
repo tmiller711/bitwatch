@@ -55,7 +55,6 @@ const VideoPreview = ({ video, edit=false }) => {
                     <img src={profilePic} className="profile-pic" />
                     <p className="title">{title}</p>
                     {edit == true ? <Button className="delete-vid-button" onClick={() => deleteVideo()}>X</Button> : null}
-                    {/* {edit == true ? <CloseButton className="delete-vid-button" onClick={() => deleteVideo()} />: null} */}
                 </div>
                 <div class="uploader">
                     <Link to={`/channel?c=${channelID}`} className="channel-link">
