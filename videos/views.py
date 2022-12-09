@@ -28,11 +28,15 @@ class GetVideos(APIView):
             page_num = 1
         
         paginator = Paginator(Video.objects.all().order_by('uploaded').reverse(), 12)
-        videos = paginator.page(page_num)
 
-        data = GetVideoSerializer(videos, many=True).data
-        
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            videos = paginator.page(page_num)
+            data = GetVideoSerializer(videos, many=True).data
+
+            return Response(data, status=status.HTTP_200_OK)
+
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, format=None):
         search = request.data.get('search')
@@ -62,18 +66,19 @@ class GetVideo(APIView):
 class GetComments(APIView):
     def get(self, request, *args, **kwargs):
         page_num = request.query_params.get('page')
-        print(page_num)
         if not page_num:
             page_num = 1
         
         video = Video.objects.get(video_id=self.kwargs['id'])
         paginator = Paginator(video.comments.all().order_by('created').reverse(), 12)
-        comments = paginator.page(page_num)
 
-        # comments = video.comments.all().order_by('created').reverse()
-        data = CommentsSerializer(comments, many=True).data
-
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            comments = paginator.page(page_num)
+            data = CommentsSerializer(comments, many=True).data
+            return Response(data, status=status.HTTP_200_OK)
+        
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 class DeleteVideo(APIView):
     # check if the user is signed in 

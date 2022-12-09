@@ -33,13 +33,13 @@ class GetUserByID(APIView):
     def get(self, request, *args, **kwargs):
         user = Account.objects.get(id=self.kwargs['id'])
            
+        is_you = False
         if request.user.is_authenticated:
             subscription_status = Subscriptions.subscription_status(request.user, user)
             if request.user == user:
                 is_you = True 
         else:
             subscription_status = False
-            is_you = False
 
         data = {"id": user.id, "name": user.name, "username": user.username, "profilePic": user.profile_pic.url, "subscribers": user.subscribers,
                 "subscription_status": subscription_status, "isYou": is_you}
