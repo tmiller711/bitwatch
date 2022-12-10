@@ -105,29 +105,45 @@ class EditProfile(APIView):
         
         return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-class GetUserPlaylists(APIView):
+class GetPlaylists(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
-        playlists = request.user.playlists.all()
-        data = PlaylistSerializer(playlists, many=True).data
+    def get(self, request, user_id=None):
+
+        # if user_id not specified return the users playlists
+        if user_id is None:
+            playlists = request.user.playlists.all()
+            data = PlaylistSerializer(playlists, many=True).data
+            
+            return Response(data)
         
-        return Response(data)
-
-class PlaylistByID(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        channel = Account.objects.get(id=self.kwargs['id'])
-        if channel == request.user:
-            playlists = channel.playlists.all()
+        # if user_id is specified return the playlists of the specified user
         else:
-            playlists = Playlist.objects.filter(creator=channel, private=False)
+            channel = Account.objects.get(id=user_id)
+            if channel == request.user:
+                playlists = channel.playlists.all()
+            else:
+                playlists = Playlist.objects.filter(creator=channel, private=False)
 
-        print(playlists)
-        data = PlaylistSerializer(playlists, many=True).data
+            print(playlists)
+            data = PlaylistSerializer(playlists, many=True).data
 
-        return Response(data)
+            return Response(data)
+
+# class PlaylistByID(APIView):
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request, *args, **kwargs):
+#         channel = Account.objects.get(id=self.kwargs['id'])
+#         if channel == request.user:
+#             playlists = channel.playlists.all()
+#         else:
+#             playlists = Playlist.objects.filter(creator=channel, private=False)
+
+#         print(playlists)
+#         data = PlaylistSerializer(playlists, many=True).data
+
+#         return Response(data)
 
 class GetHistory(APIView):
     permission_classes = [IsAuthenticated]

@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from .views import Login
 
-from .models import Account, Subscriptions
+from .models import Account, Subscriptions, History
+from videos.models import Video
 
 class RegisterTestCase(TestCase):
     def test_register(self):
@@ -157,6 +158,40 @@ class SubscriptionsTestCase(TestCase):
         data = response.json()
         self.assertEqual(data[0]['id'], str(self.account2.id))
 
-# class GetHistoryTestCase(TestCase):
+class GetHistoryTestCase(TestCase):
+    def setUp(self):
+        self.get_history_url = reverse('get_history')
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.video1 = Video(uploader=self.account, title='Test Video 1')
+        self.video1.save()
+        self.video2 = Video(uploader=self.account, title='Test Video 2')
+        self.video2.save()
+        self.video3 = Video(uploader=self.account, title='Test Video 3')
+        self.video3.save()
+
+        self.history = History.objects.create(user=self.account)
+        self.history.history.add(self.video1, self.video2, self.video3)
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+    def test_get_history(self):
+        response = self.client.get(self.get_history_url)
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        self.assertEqual(len(data), 3)
+        self.assertEqual(data[0]['video_id'], str(self.video3.video_id))
+        self.assertEqual(data[1]['video_id'], str(self.video2.video_id))
+        self.assertEqual(data[2]['video_id'], str(self.video1.video_id))
+
+    def test_get_history_unauthorized(self):
+        self.client.logout()
+        response = self.client.get(self.get_history_url)
+        self.assertEqual(response.status_code, 403)
+
+# class PlaylistsTestCase(TestCase):
 #     def setUp(self):
-#         self.get_history_url = reverse('get_history')
