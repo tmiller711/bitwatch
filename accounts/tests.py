@@ -266,43 +266,48 @@ class CreatePlaylistTestCase(TestCase):
         })
         self.assertEqual(response.status_code, 403)
 
-# class UpdatePlaylistTestCase(TestCase):
-#     def setUp(self):
-#         self.update_playlist_url = reverse('update_playlist')
-#         self.account = Account(email='testuser@gmail.com', username='testuser')
-#         self.account.set_password('testpassword')
-#         self.account.is_active = True
-#         self.account.save()
+class UpdatePlaylistTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
 
-#         self.client.login(email='testuser@gmail.com', password='testpassword')
+        self.client.login(email='testuser@gmail.com', password='testpassword')
 
-#         self.playlist = Playlist.create_playlist(user=self.account, name='Test Playlist')
+        # self.playlist = Playlist.create_playlist(user=self.account, name='Test Playlist')
+        self.playlist = Playlist(creator=self.account, name='Test Playlist')
+        self.playlist.save()
+        self.account.playlists.add(self.playlist)
 
-#     def test_update_playlist(self):
-#         response = self.client.post(f'{self.update_playlist_url}{self.playlist.id}/', data={
-#             'name': 'Updated Playlist'
-#         })
-#         self.assertEqual(response.status_code, 200)
+        self.video = Video.objects.create(
+            uploader=self.account,
+            title='Test Video',
+            description='This is a test video',
+        )
 
-#         data = response.json()
-#         self.assertEqual(data['id'], str(self.playlist.id))
-#         self.assertEqual(data['name'], 'Updated Playlist')
+        self.update_playlist_url = reverse('update_playlist', args=[self.playlist.id])
 
-#     def test_update_playlist_missing_data(self):
-#         response = self.client.put(f'{self.update_playlist_url}{self.playlist.id}/', data={
-#             # No name provided
-#         })
-#         self.assertEqual(response.status_code, 400)
+    def test_update_playlist(self):
+        response = self.client.put(self.update_playlist_url, data={
+            'name': 'Updated Playlist',
+            'video': [self.video.video_id],
+        }, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
-#     def test_update_playlist_unauthenticated(self):
-#         self.client.logout()
-#         response = self.client.put(f'{self.update_playlist_url}{self.playlist.id}/', data={
-#             'name': 'Updated Playlist'
-#         })
-#         self.assertEqual(response.status_code, 404)
+        data = response.json()
+        self.assertEqual(data['id'], str(self.playlist.id))
+        self.assertEqual(data['name'], 'Updated Playlist')
 
-#     def test_update_playlist_invalid_id(self):
-#         response = self.client.put(f'{self.update_playlist_url}adfasdfj9saasdf/', data={
-#             'name': 'Updated Playlist'
-#         })
-#         self.assertEqual(response.status_code, 404)
+    def test_update_playlist_unauthenticated(self):
+        self.client.logout()
+        response = self.client.put(f'{self.update_playlist_url}{self.playlist.id}/', data={
+            'name': 'Updated Playlist'
+        })
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_playlist_invalid_id(self):
+        response = self.client.put(f'{self.update_playlist_url}adfasdfj9saasdf/', data={
+            'name': 'Updated Playlist'
+        })
+        self.assertEqual(response.status_code, 404)

@@ -160,16 +160,26 @@ class CreatePlaylist(APIView):
         return Response(data, status=status.HTTP_201_CREATED)
 
 class UpdatePlaylist(APIView):
-    def post(self, request, *args, **kwargs):
-        playlist = Playlist.objects.get(id=self.kwargs['id'])
-        video = Video.objects.get(id=request.data.get('video'))
-        if video in playlist.videos.all():
-            playlist.videos.remove(video)
-        elif video not in playlist.videos.all():
-            playlist.videos.add(video)
+    permission_classes = [IsAuthenticated]
 
-        return Response()
+    def put(self, request, id, video_id=None):
+        playlist = Playlist.objects.get(id=id)
 
+        if video_id is not None:
+            video = Video.objects.get(video_id=video_id)
+            if video is not None:
+                if video in playlist.videos.all():
+                    playlist.videos.remove(video)
+                elif video not in playlist.videos.all():
+                    playlist.videos.add(video)
+
+        serializer = PlaylistSerializer(playlist, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 class GetSubscriptions(APIView):
     permission_classes = [IsAuthenticated]
     
