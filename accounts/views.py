@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Account, Subscriptions, Playlist, History
 from videos.models import Video
-from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer, UserSerializer
+from .serializers import LoginSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer, UserSerializer
 from videos.serializers import GetVideoSerializer
 from .tokens import accounts_activation_token
 
@@ -46,17 +46,20 @@ class GetUser(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class Login(APIView):
-    def post(self, request, format=None):
-        email = request.data.get('email')
-        password = request.data.get('password')
+    serializer_class = LoginSerializer
 
-        if (email != None and password != None) and (len(email) > 0 and len(password) > 0):
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            email = serializer.data.get('email')
+            password = serializer.data.get('password')
+
             account = authenticate(request, email=email, password=password)
             if account == None:
                 return Response({"Invalid Credentials": "Could not authenticate user"}, status=status.HTTP_404_NOT_FOUND)
 
             login(request, account)
-            return Response({"Logged In": "Good Stuff cuh"}, status=status.HTTP_202_ACCEPTED)
+            return Response(status=status.HTTP_200_OK)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
 

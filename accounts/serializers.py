@@ -9,10 +9,9 @@ class RegisterAccountSerializer(serializers.ModelSerializer):
         fields = ('email', 'username', 'password')
 
 
-class LoginAccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = ('email', 'password')
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    password = serializers.CharField()
 
 
 class EditProfileSerializer(serializers.ModelSerializer):

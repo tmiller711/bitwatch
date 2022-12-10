@@ -37,7 +37,7 @@ class LoginTestCase(TestCase):
             'email': 'testuser@gmail.com',
             'password': 'testpassword'
         })
-        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.status_code, 200)
     
     def test_login_invalid_data(self):
         response = self.client.post(self.login_url, data={
