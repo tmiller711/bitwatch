@@ -109,13 +109,22 @@ class EditProfileTestCase(TestCase):
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
     def test_edit_profile(self):
+        # Send request with valid data
         response = self.client.post(self.url, data={
             'name': 'newname',
-        })
+            # 'profile_pic': 'profile_pic.jpg'  # Include a value for the profile_pic field
+        }, content_type="application/json")
         self.assertEqual(response.status_code, 200)
         
+        # Check that the user's data was updated correctly
+        user = Account.objects.get(username='testuser')
+        self.assertEqual(user.name, 'newname')
+        # self.assertEqual(user.profile_pic, 'https://example.com/profile_pic.jpg')
+        
+        # # Check that the response includes the updated data
         data = response.json()
         self.assertEqual(data['name'], 'newname')
+        # self.assertEqual(data['profile_pic'], 'https://example.com/profile_pic.jpg')
 
 class SubscriptionsTestCase(TestCase):
     def setUp(self):

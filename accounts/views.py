@@ -90,20 +90,25 @@ class Register(APIView):
 
 class EditProfile(APIView):
     def post(self, request, *args, **kwargs):
-        serializer = EditProfileSerializer(data=request.data)
+        serializer = EditProfileSerializer(data=request.data, partial=True)
         if serializer.is_valid():
             user = request.user
-            profile_pic = request.data.get('profile_pic')
-            name = request.data.get('name')
-            user.name = name
-            if profile_pic != None:
-                user.update_profile_pic(user, profile_pic)
-            user.save()
-            data = {"profilePic": request.user.profile_pic.url, 'name': user.name}
-
+            data = self.update_profile(user, serializer.validated_data)
             return Response(data, status=status.HTTP_200_OK)
-        
-        return Response({"Error": "Invalid"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        errors = {}
+        for field, error in serializer.errors.items():
+            errors[field] = error[0]
+
+        return Response({"errors": errors}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def update_profile(self, user, data):
+        user.name = data.get('name')
+        profile_pic = data.get('profile_pic')
+        if profile_pic != None:
+            user.update_profile_pic(user, profile_pic)
+        user.save()
+        return {'name': user.name, 'profile_pic': user.profile_pic.url}
     
 class GetPlaylists(APIView):
     permission_classes = [IsAuthenticated]
