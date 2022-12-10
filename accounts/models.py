@@ -1,11 +1,16 @@
 from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import get_user_model
 from django.conf import settings
 import os
 from django.db.models import F
 import uuid
+
+from .tokens import accounts_activation_token
 
 # from videos.models import Video
 
@@ -76,6 +81,13 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    @classmethod
+    def get_activate_url(cls, request, user):
+        site = get_current_site(request)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = accounts_activation_token.make_token(user)
+        return f"{site}/api/account/activate/{uid}/{token}"
 
     @classmethod
     def update_profile_pic(self, user, new_pic):

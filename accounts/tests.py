@@ -2,6 +2,9 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.urls import reverse
 from .views import Login
+from django.http import HttpRequest
+from django.test.client import RequestFactory
+
 
 from .models import Account, Subscriptions, History, Playlist
 from videos.models import Video
@@ -13,14 +16,18 @@ class RegisterTestCase(TestCase):
             'username': 'testuser',
             'password': 'superadmin'
         })
-        self.assertIn('url', response.data)
-        self.assertIn('token', response.data)
+        self.assertEqual(response.status_code, 201)
+    
+        account = Account.objects.get(email='testuser@gmail.com')
+        factory = RequestFactory()
+        request = factory.get('/accounts/register')
 
-        activation_link = response.data['url']
-        token = response.data['token']
-        response = self.client.get(activation_link)
+        activation_url = Account.get_activate_url(request=request, user=account)
+        response = self.client.get(f"http://{activation_url}")
+        self.assertNotEqual(response.status_code, 404)
 
-        self.assertEqual(response.status_code, 302)
+        account.refresh_from_db()
+        self.assertTrue(account.is_active)
 
 class LoginTestCase(TestCase):
     def setUp(self):

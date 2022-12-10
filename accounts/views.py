@@ -4,12 +4,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login, get_user_model
 from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from rest_framework.permissions import IsAuthenticated
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from .models import Account, Subscriptions, Playlist, History
 from videos.models import Video
@@ -79,14 +78,16 @@ class Register(APIView):
             account = Account(email=email, username=username)
             account.set_password(password)
             account.save()
-            activate_email(request, account, email)
 
-            url = request.build_absolute_uri('/api/account/activate/')
-            uid = urlsafe_base64_encode(force_bytes(account.pk))
-            token = accounts_activation_token.make_token(account)
-            activation_link = f'{url}{uid}/{token}'
+            url = Account.get_activate_url(request, account)
+            message = render_to_string("template_activate_account.html", {
+                "url": url
+            })
+            mail_subject = "Activate Your Account"
+            email = EmailMessage(mail_subject, message, to=[email])
+            email.send()
 
-            return Response({'url': activation_link, 'token': token}, status=status.HTTP_201_CREATED)
+            return Response({"success": "Please confirm your email address"}, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -222,6 +223,7 @@ class Unsubscribe(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 def activate(request, uidb64, token):
+    print("tetstststs")
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -241,18 +243,3 @@ def activate(request, uidb64, token):
         print("bad activate link")
 
     return redirect('/')
-
-def activate_email(request, user, to_email):
-    mail_subject = "Activate your user accounts"
-    message = render_to_string("template_activate_account.html", {
-        'user': user.username,
-        'domain': get_current_site(request).domain,
-        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': accounts_activation_token.make_token(user),
-        'protocol': 'https' if request.is_secure() else 'http'
-    })
-    email = EmailMessage(mail_subject, message, to=[to_email])
-    if email.send():
-        pass
-    else:
-        return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
