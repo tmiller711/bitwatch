@@ -136,8 +136,22 @@ class VideoInteract(APIView):
 class ChannelVideos(APIView):
     def get(self, request, *args, **kwargs):
         channel = Account.objects.get(id=self.kwargs['id'])
-        videos = Video.objects.filter(uploader=channel)
+        # videos = Video.objects.filter(uploader=channel)
 
-        data = GetVideoSerializer(videos, many=True).data
+        # data = GetVideoSerializer(videos, many=True).data
         
-        return Response(data, status=status.HTTP_200_OK)
+        # return Response(data, status=status.HTTP_200_OK)
+        page_num = request.query_params.get('page')
+        if not page_num:
+            page_num = 1
+        
+        paginator = Paginator(Video.objects.filter(uploader=channel).order_by('uploaded').reverse(), 9)
+
+        try:
+            videos = paginator.page(page_num)
+            data = GetVideoSerializer(videos, many=True).data
+
+            return Response(data, status=status.HTTP_200_OK)
+
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)

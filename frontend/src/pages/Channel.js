@@ -21,8 +21,10 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [channelID, setChannelID] = useState()
     const [yourChannel, setYourChannel] = useState(false)
     const [show, setShow] = useState(false)
-    const [videos, setVideos] = useState()
+    const [videos, setVideos] = useState([])
     const [playlists, setPlaylists] = useState()
+ 
+	const [page, setPage] = useState(1)
 
     useEffect(() => {
         setQuery(searchParams.get('c'))
@@ -60,9 +62,39 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         getAccountDetails()
         getChannelVideos()
     }, [query, searchParams])
+
+    useEffect(() => {
+        const getChannelVideos = async () => {
+            const res = await fetch(`/api/video/channelvideos/${query}?page=${page}`)
+            const data = await res.json()
+
+            setVideos([...videos, ...data])
+        }
+
+        getChannelVideos()
+    }, [page])
+    
+    useEffect(() => {
+		window.addEventListener('scroll', handleScroll)
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll)
+		}
+	})
     
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    
+    const handleScroll = () => {
+		const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+		const body = document.body;
+		const html = document.documentElement;
+		const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
+		const windowBottom = windowHeight + window.pageYOffset;
+		if (windowBottom >= docHeight) {
+			setPage(page + 1)
+		}
+	}
 
     const subscriptionButton = () => {
         const handleSubscribe = async (uploaderID) => {
