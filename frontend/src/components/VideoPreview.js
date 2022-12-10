@@ -34,7 +34,7 @@ const VideoPreview = ({ video, edit=false }) => {
             const data = await res.json()
 
             setUploader(data.username)
-            setProfilePic(data.profilePic)
+            setProfilePic(data.profile_pic)
         }
     }
 

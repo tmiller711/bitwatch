@@ -20,7 +20,7 @@ const SideNav = ({ getCurTime }) => {
 
                 setName(data.name)
                 setUsername(data.username)
-                setProfilePic(data.profilePic)
+                setProfilePic(data.profile_pic)
                 setLoggedIn(true)
                 setUrl(`/channel?c=${data.id}`)
             } else {

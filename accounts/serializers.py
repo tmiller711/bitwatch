@@ -41,3 +41,22 @@ class PlaylistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Playlist
         fields = ('id', 'name', 'creator', 'username', 'videos', 'private', 'thumbnail')
+
+class UserSerializer(serializers.ModelSerializer):
+    is_you = serializers.BooleanField(read_only=True)
+    subscription_status = serializers.BooleanField(read_only=True)
+    
+    class Meta:
+        model = Account
+        fields = (
+            "id",
+            "email",
+            "username",
+            "name",
+            "phone",
+            "theme",
+            "profile_pic",
+            "subscribers",
+            "is_you",
+            "subscription_status",
+        )

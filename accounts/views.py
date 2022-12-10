@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,38 +13,37 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Account, Subscriptions, Playlist, History
 from videos.models import Video
-from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer
+from .serializers import LoginAccountSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer, UserSerializer
 from videos.serializers import GetVideoSerializer
 from .tokens import accounts_activation_token
 
 # Create your views here.
 class GetUser(APIView):
     def get(self, request, user_id=None):
-        if user_id is None:
+        if user_id == None:
             if request.user.is_authenticated:
-                data = {"id": request.user.id, "name": request.user.name, "username": request.user.username, 
-                            "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
-                return Response(data, status=status.HTTP_200_OK)
+                user = request.user
+                is_you = True
+                subscription_status = False
             
             else:
                 return Response({"Not": "Logged IN"}, status=status.HTTP_404_NOT_FOUND)
         
         else:
-            user = Account.objects.get(id=user_id)
+            user = get_object_or_404(Account, id=user_id)
             if user == None:
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
-            is_you = False
+            is_you = request.user == user
+
+            # check the subscription status if the user is logged in
             if request.user.is_authenticated:
                 subscription_status = Subscriptions.subscription_status(request.user, user)
-                if request.user == user:
-                    is_you = True 
             else:
                 subscription_status = False
 
-            data = {"id": user.id, "name": user.name, "username": user.username, "profilePic": user.profile_pic.url, "subscribers": user.subscribers,
-                    "subscription_status": subscription_status, "isYou": is_you}
-            return Response(data, status=status.HTTP_200_OK)
+        serializer = UserSerializer(user, context={"is_you": is_you, "subscription_status": subscription_status})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class Login(APIView):
     def post(self, request, format=None):
@@ -65,7 +64,7 @@ class Register(APIView):
     serializer_class = RegisterAccountSerializer
 
     def post(self, request, format=None):
-        # make it so users can be duplicates and other stuff that you need to check. Then send a different response for each one
+        # make it so users can't be duplicates and other stuff that you need to check. Then send a different response for each one
 
         # replace this stuff by using a serializer
         serializer = self.serializer_class(data=request.data)

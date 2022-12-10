@@ -36,7 +36,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
 
                 setName(user.name)
                 setUsername(user.username)
-                setProfilePic(user.profilePic)
+                setProfilePic(user.profile_pic)
                 setSubscribers(user.subscribers)
                 setSubscriptionStatus(user.subscription_status)
                 setChannelID(user.id)
