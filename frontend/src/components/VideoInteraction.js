@@ -48,7 +48,8 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
             setSubscribers(data.subscribers)
             setProfilePic(data.profile_pic)
             setSubscriptionStatus(data.subscription_status)
-            setYourVideo(data.isYou)
+            setYourVideo(data.is_you)
+            console.log(data)
         }
     }
 

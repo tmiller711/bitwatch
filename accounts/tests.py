@@ -89,6 +89,8 @@ class GetUserViewTestCase(TestCase):
 
         data = response.json()
         self.assertEqual(data['id'], str(self.account.id))
+        self.assertEqual(data['is_you'], False)
+        self.assertEqual(data['subscription_status'], False)
 
     def test_get_user_bad_id(self):
         self.client.logout()

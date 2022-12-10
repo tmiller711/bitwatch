@@ -40,7 +40,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                 setSubscribers(user.subscribers)
                 setSubscriptionStatus(user.subscription_status)
                 setChannelID(user.id)
-                setYourChannel(user.isYou)
+                setYourChannel(user.is_you)
             }
         }
 

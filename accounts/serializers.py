@@ -42,8 +42,14 @@ class PlaylistSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'creator', 'username', 'videos', 'private', 'thumbnail')
 
 class UserSerializer(serializers.ModelSerializer):
-    is_you = serializers.BooleanField(read_only=True)
-    subscription_status = serializers.BooleanField(read_only=True)
+    is_you = serializers.SerializerMethodField(read_only=True)
+    subscription_status = serializers.SerializerMethodField(read_only=True)
+
+    def get_is_you(self, obj):
+        return self.context['is_you']
+
+    def get_subscription_status(self, obj):
+        return self.context['subscription_status']
     
     class Meta:
         model = Account
