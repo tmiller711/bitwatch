@@ -19,39 +19,39 @@ from .tokens import accounts_activation_token
 
 # Create your views here.
 class GetUser(APIView):
-    def get(self, request, *args, **kwargs):
-        # if user is signed in return their info
+    def get(self, request, user_id=None):
+        if user_id is None:
+            if request.user.is_authenticated:
+                data = {"id": request.user.id, "name": request.user.name, "username": request.user.username, 
+                            "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
+                return Response(data, status=status.HTTP_200_OK)
+            
+            else:
+                return Response({"Not": "Logged IN"}, status=status.HTTP_404_NOT_FOUND)
         
-        if request.user.is_authenticated:
-            data = {"id": request.user.id, "name": request.user.name, "username": request.user.username, 
-                        "profilePic": request.user.profile_pic.url, "subscribers": request.user.subscribers}
+        else:
+            user = Account.objects.get(id=user_id)
+            if user == None:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            is_you = False
+            if request.user.is_authenticated:
+                subscription_status = Subscriptions.subscription_status(request.user, user)
+                if request.user == user:
+                    is_you = True 
+            else:
+                subscription_status = False
+
+            data = {"id": user.id, "name": user.name, "username": user.username, "profilePic": user.profile_pic.url, "subscribers": user.subscribers,
+                    "subscription_status": subscription_status, "isYou": is_you}
             return Response(data, status=status.HTTP_200_OK)
-        
-        else:
-            return Response({"Not": "Logged IN"}, status=status.HTTP_404_NOT_FOUND)
 
-class GetUserByID(APIView):
-    def get(self, request, *args, **kwargs):
-        user = Account.objects.get(id=self.kwargs['id'])
-           
-        is_you = False
-        if request.user.is_authenticated:
-            subscription_status = Subscriptions.subscription_status(request.user, user)
-            if request.user == user:
-                is_you = True 
-        else:
-            subscription_status = False
-
-        data = {"id": user.id, "name": user.name, "username": user.username, "profilePic": user.profile_pic.url, "subscribers": user.subscribers,
-                "subscription_status": subscription_status, "isYou": is_you}
-        return Response(data, status=status.HTTP_200_OK)
-        
 class Login(APIView):
     def post(self, request, format=None):
         email = request.data.get('email')
         password = request.data.get('password')
 
-        if len(email) > 0 and len(password) > 0:
+        if (email != None and password != None) and (len(email) > 0 and len(password) > 0):
             account = authenticate(request, email=email, password=password)
             if account == None:
                 return Response({"Invalid Credentials": "Could not authenticate user"}, status=status.HTTP_404_NOT_FOUND)
@@ -99,7 +99,7 @@ class EditProfile(APIView):
             if profile_pic != None:
                 user.update_profile_pic(user, profile_pic)
             user.save()
-            data = {"profilePic": request.user.profile_pic.url}
+            data = {"profilePic": request.user.profile_pic.url, 'name': user.name}
 
             return Response(data, status=status.HTTP_200_OK)
         
@@ -173,11 +173,8 @@ class GetSubscriptions(APIView):
         subscriptions = Subscriptions.get_subscriptions(request.user)
 
         data = []
-        for i, user in enumerate(subscriptions):
+        for user in subscriptions:
             data.append({'id': user.id, 'username': user.username, 'profilePic': user.profile_pic.url})
-            # data[i] = {}
-        
-        print(data)
         
         return Response(data, status=status.HTTP_200_OK)
 
@@ -186,8 +183,8 @@ class Subscribe(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            id = self.kwargs['id']
-            subscribe_to = Account.objects.get(id=id)
+            user_id = self.kwargs['user_id']
+            subscribe_to = Account.objects.get(id=user_id)
             Subscriptions.subscribe(request.user, subscribe_to)
 
             return Response(status=status.HTTP_200_OK)
@@ -199,8 +196,8 @@ class Unsubscribe(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            id = self.kwargs['id']
-            unsub_from = Account.objects.get(id=id)
+            user_id = self.kwargs['user_id']
+            unsub_from = Account.objects.get(id=user_id)
             Subscriptions.unsubscribe(request.user, unsub_from)
 
             return Response(status=status.HTTP_200_OK)

@@ -1,22 +1,22 @@
 from django.urls import path
 import uuid
 
-from .views import (GetUser, GetUserByID, Login, Register, activate, EditProfile, Subscribe, Unsubscribe, GetSubscriptions, GetHistory, GetUserPlaylists, CreatePlaylist, UpdatePlaylist,
+from .views import (GetUser, Login, Register, activate, EditProfile, Subscribe, Unsubscribe, GetSubscriptions, GetHistory, GetUserPlaylists, CreatePlaylist, UpdatePlaylist,
                     PlaylistByID)
 
 urlpatterns = [
-    path('getuser/<uuid:id>/', GetUserByID.as_view()),
-    path('getuser/', GetUser.as_view()),
-    path('history/', GetHistory.as_view()),
+    path('getuser/<uuid:user_id>/', GetUser.as_view(), name='get_user_by_id'),
+    path('getuser/', GetUser.as_view(), name='get_user'),
+    path('history/', GetHistory.as_view(), name='get_history'),
     # path('channel/<uuid:id>/', Channel.as_view()),
     path('createplaylist/', CreatePlaylist.as_view()),
     path('updateplaylist/<uuid:id>', UpdatePlaylist.as_view()),
-    path('subscribe/<uuid:id>', Subscribe.as_view()),
-    path('unsubscribe/<uuid:id>', Unsubscribe.as_view()),
-    path('subscriptions/', GetSubscriptions.as_view()),
-    path('login/', Login.as_view()),
-    path('register/', Register.as_view()),
-    path('profile/', EditProfile.as_view()),
+    path('subscribe/<uuid:user_id>', Subscribe.as_view(), name='subscribe'),
+    path('unsubscribe/<uuid:user_id>', Unsubscribe.as_view(), name='unsubscribe'),
+    path('subscriptions/', GetSubscriptions.as_view(), name='get_subscriptions'),
+    path('login/', Login.as_view(), name='login'),
+    path('register/', Register.as_view(), name='register'),
+    path('profile/', EditProfile.as_view(), name='edit_profile'),
     path('getplaylists/<uuid:id>', PlaylistByID.as_view()),
     path('getplaylists/', GetUserPlaylists.as_view()),
     path('activate/<uidb64>/<token>', activate, name='activate'),

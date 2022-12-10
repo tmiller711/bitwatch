@@ -139,7 +139,7 @@ class Subscriptions(models.Model):
         
     @classmethod
     def get_subscriptions(self, user):
-        object = self.objects.get(user=user)
+        object, create = self.objects.get_or_create(user=user)
         return object.subscriptions.all()
         
     def __str__(self):
