@@ -112,14 +112,14 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
         // e.preventDefault()
         const csrftoken = getCookie('csrftoken')
 
-        const res = await fetch(`/api/account/updateplaylist/${id}`, {
+        const res = await fetch(`/api/account/updateplaylist/${id}?video_id=${query}`, {
             method: "PUT",
             headers: {
                 "Content-Type": 'application/json',
                 "X-CSRFToken": csrftoken
             },
             body: JSON.stringify({
-                video: query
+                video_id: query
             })
         })
     }

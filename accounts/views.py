@@ -164,6 +164,7 @@ class UpdatePlaylist(APIView):
 
     def put(self, request, id, video_id=None):
         playlist = Playlist.objects.get(id=id)
+        video_id = request.query_params.get('video_id')
 
         if video_id is not None:
             video = Video.objects.get(video_id=video_id)
