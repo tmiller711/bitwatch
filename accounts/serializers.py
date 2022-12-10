@@ -33,7 +33,10 @@ class PlaylistSerializer(serializers.ModelSerializer):
         return obj.creator.username
 
     def get_thumbnail(self, obj):
-        return str(obj.videos.all()[0].thumbnail)
+        try:
+            return str(obj.videos.all()[0].thumbnail)
+        except:
+            return None
 
     class Meta:
         model = Playlist

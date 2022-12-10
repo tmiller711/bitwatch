@@ -125,25 +125,9 @@ class GetPlaylists(APIView):
             else:
                 playlists = Playlist.objects.filter(creator=channel, private=False)
 
-            print(playlists)
             data = PlaylistSerializer(playlists, many=True).data
 
             return Response(data)
-
-# class PlaylistByID(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request, *args, **kwargs):
-#         channel = Account.objects.get(id=self.kwargs['id'])
-#         if channel == request.user:
-#             playlists = channel.playlists.all()
-#         else:
-#             playlists = Playlist.objects.filter(creator=channel, private=False)
-
-#         print(playlists)
-#         data = PlaylistSerializer(playlists, many=True).data
-
-#         return Response(data)
 
 class GetHistory(APIView):
     permission_classes = [IsAuthenticated]
@@ -157,7 +141,11 @@ class CreatePlaylist(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, format=None):
-        name = request.data['name']
+        try:
+            name = request.data['name']
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
         if request.data.get('status') == "true":
             privateStatus = True
         else:
@@ -169,7 +157,7 @@ class CreatePlaylist(APIView):
 
         data = PlaylistSerializer(playlist).data
 
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_201_CREATED)
 
 class UpdatePlaylist(APIView):
     def post(self, request, *args, **kwargs):

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from .views import Login
 
-from .models import Account, Subscriptions, History
+from .models import Account, Subscriptions, History, Playlist
 from videos.models import Video
 
 class RegisterTestCase(TestCase):
@@ -184,14 +184,125 @@ class GetHistoryTestCase(TestCase):
 
         data = response.json()
         self.assertEqual(len(data), 3)
-        self.assertEqual(data[0]['video_id'], str(self.video3.video_id))
-        self.assertEqual(data[1]['video_id'], str(self.video2.video_id))
-        self.assertEqual(data[2]['video_id'], str(self.video1.video_id))
+        # make this in order once I add that to the history model
+        video_ids = [str(self.video1.video_id), str(self.video2.video_id), str(self.video3.video_id)]
+        self.assertIn(data[0]['video_id'], video_ids)
+        self.assertIn(data[1]['video_id'], video_ids)
+        self.assertIn(data[2]['video_id'], video_ids)
 
     def test_get_history_unauthorized(self):
         self.client.logout()
         response = self.client.get(self.get_history_url)
         self.assertEqual(response.status_code, 403)
 
-# class PlaylistsTestCase(TestCase):
+class GetPlaylistsTestCase(TestCase):
+    def setUp(self):
+        self.get_playlists_url = reverse('get_playlists')
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+        # self.playlist = Playlist.create_playlist(user=self.account, name='Test Playlist')
+        self.playlist = Playlist(creator=self.account, name='Test Playlist')
+        self.playlist.save()
+        self.account.playlists.add(self.playlist)
+
+    def test_get_playlists(self):
+        response = self.client.get(self.get_playlists_url)
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['id'], str(self.playlist.id))
+        self.assertEqual(data[0]['name'], self.playlist.name)
+
+    def test_get_playlists_unauthenticated(self):
+        self.client.logout()
+        response = self.client.get(self.get_playlists_url)
+        self.assertEqual(response.status_code, 403)
+    
+    def test_get_playlists_id(self):
+        response = self.client.get(f'{self.get_playlists_url}{str(self.account.id)}')
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]['id'], str(self.playlist.id))
+        self.assertEqual(data[0]['name'], self.playlist.name)
+
+class CreatePlaylistTestCase(TestCase):
+    def setUp(self):
+        self.create_playlist_url = reverse('create_playlist')
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+    def test_create_playlist(self):
+        response = self.client.post(self.create_playlist_url, data={
+            'name': 'Test Playlist'
+        })
+        self.assertEqual(response.status_code, 201)
+
+        data = response.json()
+        self.assertIn('id', data)
+        self.assertEqual(data['name'], 'Test Playlist')
+    
+    def test_create_playlist_missing_data(self):
+        response = self.client.post(self.create_playlist_url, data={
+            # No name provided
+        })
+        self.assertEqual(response.status_code, 204)
+
+    def test_create_playlist_unauthenticated(self):
+        self.client.logout()
+        response = self.client.post(self.create_playlist_url, data={
+            'name': 'Test Playlist'
+        })
+        self.assertEqual(response.status_code, 403)
+
+# class UpdatePlaylistTestCase(TestCase):
 #     def setUp(self):
+#         self.update_playlist_url = reverse('update_playlist')
+#         self.account = Account(email='testuser@gmail.com', username='testuser')
+#         self.account.set_password('testpassword')
+#         self.account.is_active = True
+#         self.account.save()
+
+#         self.client.login(email='testuser@gmail.com', password='testpassword')
+
+#         self.playlist = Playlist.create_playlist(user=self.account, name='Test Playlist')
+
+#     def test_update_playlist(self):
+#         response = self.client.post(f'{self.update_playlist_url}{self.playlist.id}/', data={
+#             'name': 'Updated Playlist'
+#         })
+#         self.assertEqual(response.status_code, 200)
+
+#         data = response.json()
+#         self.assertEqual(data['id'], str(self.playlist.id))
+#         self.assertEqual(data['name'], 'Updated Playlist')
+
+#     def test_update_playlist_missing_data(self):
+#         response = self.client.put(f'{self.update_playlist_url}{self.playlist.id}/', data={
+#             # No name provided
+#         })
+#         self.assertEqual(response.status_code, 400)
+
+#     def test_update_playlist_unauthenticated(self):
+#         self.client.logout()
+#         response = self.client.put(f'{self.update_playlist_url}{self.playlist.id}/', data={
+#             'name': 'Updated Playlist'
+#         })
+#         self.assertEqual(response.status_code, 404)
+
+#     def test_update_playlist_invalid_id(self):
+#         response = self.client.put(f'{self.update_playlist_url}adfasdfj9saasdf/', data={
+#             'name': 'Updated Playlist'
+#         })
+#         self.assertEqual(response.status_code, 404)
