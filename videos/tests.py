@@ -327,7 +327,7 @@ class ChannelVideosTestCase(TestCase):
             title='Test Video',
             description='This is a test description',
         )
-        self.url = reverse('channel_videos', kwargs={'channel_id': str(self.account.id)})
+        self.url = reverse('channel_videos', kwargs={'channel_id': str(self.account.id), 'page': 1})
 
     def test_channel_videos(self):
         response = self.client.get(self.url)
@@ -340,6 +340,11 @@ class ChannelVideosTestCase(TestCase):
         self.assertEqual(response.data[0]['description'], 'This is a test description')
 
     def test_404_channel_videos(self):
-        url = reverse('channel_videos', kwargs={'channel_id': "4332acd8-f3a0-4ad7-9fef-57a835cb9c56"})
+        url = reverse('channel_videos', kwargs={'channel_id': "4332acd8-f3a0-4ad7-9fef-57a835cb9c56", 'page': 1})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+    
+    def test_get_no_channel_videos(self):
+        url = reverse('channel_videos', kwargs={'channel_id': str(self.account.id), 'page': 25})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 204)

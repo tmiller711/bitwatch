@@ -9,7 +9,7 @@ urlpatterns = [
     path('getvideos', GetVideos.as_view(), name='get_videos'),
     path('getcomments/<uuid:video_id>/<int:page>', GetComments.as_view(), name='get_comments'),
     path('addcomment/<uuid:video_id>', AddComment.as_view(), name='add_comment'),
-    path('channelvideos/<uuid:channel_id>', ChannelVideos.as_view(), name='channel_videos'),
+    path('channelvideos/<uuid:channel_id>/<int:page>', ChannelVideos.as_view(), name='channel_videos'),
     path('interact/<uuid:video_id>', VideoInteract.as_view(), name='interact'),
     path('playlist/<playlist_id>', PlaylistVideos.as_view(), name='playlist_videos'),
 ]

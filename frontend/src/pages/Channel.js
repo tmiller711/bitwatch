@@ -45,7 +45,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         }
 
         const getChannelVideos = async () => {
-            const res = await fetch(`/api/video/channelvideos/${query}`)
+            const res = await fetch(`/api/video/channelvideos/${query}/${page}`)
             const data = await res.json()
 
             setVideos(data)
@@ -65,7 +65,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
 
     useEffect(() => {
         const getChannelVideos = async () => {
-            const res = await fetch(`/api/video/channelvideos/${query}?page=${page}`)
+            const res = await fetch(`/api/video/channelvideos/${query}/${page}`)
             const data = await res.json()
 
             setVideos([...videos, ...data])

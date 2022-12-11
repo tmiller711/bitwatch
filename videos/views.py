@@ -145,7 +145,7 @@ class VideoInteract(APIView):
             video = Video.objects.get(video_id=video_id)
         except ObjectDoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-            
+
         try:
             action = request.data.get('action')
             if action == 'like':
@@ -168,20 +168,16 @@ class VideoInteract(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ChannelVideos(APIView):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, channel_id=None, page=1):
         try:
-            channel = Account.objects.get(id=self.kwargs['channel_id'])
+            channel = Account.objects.get(id=channel_id)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        page_num = request.query_params.get('page')
-        if not page_num:
-            page_num = 1
-        
         paginator = Paginator(Video.objects.filter(uploader=channel).order_by('uploaded').reverse(), 9)
 
         try:
-            videos = paginator.page(page_num)
+            videos = paginator.page(page)
             data = GetVideoSerializer(videos, many=True).data
 
             return Response(data, status=status.HTTP_200_OK)
