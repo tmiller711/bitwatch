@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.core.paginator import Paginator
 from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video, Tag
@@ -107,10 +108,16 @@ class DeleteVideo(APIView):
 class AddComment(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        video = Video.objects.get(video_id=self.kwargs['video_id'])
+    def post(self, request, video_id=None):
+        try:
+            video = Video.objects.get(video_id=video_id)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         comment = request.data['comment']
-        new_comment = video.add_comment(self.kwargs['video_id'], request.user, comment)
+        new_comment = video.add_comment(video_id, request.user, comment)
 
         data = CommentsSerializer(new_comment).data
 
