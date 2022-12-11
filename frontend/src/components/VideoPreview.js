@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button"
 import CloseButton from "react-bootstrap/CloseButton"
 import Dropdown from "react-bootstrap/Dropdown"
 
-const VideoPreview = ({ video, edit=false }) => {
+const VideoPreview = ({ video, edit=false, getCookie }) => {
     const [thumbnail, setThumbnail] = useState()
     const [title, setTitle] = useState('')
     const [uploader, setUploader] = useState('')
@@ -39,8 +39,14 @@ const VideoPreview = ({ video, edit=false }) => {
     }
 
     const deleteVideo = async () => {
-        console.log("tet")
-        const res = await fetch(`/api/video/delete/${video.video_id}`)
+        const csrftoken = getCookie('csrftoken')
+        console.log("deleting")
+        const res = await fetch(`/api/video/delete/${video.video_id}`, {
+            method: "DELETE",
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        })
         if (!res.ok) {
             alert("Error deleting video")
         }

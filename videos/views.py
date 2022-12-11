@@ -91,10 +91,13 @@ class DeleteVideo(APIView):
     # check if the user is signed in 
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def delete(self, request, video_id=None):
         try:
-            video_id = self.kwargs['video_id']
             video = Video.objects.get(uploader=request.user, video_id=video_id)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        try:
             video.delete()
             
             return Response(status=status.HTTP_200_OK)

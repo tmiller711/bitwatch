@@ -59,4 +59,5 @@ div.info img.profile-pic {
     right: 0;
     width: 35px;
     height: 35px;
+    z-index: 10;
 } 

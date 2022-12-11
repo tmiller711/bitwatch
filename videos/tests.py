@@ -210,7 +210,7 @@ class DeleteVideoTestCase(TestCase):
         self.url = reverse('delete_video', kwargs={'video_id': self.video.video_id})
 
     def test_delete_video(self):
-        response = self.client.get(self.url)
+        response = self.client.delete(self.url)
 
         # assert that the video was deleted and a 200 status was returned
         self.assertEqual(response.status_code, 200)
@@ -219,13 +219,13 @@ class DeleteVideoTestCase(TestCase):
 
     def test_delete_404_video(self):
         self.video.delete()
-        response = self.client.get(self.url)
+        response = self.client.delete(self.url)
 
-        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.status_code, 404)
 
     def test_delete_video_unauthenticated(self):
         self.client.logout()
-        response = self.client.get(self.url)
+        response = self.client.delete(self.url)
         self.assertEqual(response.status_code, 403)
 
 class AddCommentTestCase(TestCase):
