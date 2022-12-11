@@ -137,10 +137,16 @@ class AddComment(APIView):
 class VideoInteract(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, *args, **kwargs):
-        video_id = self.kwargs['video_id']
+    def post(self, request, video_id=None):
+        if video_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         try:
             video = Video.objects.get(video_id=video_id)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
+        try:
             action = request.data.get('action')
             if action == 'like':
                 video.like(request.user)
