@@ -4,7 +4,7 @@ from .views import UploadVideo, GetVideo, VideoInteract, GetVideos, ChannelVideo
 
 urlpatterns = [
     path('upload', UploadVideo.as_view(), name='upload_video'),
-    path('get', GetVideo.as_view(), name='get_video'),
+    path('get/<uuid:video_id>', GetVideo.as_view(), name='get_video'),
     path('delete/<uuid:video_id>', DeleteVideo.as_view(), name='delete_video'),
     path('getvideos', GetVideos.as_view(), name='get_videos'),
     path('getcomments/<uuid:video_id>', GetComments.as_view(), name='get_comments'),

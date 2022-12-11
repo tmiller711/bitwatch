@@ -56,13 +56,15 @@ class PlaylistVideos(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         videos = GetVideoSerializer(playlist.videos.all(), many=True).data
+        if len(videos) == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(videos, status=status.HTTP_200_OK)
 
 class GetVideo(APIView):
-    def post(self, request, format=None):
+    def post(self, request, video_id=None):
         try:
-            video = Video.objects.get(video_id=request.data.get('id'))
+            video = Video.objects.get(video_id=video_id)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

@@ -50,15 +50,12 @@ function App() {
     const fetchVideo = async (query) => {
         const csrftoken = getCookie('csrftoken')
 
-        const res = await fetch('/api/video/get', {
+        const res = await fetch(`/api/video/get/${query}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken
             },
-            body: JSON.stringify({
-                id: query
-            })
         })
 
         const data = await res.json()
@@ -90,7 +87,7 @@ function App() {
 													unsubscribe={unsubscribe} fetchVideoFunction={fetchVideo} showAlert={showAlert} />} />
 					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
 					<Route path="/playlists" element={<Playlists showAlert={showAlert} />} />
-					<Route path="/playlist" element={<ViewPlaylist />} />
+					<Route path="/playlist" element={<ViewPlaylist showAlert={showAlert} />} />
 					<Route path="/search" element={<Search getCookie={getCookie} showAlert={showAlert} />} />
 				</Routes>
 			</div>

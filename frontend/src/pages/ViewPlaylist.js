@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import VideoPreview from "../components/VideoPreview"
 
-const ViewPlaylist = () => {
+const ViewPlaylist = ({ showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState(searchParams.get('list'))
     const [videos, setVideos] = useState()
@@ -11,9 +11,15 @@ const ViewPlaylist = () => {
     useEffect(() => {
         const fetchVideos = async () => {
             const res = await fetch(`/api/video/playlist/${query}`)
-            const videos = await res.json()
-
+            if (res.status == 200) {
+                const videos = await res.json()
             setVideos(videos)
+            } else if (res.status == 204) {
+                showAlert("No videos to show")
+            } else {
+                showAlert("Error getting playlist videos")
+            }
+
         }
 
         fetchVideos()

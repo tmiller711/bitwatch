@@ -119,7 +119,6 @@ class PlaylistVideosTestCase(TestCase):
 
 class GetVideoTestCase(TestCase):
     def setUp(self):
-        self.url = reverse('get_video')
         self.account = Account(email='testuser@gmail.com', username='testuser')
         self.account.set_password('testpassword')
         self.account.is_active = True
@@ -130,20 +129,18 @@ class GetVideoTestCase(TestCase):
             title='Test Video',
             description='This is a test video',
         )
+        self.url = reverse('get_video', kwargs={'video_id': self.video.video_id})
 
     def test_get_video_success(self):
-        response = self.client.post(self.url, data={
-            'id': self.video.video_id
-        })
+        response = self.client.post(self.url)
         self.assertEqual(response.status_code, 200)
 
         data = response.json()
         self.assertEqual(data['title'], 'Test Video')
 
     def test_get_video_bad_id(self):
-        response = self.client.post(self.url, data={
-            'id': 'adflafjasjflasjdlsljlf'
-        })
+        url = reverse('get_video', kwargs={'video_id': '6762da6b-fa11-42f8-accd-f95a5be15341'})
+        response = self.client.post(url)
         self.assertEqual(response.status_code, 404)
 
 class GetCommentsTestCase(TestCase):
