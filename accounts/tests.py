@@ -164,7 +164,7 @@ class SubscriptionsTestCase(TestCase):
 
     def test_get_no_subscriptions(self):
         response = self.client.get(self.subscriptions_url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
     
     def test_get_subscriptions(self):
         subscription = Subscriptions.objects.create(user=self.account1)
