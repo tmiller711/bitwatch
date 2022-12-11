@@ -156,7 +156,7 @@ class GetCommentsTestCase(TestCase):
             description='This is a test video',
         )
         
-        self.url = reverse('get_comments', kwargs={'video_id': str(self.video.video_id)})
+        self.url = reverse('get_comments', kwargs={'video_id': str(self.video.video_id), 'page': 1})
     
     def test_get_comments(self):
         # Add some comments to the video
@@ -165,8 +165,7 @@ class GetCommentsTestCase(TestCase):
             comment.save()
             self.video.comments.add(comment)
 
-        # Make a GET request to the view and verify the response
-        response = self.client.get(self.url, data={'video_id': self.video.video_id})
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         
         data = response.json()
@@ -180,13 +179,14 @@ class GetCommentsTestCase(TestCase):
             self.video.comments.add(comment)
 
         # Make a GET request to the view with pagination parameters and verify the response
-        response = self.client.get(self.url, data={'video_id': self.video.video_id, 'page': 1})
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
         data = response.json()
         self.assertEqual(len(data), 12)
         
-        response = self.client.get(self.url, data={'video_id': self.video.video_id, 'page': 2})
+        url = reverse('get_comments', kwargs={'video_id': str(self.video.video_id), 'page': 2})
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
         data = response.json()

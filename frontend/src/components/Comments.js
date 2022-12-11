@@ -12,7 +12,7 @@ const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
 
     useEffect(() => {
         const fetchComments = async () => {
-            const res = await fetch(`/api/video/getcomments/${videoID}?page=${page}`)
+            const res = await fetch(`/api/video/getcomments/${videoID}/${page}`)
             const data = await res.json()
             
             setComments([...comments, ...data])

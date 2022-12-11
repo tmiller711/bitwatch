@@ -72,16 +72,15 @@ class GetVideo(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GetComments(APIView):
-    def get(self, request, *args, **kwargs):
-        page_num = request.query_params.get('page')
-        if not page_num:
-            page_num = 1
-        
-        video = Video.objects.get(video_id=self.kwargs['video_id'])
+    def get(self, request, video_id=None, page=1):
+        try:
+            video = Video.objects.get(video_id=video_id)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         paginator = Paginator(video.comments.all().order_by('created').reverse(), 12)
 
         try:
-            comments = paginator.page(page_num)
+            comments = paginator.page(page)
             data = CommentsSerializer(comments, many=True).data
             return Response(data, status=status.HTTP_200_OK)
         

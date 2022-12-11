@@ -36,7 +36,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
 
     useEffect(() => {
         const fetchComments = async () => {
-            const res = await fetch(`/api/video/getcomments/${query}?page=1`)
+            const res = await fetch(`/api/video/getcomments/${query}/1`)
             const data = await res.json()
             
             setComments(data)
