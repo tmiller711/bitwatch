@@ -209,9 +209,11 @@ class GetSubscriptions(APIView):
 class Subscribe(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, user_id=None):
+        if user_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            user_id = self.kwargs['user_id']
             subscribe_to = Account.objects.get(id=user_id)
             Subscriptions.subscribe(request.user, subscribe_to)
 
@@ -222,9 +224,11 @@ class Subscribe(APIView):
 class Unsubscribe(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, user_id=None):
+        if user_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            user_id = self.kwargs['user_id']
             unsub_from = Account.objects.get(id=user_id)
             Subscriptions.unsubscribe(request.user, unsub_from)
 
