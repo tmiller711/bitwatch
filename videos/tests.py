@@ -232,3 +232,87 @@ class DeleteVideoTestCase(TestCase):
         self.client.logout()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 403)
+
+class AddCommentTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+
+        self.video = Video.objects.create(
+            uploader=self.account,
+            title='Test Video',
+            description='This is a test video',
+        )
+        self.url = reverse('add_comment', kwargs={'video_id': str(self.video.video_id)})
+
+    def test_add_comment(self):
+        response = self.client.post(self.url, data={'comment': 'test comment'})
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        self.assertEqual(data['text'], 'test comment')
+
+    def test_add_comment_unauthorized(self):
+        self.client.logout()
+        response = self.client.post(self.url, data={'comment': 'test comment'})
+        self.assertEqual(response.status_code, 403)
+
+class VideoInteractTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+
+        self.video = Video.objects.create(
+            uploader=self.account,
+            title='Test Video',
+            description='This is a test video',
+        )
+        self.url = reverse('interact', kwargs={'video_id': str(self.video.video_id)})
+
+    def test_like_video(self):
+        response = self.client.post(self.url, data={
+            'id': self.video.video_id,
+            'action': 'like'
+        })
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        self.assertEqual(data, {"num_likes": 1, "num_dislikes": 0})
+
+    def test_dislike_video(self):
+        response = self.client.post(self.url, data={
+            'id': self.video.video_id,
+            'action': 'dislike'
+        })
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        self.assertEqual(data, {"num_likes": 0, "num_dislikes": 1})
+
+    def test_view_video(self):
+        response = self.client.post(self.url, data={
+            'id': self.video.video_id,
+            'action': 'view'
+        })
+        self.assertEqual(response.status_code, 200)
+        
+        self.video.refresh_from_db()
+        self.assertEqual(self.video.views, 1)
+
+    def test_like_video_unauthorized(self):
+        self.client.logout()
+        response = self.client.post(self.url, data={
+            'id': self.video.video_id,
+            'action': 'like'
+        })
+        self.assertEqual(response.status_code, 403)

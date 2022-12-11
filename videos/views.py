@@ -110,9 +110,9 @@ class AddComment(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        video = Video.objects.get(video_id=self.kwargs['id'])
+        video = Video.objects.get(video_id=self.kwargs['video_id'])
         comment = request.data['comment']
-        new_comment = video.add_comment(self.kwargs['id'], request.user, comment)
+        new_comment = video.add_comment(self.kwargs['video_id'], request.user, comment)
 
         data = CommentsSerializer(new_comment).data
 
@@ -122,7 +122,7 @@ class VideoInteract(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        video_id = self.kwargs['id']
+        video_id = self.kwargs['video_id']
         try:
             video = Video.objects.get(video_id=video_id)
             action = request.data.get('action')
@@ -148,11 +148,7 @@ class VideoInteract(APIView):
 class ChannelVideos(APIView):
     def get(self, request, *args, **kwargs):
         channel = Account.objects.get(id=self.kwargs['id'])
-        # videos = Video.objects.filter(uploader=channel)
 
-        # data = GetVideoSerializer(videos, many=True).data
-        
-        # return Response(data, status=status.HTTP_200_OK)
         page_num = request.query_params.get('page')
         if not page_num:
             page_num = 1
