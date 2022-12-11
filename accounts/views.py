@@ -154,7 +154,7 @@ class CreatePlaylist(APIView):
         try:
             name = request.data['name']
         except:
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if request.data.get('status') == "true":
             privateStatus = True
@@ -173,7 +173,12 @@ class UpdatePlaylist(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self, request, id, video_id=None):
-        playlist = Playlist.objects.get(id=id)
+        try:
+            playlist = Playlist.objects.get(id=id)
+        except Playlist.DoesNotExist:
+            # Return 404 Not Found if the playlist does not exist
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         video_id = request.query_params.get('video_id')
 
         if video_id is not None:
@@ -196,10 +201,10 @@ class GetSubscriptions(APIView):
     
     def get(self, request, format=None):
         subscriptions = Subscriptions.get_subscriptions(request.user)
+        if len(subscriptions) == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        data = []
-        for user in subscriptions:
-            data.append({'id': user.id, 'username': user.username, 'profilePic': user.profile_pic.url})
+        data = UserSerializer(subscriptions, many=True).data
         
         return Response(data, status=status.HTTP_200_OK)
 

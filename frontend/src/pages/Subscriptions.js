@@ -15,6 +15,8 @@ const Subscriptions = ({ showAlert }) => {
                 setSubscriptions(data)
             } else if (res.status == 403) {
                 showAlert("Must be signed in to view subscriptions")
+            } else if (res.status == 404) {
+                showAlert("No subscriptions to show")
             } else {
                 showAlert("Error getting subscriptions")
             }
@@ -29,7 +31,7 @@ const Subscriptions = ({ showAlert }) => {
             {subscriptions.map((channel) => (
                 <div className="subscriptions">
                     <Link to={`/channel?c=${channel.id}`} className='channel-link'>
-                        <img src={channel.profilePic} className="profile-pic" />
+                        <img src={channel.profile_pic} className="profile-pic" />
                         <h1>{channel.username}</h1>
                     </Link>
                 </div>

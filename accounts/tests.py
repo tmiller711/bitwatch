@@ -275,7 +275,7 @@ class CreatePlaylistTestCase(TestCase):
         response = self.client.post(self.create_playlist_url, data={
             # No name provided
         })
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 400)
 
     def test_create_playlist_unauthenticated(self):
         self.client.logout()

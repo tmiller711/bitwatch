@@ -46,10 +46,16 @@ class UserSerializer(serializers.ModelSerializer):
     subscription_status = serializers.SerializerMethodField(read_only=True)
 
     def get_is_you(self, obj):
-        return self.context['is_you']
+        try:
+            return self.context['is_you']
+        except:
+            return False
 
     def get_subscription_status(self, obj):
-        return self.context['subscription_status']
+        try:
+            return self.context['subscription_status']
+        except:
+            return False
     
     class Meta:
         model = Account
