@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import VideoPreview from "../components/VideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
 
-const Search = ({ getCookie }) => {
+const Search = ({ getCookie, showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState()
 	const [videos, setVideos] = useState()
@@ -14,7 +14,7 @@ const Search = ({ getCookie }) => {
 
         const fetchVideos = async () => {
             const csrftoken = getCookie('csrftoken')
-            const res = await fetch("/api/video/getvideos", {
+            const res = await fetch(`/api/video/getvideos?search=${query}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -27,6 +27,9 @@ const Search = ({ getCookie }) => {
             if (res.ok) {
                 const data = await res.json()
                 setVideos(data)
+            } else if (res.status == 404) {
+                showAlert("No Videos Found")
+                setVideos([])
             }
         }
 

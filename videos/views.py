@@ -22,7 +22,7 @@ class UploadVideo(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GetVideos(APIView):
-    def get(self, request, format=None):
+    def get(self, request, format=None, page=1):
         page_num = request.query_params.get('page')
         if not page_num:
             page_num = 1
@@ -39,8 +39,7 @@ class GetVideos(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, format=None):
-        search = request.data.get('search')
-        # search = request.query_params.get('search')
+        search = request.query_params.get('search')
         videos = Video.objects.filter(title=search)
         if len(videos) == 0:
             return Response(status=status.HTTP_404_NOT_FOUND)

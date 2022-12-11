@@ -66,18 +66,16 @@ class GetVideosTestCase(TestCase):
         self.assertEqual(response.status_code, 204)
 
     def test_get_video_search(self):
-        response = self.client.post(f"{self.url}", data={
-            'search': 'Test Video'
-        })
+        search_url = f"{reverse('get_videos')}?search=Test%20Video"
+        response = self.client.post(search_url)
         self.assertEqual(response.status_code, 200)
 
         data = response.json()
         self.assertEqual(data[0]['title'], 'Test Video')
 
     def test_get_bad_search(self):
-        response = self.client.post(self.url, data={
-            'search': 'aljdlasjkfasdjfasjlf'
-        })
+        search_url = f"{reverse('get_videos')}?search=aslfasiofjoiasfj"
+        response = self.client.post(search_url)
         self.assertEqual(response.status_code, 404)
 
 

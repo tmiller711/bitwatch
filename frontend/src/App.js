@@ -91,7 +91,7 @@ function App() {
 					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
 					<Route path="/playlists" element={<Playlists showAlert={showAlert} />} />
 					<Route path="/playlist" element={<ViewPlaylist />} />
-					<Route path="/search" element={<Search getCookie={getCookie} />} />
+					<Route path="/search" element={<Search getCookie={getCookie} showAlert={showAlert} />} />
 				</Routes>
 			</div>
 		</>
