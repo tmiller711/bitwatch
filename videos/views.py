@@ -116,12 +116,23 @@ class AddComment(APIView):
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        comment = request.data['comment']
-        new_comment = video.add_comment(video_id, request.user, comment)
+        try: 
+            comment = request.data['comment']
+        except KeyError:
+            # handle the case where the comment text is missing
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        data = CommentsSerializer(new_comment).data
+        if len(comment) > 1000:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            new_comment = video.add_comment(video_id, request.user, comment)
+
+            data = CommentsSerializer(new_comment).data
+
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class VideoInteract(APIView):
     permission_classes = [IsAuthenticated]
