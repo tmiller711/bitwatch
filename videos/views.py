@@ -40,7 +40,11 @@ class GetVideos(APIView):
 
     def post(self, request, format=None):
         search = request.data.get('search')
+        # search = request.query_params.get('search')
         videos = Video.objects.filter(title=search)
+        if len(videos) == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         data = GetVideoSerializer(videos, many=True).data
 
         return Response(data, status=status.HTTP_200_OK)

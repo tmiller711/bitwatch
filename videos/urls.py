@@ -6,7 +6,7 @@ urlpatterns = [
     path('upload', UploadVideo.as_view(), name='upload_video'),
     path('get', GetVideo.as_view()),
     path('delete/<uuid:id>', DeleteVideo.as_view()),
-    path('getvideos', GetVideos.as_view()),
+    path('getvideos', GetVideos.as_view(), name='get_videos'),
     path('getcomments/<uuid:id>', GetComments.as_view()),
     path('addcomment/<uuid:id>', AddComment.as_view()),
     path('channelvideos/<uuid:id>', ChannelVideos.as_view()),
