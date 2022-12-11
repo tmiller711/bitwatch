@@ -304,12 +304,11 @@ class UpdatePlaylistTestCase(TestCase):
             description='This is a test video',
         )
 
-        self.update_playlist_url = reverse('update_playlist', args=[self.playlist.id])
+        self.update_playlist_url = reverse('update_playlist', kwargs={'playlist_id': str(self.playlist.id), 'video_id': str(self.video.video_id)})
 
     def test_update_playlist(self):
         response = self.client.put(self.update_playlist_url, data={
             'name': 'Updated Playlist',
-            'video': [self.video.video_id],
         }, content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
@@ -319,12 +318,13 @@ class UpdatePlaylistTestCase(TestCase):
 
     def test_update_playlist_unauthenticated(self):
         self.client.logout()
-        response = self.client.put(f'{self.update_playlist_url}{self.playlist.id}/', data={
+        response = self.client.put(self.update_playlist_url, data={
             'name': 'Updated Playlist'
         })
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
     def test_update_playlist_invalid_id(self):
+        url = reverse('update_playlist', kwargs={'playlist_id': 'd1728f10-327c-40fb-be6b-01ba1233c5ee', 'video_id': 'd1728f10-327c-40fb-be6b-01ba1233c5ee'})
         response = self.client.put(f'{self.update_playlist_url}adfasdfj9saasdf/', data={
             'name': 'Updated Playlist'
         })

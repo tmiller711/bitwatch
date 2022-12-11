@@ -172,14 +172,12 @@ class CreatePlaylist(APIView):
 class UpdatePlaylist(APIView):
     permission_classes = [IsAuthenticated]
 
-    def put(self, request, id, video_id=None):
+    def put(self, request, playlist_id, video_id=None):
         try:
-            playlist = Playlist.objects.get(id=id)
+            playlist = Playlist.objects.get(id=playlist_id)
         except Playlist.DoesNotExist:
-            # Return 404 Not Found if the playlist does not exist
+            # return 404 if the playlist does not exist
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-        video_id = request.query_params.get('video_id')
 
         if video_id is not None:
             video = Video.objects.get(video_id=video_id)

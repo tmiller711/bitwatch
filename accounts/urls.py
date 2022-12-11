@@ -9,7 +9,7 @@ urlpatterns = [
     path('history/', GetHistory.as_view(), name='get_history'),
     # path('channel/<uuid:id>/', Channel.as_view()),
     path('createplaylist/', CreatePlaylist.as_view(), name='create_playlist'),
-    path('updateplaylist/<uuid:id>', UpdatePlaylist.as_view(), name='update_playlist'),
+    path('updateplaylist/<uuid:playlist_id>/<uuid:video_id>', UpdatePlaylist.as_view(), name='update_playlist'),
     path('subscribe/<uuid:user_id>', Subscribe.as_view(), name='subscribe'),
     path('unsubscribe/<uuid:user_id>', Unsubscribe.as_view(), name='unsubscribe'),
     path('subscriptions/', GetSubscriptions.as_view(), name='get_subscriptions'),
