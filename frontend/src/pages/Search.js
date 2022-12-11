@@ -14,16 +14,7 @@ const Search = ({ getCookie, showAlert }) => {
 
         const fetchVideos = async () => {
             const csrftoken = getCookie('csrftoken')
-            const res = await fetch(`/api/video/getvideos?search=${query}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrftoken
-                },
-                body: JSON.stringify({
-                    search: query
-                })
-            })
+            const res = await fetch(`/api/video/search/${searchParams.get('q')}`)
             if (res.ok) {
                 const data = await res.json()
                 setVideos(data)

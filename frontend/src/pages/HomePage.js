@@ -10,7 +10,7 @@ const HomePage = (props) => {
 
 	useEffect(() => {
         const fetchVideos = async () => {
-            const res = await fetch(`/api/video/getvideos?page=${page}`)
+            const res = await fetch(`/api/video/getvideos/${page}`)
             const data = await res.json()
             
 			setVideos([...videos, ...data])
