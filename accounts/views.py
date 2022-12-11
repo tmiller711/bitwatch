@@ -89,6 +89,8 @@ class Register(APIView):
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
 
 class EditProfile(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         serializer = EditProfileSerializer(data=request.data, partial=True)
         if serializer.is_valid():
@@ -139,6 +141,9 @@ class GetHistory(APIView):
 
     def get(self, request, format=None):
         data = History.get_history(user=request.user)
+        if data is None or len(data) == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         videos = GetVideoSerializer(data, many=True).data
         return Response(videos, status=status.HTTP_200_OK)
 
@@ -225,7 +230,6 @@ class Unsubscribe(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 def activate(request, uidb64, token):
-    print("tetstststs")
     User = get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))

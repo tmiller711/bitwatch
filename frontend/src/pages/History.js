@@ -27,6 +27,8 @@ const History = ({ fetchVideo, showAlert }) => {
             setVideos(history)
         } else if (res.status == 403) {
             showAlert("Must be signed in to view history")
+        } else if (res.status == 404) {
+            (showAlert("No history to show"))
         } else {
             showAlert("Error getting history")
         }
