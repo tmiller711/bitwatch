@@ -50,19 +50,27 @@ class GetVideos(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class PlaylistVideos(APIView):
-    def get(self, request, *args, **kwargs):
-        try:
-            playlist = Playlist.objects.get(id=self.kwargs['id'])
-            videos = GetVideoSerializer(playlist.videos.all(), many=True).data
+    def get(self, request, playlist_id=None):
+        if playlist_id == None or playlist_id == '':
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(videos, status=status.HTTP_200_OK)
+        playlist = Playlist.objects.get(id=playlist_id)
+        if playlist == None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        except:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        videos = GetVideoSerializer(playlist.videos.all(), many=True).data
+
+        return Response(videos, status=status.HTTP_200_OK)
+
+        # except:
+        #     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetVideo(APIView):
     def post(self, request, format=None):
-        video = Video.objects.get(video_id=request.data.get('id'))
+        try:
+            video = Video.objects.get(video_id=request.data.get('id'))
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = GetVideoSerializer(video)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -73,7 +81,7 @@ class GetComments(APIView):
         if not page_num:
             page_num = 1
         
-        video = Video.objects.get(video_id=self.kwargs['id'])
+        video = Video.objects.get(video_id=self.kwargs['video_id'])
         paginator = Paginator(video.comments.all().order_by('created').reverse(), 12)
 
         try:
@@ -90,8 +98,8 @@ class DeleteVideo(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            video_id = self.kwargs['id']
-            video = Video.objects.get(user=request.user, video_id=video_id)
+            video_id = self.kwargs['video_id']
+            video = Video.objects.get(uploader=request.user, video_id=video_id)
             video.delete()
             
             return Response(status=status.HTTP_200_OK)
