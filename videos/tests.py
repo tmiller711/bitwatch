@@ -109,10 +109,10 @@ class PlaylistVideosTestCase(TestCase):
         self.assertNotEqual(len(data), 0)
         self.assertEqual(data[0]['title'], 'Test Video')
 
-    # def test_playlist_videos_bad_id(self):
-    #     url = reverse('playlist_videos', kwargs={'playlist_id': 'adlfjasjfklasjflsafldsjflasjlf'})
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 404)
+    def test_playlist_videos_bad_id(self):
+        url = reverse('playlist_videos', kwargs={'playlist_id': '4332acd8-f3a0-4ad7-9fef-57a835cb9c56'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
     
     # def test_playlist_videos_no_id(self):
     #     url = reverse('playlist_videos', kwargs={'playlist_id': ''})
@@ -316,3 +316,35 @@ class VideoInteractTestCase(TestCase):
             'action': 'like'
         })
         self.assertEqual(response.status_code, 403)
+
+class ChannelVideosTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+
+        self.video = Video.objects.create(
+            uploader=self.account,
+            title='Test Video',
+            description='This is a test description',
+        )
+        self.url = reverse('channel_videos', kwargs={'channel_id': str(self.account.id)})
+
+    def test_channel_videos(self):
+        response = self.client.get(self.url)
+
+        # Test that the response is 200 OK
+        self.assertEqual(response.status_code, 200)
+
+        # Test that the response contains the expected data
+        self.assertEqual(response.data[0]['title'], 'Test Video')
+        self.assertEqual(response.data[0]['description'], 'This is a test description')
+
+    def test_404_channel_videos(self):
+        url = reverse('channel_videos', kwargs={'channel_id': "4332acd8-f3a0-4ad7-9fef-57a835cb9c56"})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)

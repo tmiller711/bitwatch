@@ -51,19 +51,14 @@ class GetVideos(APIView):
 
 class PlaylistVideos(APIView):
     def get(self, request, playlist_id=None):
-        if playlist_id == None or playlist_id == '':
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        playlist = Playlist.objects.get(id=playlist_id)
-        if playlist == None:
+        try:
+            playlist = Playlist.objects.get(id=playlist_id)
+        except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         videos = GetVideoSerializer(playlist.videos.all(), many=True).data
 
         return Response(videos, status=status.HTTP_200_OK)
-
-        # except:
-        #     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetVideo(APIView):
     def post(self, request, format=None):
@@ -147,7 +142,10 @@ class VideoInteract(APIView):
 
 class ChannelVideos(APIView):
     def get(self, request, *args, **kwargs):
-        channel = Account.objects.get(id=self.kwargs['id'])
+        try:
+            channel = Account.objects.get(id=self.kwargs['channel_id'])
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         page_num = request.query_params.get('page')
         if not page_num:
