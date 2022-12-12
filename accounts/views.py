@@ -288,7 +288,7 @@ class ResetPassword(APIView):
             return Response(status=status.HTTP_200_OK)
         else:
             # alert the user of bad activation link
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 def activate(request, uidb64, token):

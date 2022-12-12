@@ -4,10 +4,12 @@ from django.urls import reverse
 from .views import Login
 from django.http import HttpRequest
 from django.test.client import RequestFactory
-
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 
 from .models import Account, Subscriptions, History, Playlist
 from videos.models import Video
+from .tokens import accounts_activation_token
 
 class RegisterTestCase(TestCase):
     def test_register(self):
@@ -363,3 +365,76 @@ class DeletePlaylistTestCase(TestCase):
         self.client.logout()
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, 403)
+
+class ResetPasswordTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+    def test_reset_password(self):
+    
+        account = Account.objects.get(email='testuser@gmail.com')
+        factory = RequestFactory()
+        request = factory.get('/accounts/register')
+
+        activation_url = Account.get_activate_url(request=request, user=account)
+        response = self.client.get(f"http://{activation_url}")
+        self.assertNotEqual(response.status_code, 404)
+
+        account.refresh_from_db()
+        self.assertTrue(account.is_active)
+
+class TestResetPassword(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.uidb64 = urlsafe_base64_encode(force_bytes(self.account.pk))
+        self.token = accounts_activation_token.make_token(self.account)
+
+        self.url = reverse('reset', kwargs={'uidb64': self.uidb64, 'token': self.token})
+
+    def test_reset_password(self):
+        response = self.client.post(self.url, data={'password': 'newpassword'})
+        self.assertEqual(response.status_code, 200)
+
+        # Assert that the user's password has been successfully reset
+        account = Account.objects.get(pk=self.account.pk)
+        self.assertTrue(account.check_password('newpassword'))
+
+    def test_reset_password_bad_token(self):
+        url = reverse('reset', kwargs={'uidb64': self.uidb64, 'token': 'asdflkjaslf'})
+        response = self.client.post(url, data={'password': 'newpassword'})
+        self.assertEqual(response.status_code, 400)
+        
+    def test_reset_password_bad_uid(self):
+        url = reverse('reset', kwargs={'uidb64': 'ladjlajflasdlf', 'token': self.token})
+        response = self.client.post(url, data={'password': 'newpassword'})
+        self.assertEqual(response.status_code, 400)
+
+    def test_reset_password_no_password(self):
+        url = reverse('reset', kwargs={'uidb64': self.uidb64, 'token': self.token})
+        response = self.client.post(url, data={'password': ''})
+        self.assertEqual(response.status_code, 400)
+
+
+class SendResetTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.url = reverse('send_reset')
+
+    def test_send_reset(self):
+        response = self.client.post(self.url, data={'email': self.account.email})
+        self.assertEqual(response.status_code, 200)
+
+    def test_send_reset_bad_email(self):
+        response = self.client.post(self.url, data={'email': 'bademail@gmail.com'})
+        self.assertEqual(response.status_code, 404)

@@ -23,5 +23,5 @@ urlpatterns = [
     path('getplaylists/', GetPlaylists.as_view(), name='get_playlists'),
     path('sendreset/', SendPasswordReset.as_view(), name='send_reset'),
     path('activate/<uidb64>/<token>', activate, name='activate'),
-    path('reset/<uidb64>/<token>/', ResetPassword.as_view(), name='')
+    path('reset/<uidb64>/<token>/', ResetPassword.as_view(), name='reset')
 ]
