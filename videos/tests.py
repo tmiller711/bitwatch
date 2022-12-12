@@ -362,3 +362,96 @@ class ChannelVideosTestCase(TestCase):
         url = reverse('channel_videos', kwargs={'channel_id': str(self.account.id), 'page': 25})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 204)
+
+class CommentTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+        # Create a comment for testing
+        self.comment = Comment.objects.create(
+            user=self.account,
+            text='This is a test comment.',
+        )
+
+    def test_created_ago(self):
+        # Test that the created_ago property returns the correct string
+        # time = datetime.now()
+        self.assertEqual(
+            self.comment.created_ago,
+            '0 hours ago'
+        )
+
+    def test_str(self):
+        # Test that the __str__ method returns the correct string
+        self.assertEqual(
+            str(self.comment),
+            'testuser'
+        )
+
+from django.test import TestCase
+from django.contrib.auth import get_user_model
+from datetime import datetime
+
+class VideoTestCase(TestCase):
+    def setUp(self):
+        # Create a user for testinguser
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+        self.video = Video.objects.create(
+            uploader=self.account,
+            title='Test Video',
+            description='This is a test video.',
+        )
+
+    def test_uploaded_ago(self):
+        # Test that the uploaded_ago property returns the correct string
+        time = datetime.now()
+        self.assertEqual(
+            self.video.uploaded_ago,
+            '0 hours ago'
+        )
+
+    def test_str(self):
+        # Test that the __str__ method returns the correct string
+        self.assertEqual(
+            str(self.video),
+            'Test Video'
+        )
+
+    def test_add_comment(self):
+        # Test that the add_comment method adds a comment to the video
+        comment = Video.add_comment(self.video.video_id, self.account, 'This is a test comment.')
+        self.assertIn(comment, self.video.comments.all())
+
+    def test_like(self):
+        # Test that the like method adds a like to the video
+        self.video.like(self.account)
+        self.assertIn(self.account, self.video.likes.all())
+
+        self.assertEqual(self.video.num_likes, 1)
+
+        self.video.like(self.account)
+        self.assertNotIn(self.account, self.video.likes.all())
+        
+        self.assertEqual(self.video.num_likes, 0)
+
+    def test_dislike(self):
+        self.video.dislike(self.account)
+        self.assertIn(self.account, self.video.dislikes.all())
+
+        self.assertEqual(self.video.num_dislikes, 1)
+
+        self.video.dislike(self.account)
+        self.assertNotIn(self.account, self.video.dislikes.all())
+        
+        self.assertEqual(self.video.num_dislikes, 1)
