@@ -16,6 +16,8 @@ import Search from "./pages/Search";
 import { Alert } from 'react-bootstrap';
 import "./css/sidebar.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { PageNotFound } from "./components/NotFound";
+import { subscribe, unsubscribe } from "./api"
 
 function App() {
 	const [alertShow, setAlertShow] = useState(false)
@@ -37,16 +39,6 @@ function App() {
         return cookieValue;
 	}
 
-	const subscribe = async (subToID) => {
-		const res = await fetch(`/api/account/subscribe/${subToID}`)
-		return res
-	}
-
-	const unsubscribe = async (unsubID) => {
-		const res = await fetch(`/api/account/unsubscribe/${unsubID}`)
-		return res
-	}
-
     const fetchVideo = async (query) => {
         const csrftoken = getCookie('csrftoken')
 
@@ -57,9 +49,13 @@ function App() {
                 'X-CSRFToken': csrftoken
             },
         })
+		if (res.status == 200) {
+			const data = await res.json()
+			return data
+		} else if (res.status == 404) {
+			return 404
+		}
 
-        const data = await res.json()
-        return data
     }
 
 	const showAlert = (text) => {
@@ -89,6 +85,7 @@ function App() {
 					<Route path="/playlists" element={<Playlists showAlert={showAlert} />} />
 					<Route path="/playlist" element={<ViewPlaylist showAlert={showAlert} />} />
 					<Route path="/search" element={<Search getCookie={getCookie} showAlert={showAlert} />} />
+					<Route component={<PageNotFound />} />
 				</Routes>
 			</div>
 		</>

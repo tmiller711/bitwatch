@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import "../css/watch.css";
 import Form from 'react-bootstrap/Form';
@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner'
 import VideoInteraction from "../components/VideoInteraction";
 import Comments from "../components/Comments";
+import { VideoNotFound } from "../components/NotFound";
 
 const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -16,19 +17,23 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
     const [views, setViews] = useState(0)
     const [uploadedAgo, setUploadedAgo] = useState('')
     const [uploaderID, setUploaderID] = useState()
+    const descriptionRef = useRef(null);
 
     const [comments, setComments] = useState(null)
 
     useEffect(() => {
         const fetchVideo = async () => {
             const video = await fetchVideoFunction(query)
-            
-            setUploadedAgo(video.uploaded_ago)
-            setTitle(video.title)
-            setVideo(video.video)
-            setDescription(video.description)
-            setViews(video.views)
-            setUploaderID(video.uploader)
+            if (video == 404) {
+                setVideo(404)
+            } else {
+                setUploadedAgo(video.uploaded_ago)
+                setTitle(video.title)
+                setVideo(video.video)
+                setDescription(video.description)
+                setViews(video.views)
+                setUploaderID(video.uploader)
+            }
         }
 
         fetchVideo()
@@ -56,8 +61,9 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
     }
 
     const changeDescriptionClass = () => {
-        const description = document.querySelector('.description-section')
-        description.classList.toggle('active')
+        descriptionRef.current.classList.toggle('active')
+        // const description = document.querySelector('.description-section')
+        // description.classList.toggle('active')
     }
 
    if (video != undefined && comments != null) {
@@ -69,14 +75,19 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
                     {<VideoInteraction uploaderID={uploaderID} subscribe={subscribe} unsubscribe={unsubscribe}
                                     query={query} getCookie={getCookie} showAlert={showAlert} />}
                 </div>
-                <div className="description-section" onClick={changeDescriptionClass}>
+                <div className="description-section" ref={descriptionRef} onClick={changeDescriptionClass}>
                     <p className="views">{views} views - {uploadedAgo}</p>
                     <p>{description}</p>
                 </div>
                 <Comments videoID={query} getCookie={getCookie} firstComments={comments} showAlert={showAlert} />
             </div>
         )
-    } else {
+    } else if (video == 404) {
+        return (
+            <VideoNotFound />
+        )
+    }
+    else {
         return (
             <div className="loading">
                 <Spinner animation="border" role="status" className="spinner">

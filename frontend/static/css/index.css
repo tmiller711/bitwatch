@@ -57,3 +57,7 @@ div.loading {
     align-items: center;
     justify-content: center;
 }
+
+div.not-found {
+    margin: 0 auto;
+}

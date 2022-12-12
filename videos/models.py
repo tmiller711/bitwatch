@@ -40,9 +40,9 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
-    @property
-    def get_tag(self, name):
-        return Tag.objects.get(name=name)
+    # @classmethod
+    # def get_tag(cls, name):
+    #     return cls.objects.get(name=name)
 
 class Video(models.Model):
     video_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -75,13 +75,13 @@ class Video(models.Model):
         return self.uploaded
     
     @classmethod
-    def add_comment(self, video_id, user, text):
+    def add_comment(cls, video_id, user, text):
         comment = Comment.objects.create(
             user = user,
             text = text
         )
 
-        video = self.objects.get(video_id=video_id)
+        video = cls.objects.get(video_id=video_id)
         video.comments.add(comment)
 
         return comment
