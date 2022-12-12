@@ -7,6 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import Spinner from 'react-bootstrap/Spinner'
 import VideoPreview from "../components/VideoPreview";
 import PlaylistPreview from "../components/PlaylistPreview";
+import { ChannelNotFound } from "../components/NotFound";
 import "../css/channel.css"
 
 const Channel = ({ getCookie, subscribe, unsubscribe }) => {
@@ -23,6 +24,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [show, setShow] = useState(false)
     const [videos, setVideos] = useState([])
     const [playlists, setPlaylists] = useState()
+    const [channelNotFound, setChannelNotFound] = useState(false)
  
 	const [page, setPage] = useState(1)
 
@@ -41,6 +43,8 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                 setSubscriptionStatus(user.subscription_status)
                 setChannelID(user.id)
                 setYourChannel(user.is_you)
+            } else if (res.status == 404) {
+                setChannelNotFound(true)
             }
         }
 
@@ -180,7 +184,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         channelVideos.classList.toggle('active')
     }
 
-    if (videos != undefined && username != ""){
+    if (videos != [] && username != ""){
         return (
             <div className="channel">
                 <div className="channel-details">
@@ -247,6 +251,10 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                     </Modal.Footer>
                 </Modal>
             </div>
+        )
+    } else if (channelNotFound == true) {
+        return (
+            <ChannelNotFound />
         )
     } else {
         return (

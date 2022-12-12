@@ -17,6 +17,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
     const [views, setViews] = useState(0)
     const [uploadedAgo, setUploadedAgo] = useState('')
     const [uploaderID, setUploaderID] = useState()
+    const [videoNotFound, setVideoNotFound] = useState(false)
     const descriptionRef = useRef(null);
 
     const [comments, setComments] = useState(null)
@@ -25,7 +26,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
         const fetchVideo = async () => {
             const video = await fetchVideoFunction(query)
             if (video == 404) {
-                setVideo(404)
+                setVideoNotFound(true)
             } else {
                 setUploadedAgo(video.uploaded_ago)
                 setTitle(video.title)
@@ -82,7 +83,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
                 <Comments videoID={query} getCookie={getCookie} firstComments={comments} showAlert={showAlert} />
             </div>
         )
-    } else if (video == 404) {
+    } else if (videoNotFound == true) {
         return (
             <VideoNotFound />
         )
