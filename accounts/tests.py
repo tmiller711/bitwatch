@@ -329,3 +329,37 @@ class UpdatePlaylistTestCase(TestCase):
             'name': 'Updated Playlist'
         })
         self.assertEqual(response.status_code, 404)
+
+class DeletePlaylistTestCase(TestCase):
+    def setUp(self):
+        self.account = Account(email='testuser@gmail.com', username='testuser')
+        self.account.set_password('testpassword')
+        self.account.is_active = True
+        self.account.save()
+
+        self.client.login(email='testuser@gmail.com', password='testpassword')
+
+        self.playlist = Playlist(creator=self.account, name='Test Playlist')
+        self.playlist.save()
+        self.account.playlists.add(self.playlist)
+        
+        self.url = reverse('delete_playlist', kwargs={'playlist_id': self.playlist.id})
+
+    def test_delete_playlist(self):
+        response = self.client.delete(self.url)
+
+        # assert that the video was deleted and a 200 status was returned
+        self.assertEqual(response.status_code, 200)
+        with self.assertRaises(Playlist.DoesNotExist):
+            Playlist.objects.get(id=self.playlist.id)
+
+    def test_delete_404_playlist(self):
+        self.playlist.delete()
+        response = self.client.delete(self.url)
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_delete_playlist_unauthenticated(self):
+        self.client.logout()
+        response = self.client.delete(self.url)
+        self.assertEqual(response.status_code, 403)

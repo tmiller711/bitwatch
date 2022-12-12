@@ -393,10 +393,6 @@ class CommentTestCase(TestCase):
             'testuser'
         )
 
-from django.test import TestCase
-from django.contrib.auth import get_user_model
-from datetime import datetime
-
 class VideoTestCase(TestCase):
     def setUp(self):
         # Create a user for testinguser
@@ -415,7 +411,6 @@ class VideoTestCase(TestCase):
 
     def test_uploaded_ago(self):
         # Test that the uploaded_ago property returns the correct string
-        time = datetime.now()
         self.assertEqual(
             self.video.uploaded_ago,
             '0 hours ago'
