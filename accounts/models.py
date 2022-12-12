@@ -167,6 +167,3 @@ class Playlist(models.Model):
     def __str__(self):
         return self.name
 
-    @classmethod
-    def create_playlist(self, user, name):
-        obj = self.objects.create(creator=user, name=name)

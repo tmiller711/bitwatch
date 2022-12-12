@@ -1,4 +1,5 @@
 .playlist-preview {
+    position: relative;
     height: 300px;
     width: 400px;
     background-color: #D2D2D4;
@@ -48,6 +49,12 @@ div.img-container {
     transform: translateY(-50%);
 }
 
+.playlist-info {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
 .name {
     font-size: 20px;
     text-decoration: none;
@@ -68,3 +75,12 @@ div.img-container {
     float: right;
     padding-right: 10px;
 }
+
+.delete-playlist-button {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    width: 35px;
+    height: 35px;
+    z-index: 10;
+} 

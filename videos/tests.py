@@ -454,4 +454,4 @@ class VideoTestCase(TestCase):
         self.video.dislike(self.account)
         self.assertNotIn(self.account, self.video.dislikes.all())
         
-        self.assertEqual(self.video.num_dislikes, 1)
+        self.assertEqual(self.video.num_dislikes, 0)

@@ -193,6 +193,22 @@ class UpdatePlaylist(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeletePlaylist(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, playlist_id):
+        try:
+            playlist = Playlist.objects.get(id=playlist_id)
+        except Playlist.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    
+        try:
+            playlist.delete()
+            
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class GetSubscriptions(APIView):
     permission_classes = [IsAuthenticated]

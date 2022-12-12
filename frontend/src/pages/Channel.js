@@ -32,7 +32,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         setQuery(searchParams.get('c'))
 
         const getAccountDetails = async () => {
-            const res = await fetch(`/api/account/getuser/${query}`)
+            const res = await fetch(`/api/account/getuser/${searchParams.get('c')}`)
             if (res.ok) {
                 const user = await res.json()
 
@@ -169,7 +169,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         return (
         <>
             {playlists.map((playlist) => (
-                <PlaylistPreview key={playlist.id} playlist={playlist} />
+                <PlaylistPreview key={playlist.id} playlist={playlist} edit={yourChannel} getCookie={getCookie} />
             ))} 
         </>
         )

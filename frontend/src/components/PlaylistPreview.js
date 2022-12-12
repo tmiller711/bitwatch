@@ -1,8 +1,23 @@
 import React, { useEffect, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
+import Button from "react-bootstrap/Button"
 import "../css/playlistpreview.css"
 
-const PlaylistPreview = ({ id, playlist }) => {
+const PlaylistPreview = ({ id, playlist, getCookie, edit=False, showAlert }) => {
+
+    const deletePlaylist = async () => {
+        const csrftoken = getCookie('csrftoken')
+        console.log("deleting")
+        const res = await fetch(`/api/account/deleteplaylist/${playlist.id}`, {
+            method: "DELETE",
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        })
+        if (!res.ok) {
+            showAlert("Error deleting playlist")
+        }
+    }
     
     return (
         <div className="playlist-preview">
@@ -14,13 +29,16 @@ const PlaylistPreview = ({ id, playlist }) => {
                         <p>{playlist.private == true ? "Private" : "Public"}</p>
                     </div>
                 </div>
-                <p className="name">{playlist.name}</p>
-                <p className="user">
-                    <Link to={`/channel?c=${playlist.creator}`} className="channel-link">
-                        {playlist.username}
-                    </Link>
-                </p>
-                <p className="num-videos">{playlist.videos.length} videos</p>
+                <div className="playlist-info">
+                    <p className="name">{playlist.name}</p>
+                    {edit == true ? <Button className="delete-playlist-button" onClick={() => deletePlaylist()}>X</Button> : null}
+                    <p className="user">
+                        <Link to={`/channel?c=${playlist.creator}`} className="channel-link">
+                            {playlist.username}
+                        </Link>
+                    </p>
+                    <p className="num-videos">{playlist.videos.length} videos</p>
+                </div>
             </Link>
         </div>
     )
