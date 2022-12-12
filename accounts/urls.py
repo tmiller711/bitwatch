@@ -2,7 +2,8 @@ from django.urls import path
 import uuid
 
 from .views import (GetUser, Login, Register, activate, EditProfile, Subscribe, Unsubscribe, 
-                    GetSubscriptions, GetHistory, GetPlaylists, CreatePlaylist, UpdatePlaylist, DeletePlaylist)
+                    GetSubscriptions, GetHistory, GetPlaylists, CreatePlaylist, UpdatePlaylist, DeletePlaylist,
+                    SendPasswordReset, ResetPassword)
 
 urlpatterns = [
     path('getuser/<uuid:user_id>/', GetUser.as_view(), name='get_user_by_id'),
@@ -20,5 +21,7 @@ urlpatterns = [
     path('profile/', EditProfile.as_view(), name='edit_profile'),
     path('getplaylists/<uuid:user_id>', GetPlaylists.as_view(), name='get_playlists'),
     path('getplaylists/', GetPlaylists.as_view(), name='get_playlists'),
+    path('sendreset/', SendPasswordReset.as_view(), name='send_reset'),
     path('activate/<uidb64>/<token>', activate, name='activate'),
+    path('reset/<uidb64>/<token>/', ResetPassword.as_view(), name='')
 ]

@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import "../css/registration.css"
 
-const Login = (props) => {
+const Login = ({ showAlert }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Login = (props) => {
             if(response.ok){
                 navigate("/", {replace: true})
             } else {
-                alert("Invalid Credentials")
+                showAlert("Invalid Credentials")
             }
         })
     }
@@ -65,6 +65,7 @@ const Login = (props) => {
                 </Form.Group>
 
                 <p>Want to register an account instead? Click <Link to="/register">Here</Link></p>
+                <p>Reset Password <Link to="/sendreset">Here</Link></p>
                 <Button type='submit' className="btn btn-block">Login</Button>
             </Form>
         </div>

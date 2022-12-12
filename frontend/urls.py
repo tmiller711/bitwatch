@@ -14,5 +14,7 @@ urlpatterns = [
     path('channel/', index),
     path('playlists/', index),
     path('playlist/', index),
-    path('search/', index)
+    path('search/', index),
+    path('sendreset/', index),
+    path('resetpassword/', index)
 ]

@@ -18,6 +18,8 @@ import "./css/sidebar.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { PageNotFound } from "./components/NotFound";
 import { subscribe, unsubscribe } from "./api"
+import SendReset from "./pages/SendReset";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
 	const [alertShow, setAlertShow] = useState(false)
@@ -74,7 +76,7 @@ function App() {
 				)}
 				<Routes>
 					<Route path="/" element={<HomePage />} />
-					<Route path="/login" element={<Login />} />
+					<Route path="/login" element={<Login showAlert={showAlert} />} />
 					<Route path='/register' element={<Register showAlert={showAlert} />} />
 					<Route path="/subscriptions" element={<Subscriptions showAlert={showAlert} />} />
 					<Route path="/history" element={<History fetchVideo={fetchVideo} showAlert={showAlert} />} />
@@ -85,6 +87,8 @@ function App() {
 					<Route path="/playlists" element={<Playlists showAlert={showAlert} />} />
 					<Route path="/playlist" element={<ViewPlaylist showAlert={showAlert} />} />
 					<Route path="/search" element={<Search getCookie={getCookie} showAlert={showAlert} />} />
+					<Route path='/sendreset' element={<SendReset showAlert={showAlert} getCookie={getCookie} />} />
+					<Route path='/resetpassword' element={<ResetPassword showAlert={showAlert} getCookie={getCookie} />} />
 					<Route component={<PageNotFound />} />
 				</Routes>
 			</div>

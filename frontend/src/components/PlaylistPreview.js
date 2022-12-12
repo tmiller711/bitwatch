@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom"
 import Button from "react-bootstrap/Button"
 import "../css/playlistpreview.css"
 
-const PlaylistPreview = ({ id, playlist, getCookie, edit=False, showAlert }) => {
+const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => {
 
     const deletePlaylist = async () => {
         const csrftoken = getCookie('csrftoken')

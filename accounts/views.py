@@ -251,7 +251,46 @@ class Unsubscribe(APIView):
             return Response(status=status.HTTP_200_OK)
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+        
+class SendPasswordReset(APIView):
+    def post(self, request, email=None):
+        email = request.data.get('email')
+        try:
+            account = Account.objects.get(email=email)
+        except Account.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        url = Account.get_password_reset_url(request=request, user=account)
+        message = render_to_string("template_reset_password.html", {
+            "url": url
+        })
+        mail_subject = "Reset Your Password"
+        email = EmailMessage(mail_subject, message, to=[email])
+        email.send()
+
+        return Response(status=status.HTTP_200_OK)
+
+class ResetPassword(APIView):
+
+    def post(self, request, uidb64, token):
+        User = get_user_model()
+        new_password = request.data.get('password')
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = Account.objects.get(pk=uid)
+        except:
+            user = None
+
+        if user is not None and accounts_activation_token.check_token(user, token) and new_password:
+            user.set_password(new_password)
+            user.save()
+            
+            return Response(status=status.HTTP_200_OK)
+        else:
+            # alert the user of bad activation link
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 def activate(request, uidb64, token):
     User = get_user_model()
     try:
