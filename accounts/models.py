@@ -5,6 +5,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from django.conf import settings
 import os
 from django.db.models import F
@@ -103,23 +104,23 @@ class Account(AbstractBaseUser):
         user.profile_pic = new_pic
         user.save()
     
-class History(models.Model):
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    history = models.ManyToManyField('videos.Video', related_name='hist', blank=True)
+class HistoryEntry(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    video = models.ForeignKey('videos.Video', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     @classmethod
-    def get_history(self, user):
-        object, create = self.objects.get_or_create(
-            user=user
-        )
-        return object.history.all()
-    
+    def get_history(cls, user):
+        return cls.objects.filter(user=user).order_by('-timestamp')
+
     @classmethod
-    def add_video(self, user, video):
-        object, create = self.objects.get_or_create(
-            user = user
-        )
-        object.history.add(video)
+    def add_video(cls, user, video):
+        try:
+            old_entry = cls.objects.get(user=user, video=video)
+            old_entry.timestamp = timezone.now()
+            old_entry.save()
+        except cls.DoesNotExist:
+            object = cls.objects.create(user=user, video=video)
 
     def __str__(self):
         return self.user.username

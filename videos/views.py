@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video, Tag
-from accounts.models import History, Account, Playlist
+from accounts.models import HistoryEntry, Account, Playlist
 
 class UploadVideo(APIView):
     permission_classes = [IsAuthenticated]
@@ -153,7 +153,7 @@ class VideoInteract(APIView):
             elif action == 'view':
                 video.add_view()
                 # add video to users history if they are logged in
-                History.add_video(request.user, video)
+                HistoryEntry.add_video(request.user, video)
             else:
                 return Response({"message": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -11,7 +11,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.paginator import Paginator
 
-from .models import Account, Subscriptions, Playlist, History
+from .models import Account, Subscriptions, Playlist, HistoryEntry
 from videos.models import Video
 from .serializers import LoginSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer, UserSerializer
 from videos.serializers import GetVideoSerializer
@@ -141,7 +141,8 @@ class GetHistory(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, page=1):
-        history = History.get_history(user=request.user)
+        history = HistoryEntry.get_history(user=request.user)
+        history = [entry.video for entry in history]
         if len(history) == 0:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

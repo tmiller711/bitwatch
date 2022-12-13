@@ -7,7 +7,7 @@ from django.test.client import RequestFactory
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 
-from .models import Account, Subscriptions, History, Playlist
+from .models import Account, Subscriptions, HistoryEntry, Playlist
 from videos.models import Video
 from .tokens import accounts_activation_token
 
@@ -193,8 +193,9 @@ class GetHistoryTestCase(TestCase):
         self.video3 = Video(uploader=self.account, title='Test Video 3')
         self.video3.save()
 
-        self.history = History.objects.create(user=self.account)
-        self.history.history.add(self.video1, self.video2, self.video3)
+        self.history1 = HistoryEntry.objects.create(user=self.account, video=self.video1)
+        self.history2 = HistoryEntry.objects.create(user=self.account, video=self.video2)
+        self.history3 = HistoryEntry.objects.create(user=self.account, video=self.video3)
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -205,15 +206,27 @@ class GetHistoryTestCase(TestCase):
         data = response.json()
         self.assertEqual(len(data), 3)
         # make this in order once I add that to the history model
-        video_ids = [str(self.video1.video_id), str(self.video2.video_id), str(self.video3.video_id)]
-        self.assertIn(data[0]['video_id'], video_ids)
-        self.assertIn(data[1]['video_id'], video_ids)
-        self.assertIn(data[2]['video_id'], video_ids)
+        self.assertEqual(data[0]['video_id'], str(self.video3.video_id))
+        self.assertEqual(data[1]['video_id'], str(self.video2.video_id))    
+        self.assertEqual(data[2]['video_id'], str(self.video1.video_id))
 
     def test_get_history_unauthorized(self):
         self.client.logout()
         response = self.client.get(self.get_history_url)
         self.assertEqual(response.status_code, 403)
+    
+    def test_history_add_video(self):
+        HistoryEntry.add_video(user=self.account, video=self.video2)
+        response = self.client.get(self.get_history_url)
+        self.assertEqual(response.status_code, 200)
+
+        data = response.json()
+        self.assertEqual(len(data), 3)
+        # make this in order once I add that to the history model
+        self.assertEqual(data[0]['video_id'], str(self.video2.video_id))
+        self.assertEqual(data[1]['video_id'], str(self.video3.video_id))    
+        self.assertEqual(data[2]['video_id'], str(self.video1.video_id))
+
 
 class GetPlaylistsTestCase(TestCase):
     def setUp(self):
