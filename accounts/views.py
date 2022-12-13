@@ -9,6 +9,7 @@ from django.contrib import messages
 from rest_framework.permissions import IsAuthenticated
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.core.paginator import Paginator
 
 from .models import Account, Subscriptions, Playlist, History
 from videos.models import Video
@@ -139,13 +140,21 @@ class GetPlaylists(APIView):
 class GetHistory(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
-        data = History.get_history(user=request.user)
-        if data is None or len(data) == 0:
+    def get(self, request, page=1):
+        history = History.get_history(user=request.user)
+        if len(history) == 0:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        videos = GetVideoSerializer(data, many=True).data
-        return Response(videos, status=status.HTTP_200_OK)
+        paginator = Paginator(history, 12)
+
+        try:
+            videos = paginator.page(page)
+            data = GetVideoSerializer(videos, many=True).data
+
+            return Response(data, status=status.HTTP_200_OK)
+
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 class CreatePlaylist(APIView):
     permission_classes = [IsAuthenticated]

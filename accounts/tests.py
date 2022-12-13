@@ -180,7 +180,7 @@ class SubscriptionsTestCase(TestCase):
 
 class GetHistoryTestCase(TestCase):
     def setUp(self):
-        self.get_history_url = reverse('get_history')
+        self.get_history_url = reverse('get_history', kwargs={'page': 1})
         self.account = Account(email='testuser@gmail.com', username='testuser')
         self.account.set_password('testpassword')
         self.account.is_active = True

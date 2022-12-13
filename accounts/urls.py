@@ -8,7 +8,7 @@ from .views import (GetUser, Login, Register, activate, EditProfile, Subscribe, 
 urlpatterns = [
     path('getuser/<uuid:user_id>/', GetUser.as_view(), name='get_user_by_id'),
     path('getuser/', GetUser.as_view(), name='get_user'),
-    path('history/', GetHistory.as_view(), name='get_history'),
+    path('history/<int:page>/', GetHistory.as_view(), name='get_history'),
     # path('channel/<uuid:id>/', Channel.as_view()),
     path('createplaylist/', CreatePlaylist.as_view(), name='create_playlist'),
     path('updateplaylist/<uuid:playlist_id>/<uuid:video_id>', UpdatePlaylist.as_view(), name='update_playlist'),
