@@ -114,7 +114,7 @@ class EditProfile(APIView):
         return {'name': user.name, 'profile_pic': user.profile_pic.url}
     
 class GetPlaylists(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request, user_id=None):
 
