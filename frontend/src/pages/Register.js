@@ -14,19 +14,6 @@ const Register = ({ showAlert }) => {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        if (!email) {
-            alert("Please add an email")
-            return
-        }
-        if (!username) {
-            alert("Please add a username")
-            return
-        }
-        if (!password) {
-            alert("Please add a password")
-            return
-        }
-
         registerUser({ email, username, password })
 
         // after submitting register form make the fields blank
@@ -62,7 +49,7 @@ const Register = ({ showAlert }) => {
             <Form onSubmit={onSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" onChange={(e) => setEmail(e.target.value)}/>
+                    <Form.Control type="email" required placeholder="Enter email" onChange={(e) => setEmail(e.target.value)}/>
                     <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
                     </Form.Text>
@@ -70,12 +57,12 @@ const Register = ({ showAlert }) => {
 
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
+                    <Form.Control type="text" required placeholder="Username" onChange={(e) => setUsername(e.target.value)}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                    <Form.Control type="password" required placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                 </Form.Group>
 
                 <p>Want to login to an existing account instead? Click <Link to="/login">Here</Link></p>
