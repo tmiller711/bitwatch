@@ -40,5 +40,4 @@ const fetchVideo = async (query) => {
     return 404
   }
 }
-
 export { subscribe, unsubscribe, fetchVideo, getCookie };
