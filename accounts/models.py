@@ -10,6 +10,7 @@ from django.conf import settings
 import os
 from django.db.models import F
 import uuid
+from operator import attrgetter
 
 from .tokens import accounts_activation_token
 
@@ -98,7 +99,7 @@ class Account(AbstractBaseUser):
         return f"{site}/resetpassword?uid={uid}&token={token}"
 
     @classmethod
-    def update_profile_pic(self, user, new_pic):
+    def update_profile_pic(cls, user, new_pic):
         if user.profile_pic.name != 'images/default.png':
             os.remove(os.path.join(settings.MEDIA_ROOT, str(user.profile_pic.name)))
         user.profile_pic = new_pic
@@ -130,8 +131,8 @@ class Subscriptions(models.Model):
     subscriptions = models.ManyToManyField(get_user_model(), blank=True, related_name='subs')
 
     @classmethod 
-    def subscribe(self, user, subscribe_to):
-        object, create = self.objects.get_or_create(
+    def subscribe(cls, user, subscribe_to):
+        object, create = cls.objects.get_or_create(
             user = user
         )
         object.subscriptions.add(subscribe_to)
@@ -139,8 +140,8 @@ class Subscriptions(models.Model):
         subscribe_to.save()
 
     @classmethod
-    def unsubscribe(self, user, unsubscribe_from):
-        object, create = self.objects.get_or_create(
+    def unsubscribe(cls, user, unsubscribe_from):
+        object, create = cls.objects.get_or_create(
             user = user
         )
         object.subscriptions.remove(unsubscribe_from)
@@ -148,8 +149,8 @@ class Subscriptions(models.Model):
         unsubscribe_from.save()
 
     @classmethod
-    def subscription_status(self, user, check_user):
-        object, create = self.objects.get_or_create(
+    def subscription_status(cls, user, check_user):
+        object, create = cls.objects.get_or_create(
             user = user
         )
         if check_user in object.subscriptions.all():
@@ -158,9 +159,20 @@ class Subscriptions(models.Model):
             return False
         
     @classmethod
-    def get_subscriptions(self, user):
-        object, create = self.objects.get_or_create(user=user)
+    def get_subscriptions(cls, user):
+        object, create = cls.objects.get_or_create(user=user)
         return object.subscriptions.all()
+    
+    @classmethod
+    def get_videos(cls, user):
+        from videos.models import Video
+        object, create = cls.objects.get_or_create(user=user)
+        subscriptions = object.subscriptions.all()
+        videos = []
+        for channel in subscriptions:
+            videos.extend(Video.objects.filter(uploader=channel))
+        
+        return sorted(videos, key=attrgetter('uploaded'), reverse=True)
         
     def __str__(self):
         return self.user.username

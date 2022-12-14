@@ -11,3 +11,10 @@ img.profile-pic {
     width: 35px;
     height: 35px;
 }
+
+.videos {
+    display: grid;
+    gap: 0px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+}

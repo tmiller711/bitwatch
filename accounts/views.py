@@ -225,14 +225,27 @@ class DeletePlaylist(APIView):
 class GetSubscriptions(APIView):
     permission_classes = [IsAuthenticated]
     
-    def get(self, request, format=None):
+    def get(self, request, page=1):
         subscriptions = Subscriptions.get_subscriptions(request.user)
-        if len(subscriptions) == 0:
+        videos = Subscriptions.get_videos(request.user)
+        if len(videos) == 0:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        data = UserSerializer(subscriptions, many=True).data
+        channels = UserSerializer(subscriptions, many=True).data
+        # videos = GetVideoSerializer(videos, many=True).data
         
-        return Response(data, status=status.HTTP_200_OK)
+        # return Response({'channels': channels, 'videos': videos}, status=status.HTTP_200_OK)
+        
+        paginator = Paginator(videos, 12)
+
+        try:
+            videos = paginator.page(page)
+            videos = GetVideoSerializer(videos, many=True).data
+
+            return Response({'channels': channels, 'videos': videos}, status=status.HTTP_200_OK)
+
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 class Subscribe(APIView):
     permission_classes = [IsAuthenticated]

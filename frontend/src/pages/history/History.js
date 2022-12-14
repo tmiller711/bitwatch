@@ -56,9 +56,12 @@ const History = ({ fetchVideo, showAlert }) => {
 
     if (videos.length > 0) {
         return (
+            <>
+            <h1>History</h1>
             <div className="history">
                 {mapVideos()}
             </div>
+            </>
         )
     } else {
         return (

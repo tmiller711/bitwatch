@@ -141,9 +141,12 @@ class SubscriptionsTestCase(TestCase):
         self.account2.subscribers = 1
         self.account2.save()
 
+        self.video = Video(uploader=self.account2, title='Test Video')
+        self.video.save()
+
         self.subscribe_url = reverse('subscribe', args=[self.account2.id])
         self.unsubscribe_url = reverse('unsubscribe', args=[self.account2.id])
-        self.subscriptions_url = reverse('get_subscriptions')
+        self.subscriptions_url = reverse('get_subscriptions', kwargs={'page': 1})
 
         self.client.login(email='testuser1@gmail.com', password='testpassword1')
 
@@ -176,7 +179,17 @@ class SubscriptionsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         data = response.json()
-        self.assertEqual(data[0]['id'], str(self.account2.id))
+        self.assertEqual(data['channels'][0]['id'], str(self.account2.id))
+        self.assertEqual(data['videos'][0]['video_id'], str(self.video.video_id))
+
+    def test_get_subscriptions_non(self):
+        subscription = Subscriptions.objects.create(user=self.account1)
+        subscription.subscriptions.add(self.account2)
+        
+        url = reverse('get_subscriptions', kwargs={'page': 2})
+        response = self.client.get(url)
+    
+        self.assertEqual(response.status_code, 204)
 
 class GetHistoryTestCase(TestCase):
     def setUp(self):
