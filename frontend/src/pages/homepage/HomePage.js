@@ -48,7 +48,7 @@ const HomePage = (props) => {
 		)
 	}
 
-	if (videos != undefined) {
+	if (videos.length > 0) {
 		return (
 			<div className="homepage">
 				{mapVideos()}

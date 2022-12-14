@@ -54,7 +54,7 @@ const History = ({ fetchVideo, showAlert }) => {
         }
     }
 
-    if (videos != []) {
+    if (videos.length > 0) {
         return (
             <div className="history">
                 {mapVideos()}
@@ -63,6 +63,7 @@ const History = ({ fetchVideo, showAlert }) => {
     } else {
         return (
             <div className="loading">
+                {console.log("test")}
                 <Spinner animation="border" role="status" className="spinner">
 
                 </Spinner>

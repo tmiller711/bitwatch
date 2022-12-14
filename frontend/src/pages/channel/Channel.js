@@ -184,7 +184,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         channelVideos.classList.toggle('active')
     }
 
-    if (videos != [] && username != ""){
+    if (videos.length > 0 && username != ""){
         return (
             <div className="channel">
                 <div className="channel-details">

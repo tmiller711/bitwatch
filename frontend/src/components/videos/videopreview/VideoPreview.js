@@ -62,7 +62,7 @@ const VideoPreview = ({ video, edit=false, getCookie }) => {
                     <p className="title">{title}</p>
                     {edit == true ? <Button className="delete-vid-button" onClick={() => deleteVideo()}>X</Button> : null}
                 </div>
-                <div class="uploader">
+                <div className="uploader">
                     <Link to={`/channel?c=${channelID}`} className="channel-link">
                         <p>{uploader}</p>
                     </Link>
