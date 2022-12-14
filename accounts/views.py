@@ -114,16 +114,18 @@ class EditProfile(APIView):
         return {'name': user.name, 'profile_pic': user.profile_pic.url}
     
 class GetPlaylists(APIView):
-    # permission_classes = [IsAuthenticated]
-
     def get(self, request, user_id=None):
 
         # if user_id not specified return the users playlists
         if user_id is None:
-            playlists = request.user.playlists.all()
-            data = PlaylistSerializer(playlists, many=True).data
+            if request.user.is_authenticated:
+                playlists = request.user.playlists.all()
+                data = PlaylistSerializer(playlists, many=True).data
+                
+                return Response(data)
             
-            return Response(data)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
         
         # if user_id is specified return the playlists of the specified user
         else:
