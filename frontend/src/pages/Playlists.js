@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import PlaylistPreview from "../components/PlaylistPreview"
+import PlaylistPreview from "../components/playlistpreview/PlaylistPreview"
 import Spinner from 'react-bootstrap/Spinner'
 
 const Playlists = ({ showAlert }) => {

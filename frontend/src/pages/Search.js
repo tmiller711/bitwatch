@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useParams } from "react-router-dom"
-import VideoPreview from "../components/VideoPreview";
+import VideoPreview from "../components/videos/videopreview/VideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
 
 const Search = ({ getCookie, showAlert }) => {

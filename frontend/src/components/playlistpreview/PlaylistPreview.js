@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import Button from "react-bootstrap/Button"
-import "../css/playlistpreview.css"
+import "./playlistpreview.css"
 
 const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => {
 

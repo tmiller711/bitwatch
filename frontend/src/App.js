@@ -1,64 +1,63 @@
 import React, {useState} from "react";
 import { render } from "react-dom";
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import SideBar from "./components/SideBar"
-import HomePage from "./pages/HomePage"
-import Subscriptions from "./pages/Subscriptions"
-import History from "./pages/History"
-import Login from "./pages/Login"
-import Register from "./pages/Register"
+import SideBar from "./components/sidebar/SideBar"
+import HomePage from "./pages/homepage/HomePage"
+import Subscriptions from "./pages/subscriptions/Subscriptions"
+import History from "./pages/history/History"
+import Login from "./pages/registration/Login"
+import Register from "./pages/registration/Register"
 import Upload from "./pages/Upload"
-import Watch from "./pages/Watch"
-import Channel from "./pages/Channel";
+import Watch from "./pages/watch/Watch"
+import Channel from "./pages/channel/Channel";
 import Playlists from "./pages/Playlists";
 import ViewPlaylist from "./pages/ViewPlaylist";
 import Search from "./pages/Search";
 import { Alert } from 'react-bootstrap';
-import "./css/sidebar.css"
+// import "./css/sidebar.css"
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { PageNotFound } from "./components/NotFound";
-import { subscribe, unsubscribe } from "./api"
-import SendReset from "./pages/SendReset";
-import ResetPassword from "./pages/ResetPassword";
+import { PageNotFound } from "./components/notfound/NotFound";
+import { subscribe, unsubscribe, fetchVideo, getCookie } from "./api/api"
+import SendReset from "./pages/registration/SendReset";
+import ResetPassword from "./pages/registration/ResetPassword";
 
 function App() {
 	const [alertShow, setAlertShow] = useState(false)
 	const [alertText, setAlertText] = useState('')
 
-	function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-	}
+	// function getCookie(name) {
+    //     let cookieValue = null;
+    //     if (document.cookie && document.cookie !== '') {
+    //         const cookies = document.cookie.split(';');
+    //         for (let i = 0; i < cookies.length; i++) {
+    //             const cookie = cookies[i].trim();
+    //             // Does this cookie string begin with the name we want?
+    //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     return cookieValue;
+	// }
 
-    const fetchVideo = async (query) => {
-        const csrftoken = getCookie('csrftoken')
+    // const fetchVideo = async (query) => {
+    //     const csrftoken = getCookie('csrftoken')
 
-        const res = await fetch(`/api/video/get/${query}`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-        })
-		if (res.status == 200) {
-			const data = await res.json()
-			return data
-		} else if (res.status == 404) {
-			return 404
-		}
-
-    }
+    //     const res = await fetch(`/api/video/get/${query}`, {
+    //         method: "POST",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'X-CSRFToken': csrftoken
+    //         },
+    //     })
+	// 	if (res.status == 200) {
+	// 		const data = await res.json()
+	// 		return data
+	// 	} else if (res.status == 404) {
+	// 		return 404
+	// 	}
+    // }
 
 	const showAlert = (text) => {
 		setAlertShow(true)

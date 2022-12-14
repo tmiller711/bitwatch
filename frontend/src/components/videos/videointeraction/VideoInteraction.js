@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
-import "../css/videointeraction.css"
+import "./videointeraction.css"
 import { Link } from 'react-router-dom';
 
 const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie, showAlert }) => {
@@ -179,7 +179,7 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
                 <h4 className="likes"><i className='bx bx-upvote like' onClick={() => interactVideo('like')}></i>{likes}</h4>
                 <h4 className="dislikes"><i className='bx bx-downvote dislike' onClick={() => interactVideo('dislike')}></i>{dislikes}</h4>
                 <div className="save" onClick={handleShow}>
-                    <p><i class='bx bx-dots-horizontal-rounded' />Save</p>
+                    <p><i className='bx bx-dots-horizontal-rounded' />Save</p>
                     {/* <p>Save</p> */}
                 </div>
             </div>

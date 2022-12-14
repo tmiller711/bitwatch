@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"
-import "../css/comments.css"
+import "./comments.css"
 import { Link } from "react-router-dom"
 
 const Comment = ({ comment }) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Routes, Route, useNavigate, Link} from 'react-router-dom';
 import Form from "react-bootstrap/Form"
-import '../css/sidebar.css';
+import './sidebar.css';
 
 const SideNav = ({ getCurTime }) => {
     const navigate = useNavigate()
@@ -122,14 +122,14 @@ const SideNav = ({ getCurTime }) => {
                 </li>
                 <li>
                 <Link to="/playlists" className="link">
-                    <i class='bx bx-list-ul'></i>
+                    <i className='bx bx-list-ul'></i>
                     <span className="links_name">Playlists</span>
                 </Link>
                 <span className="tooltip">Playlists</span>
                 </li>
                 <li className="upload">
                 <Link to="/upload" className="link">
-                    <i class='bx bx-upload'></i>
+                    <i className='bx bx-upload'></i>
                     <span className="links_name">Upload</span>
                 </Link>
                 <span className="tooltip">Upload</span>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import VideoPreview from "../components/VideoPreview";
+import VideoPreview from "../../components/videos/videopreview/VideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
-import "../css/history.css"
+import "./history.css"
 
 const History = ({ fetchVideo, showAlert }) => {
     const [videos, setVideos] = useState([])

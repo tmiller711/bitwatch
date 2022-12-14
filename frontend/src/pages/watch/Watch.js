@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import "../css/watch.css";
+import "./watch.css";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner'
-import VideoInteraction from "../components/VideoInteraction";
-import Comments from "../components/Comments";
-import { VideoNotFound } from "../components/NotFound";
+import VideoInteraction from "../../components/videos/videointeraction/VideoInteraction";
+import Comments from "../../components/videos/comments/Comments";
+import { VideoNotFound } from "../../components/notfound/NotFound";
 
 const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()

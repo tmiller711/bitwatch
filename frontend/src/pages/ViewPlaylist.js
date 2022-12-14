@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import VideoPreview from "../components/VideoPreview"
+import VideoPreview from "../components/videos/videopreview/VideoPreview"
 
 const ViewPlaylist = ({ showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()

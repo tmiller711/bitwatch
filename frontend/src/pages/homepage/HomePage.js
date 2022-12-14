@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import VideoPreview from "../components/VideoPreview";
+import VideoPreview from "../../components/videos/videopreview/VideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
-import "../css/homepage.css"
+import "./homepage.css"
 
 const HomePage = (props) => {
 	const [videos, setVideos] = useState([])

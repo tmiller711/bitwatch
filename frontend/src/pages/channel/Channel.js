@@ -5,10 +5,10 @@ import Form from "react-bootstrap/Form";
 import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav';
 import Spinner from 'react-bootstrap/Spinner'
-import VideoPreview from "../components/VideoPreview";
-import PlaylistPreview from "../components/PlaylistPreview";
-import { ChannelNotFound } from "../components/NotFound";
-import "../css/channel.css"
+import VideoPreview from "../../components/videos/videopreview/VideoPreview";
+import PlaylistPreview from "../../components/playlistpreview/PlaylistPreview";
+import { ChannelNotFound } from "../../components/notfound/NotFound";
+import "./channel.css"
 
 const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [searchParams, setSearchParams] = useSearchParams()

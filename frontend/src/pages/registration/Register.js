@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import "../css/registration.css"
+import "./registration.css"
 
 const Register = ({ showAlert }) => {
     const [email, setEmail] = useState('')

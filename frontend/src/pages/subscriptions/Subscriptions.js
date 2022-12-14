@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 import Spinner from 'react-bootstrap/Spinner'
-import "../css/subscriptions.css"
+import "./subscriptions.css"
 
 const Subscriptions = ({ showAlert }) => {
     const [subscriptions, setSubscriptions] = useState()
