@@ -1,0 +1,9 @@
+div.upload {
+    position: absolute;
+    width: 750px;
+    text-align: left;
+    left: 50%;
+    top: 40%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}

@@ -1,39 +1,12 @@
-div.login-form {
-    position: absolute;
-    width: 500px;
-    text-align: center;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
-div.register-form {
-    position: absolute;
-    width: 500px;
-    text-align: center;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
-div.reset-password {
-    position: absolute;
-    width: 500px;
-    text-align: center;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
+div.login-form,
+div.register-form,
+div.reset-password,
 div.reset-form {
     position: absolute;
     width: 500px;
-    text-align: center;
+    text-align: left;
     left: 50%;
-    top: 50%;
+    top: 40%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }

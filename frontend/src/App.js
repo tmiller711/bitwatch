@@ -7,7 +7,7 @@ import Subscriptions from "./pages/subscriptions/Subscriptions"
 import History from "./pages/history/History"
 import Login from "./pages/registration/Login"
 import Register from "./pages/registration/Register"
-import Upload from "./pages/Upload"
+import Upload from "./pages/upload/Upload"
 import Watch from "./pages/watch/Watch"
 import Channel from "./pages/channel/Channel";
 import Playlists from "./pages/Playlists";
@@ -24,40 +24,6 @@ import ResetPassword from "./pages/registration/ResetPassword";
 function App() {
 	const [alertShow, setAlertShow] = useState(false)
 	const [alertText, setAlertText] = useState('')
-
-	// function getCookie(name) {
-    //     let cookieValue = null;
-    //     if (document.cookie && document.cookie !== '') {
-    //         const cookies = document.cookie.split(';');
-    //         for (let i = 0; i < cookies.length; i++) {
-    //             const cookie = cookies[i].trim();
-    //             // Does this cookie string begin with the name we want?
-    //             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-    //                 break;
-    //             }
-    //         }
-    //     }
-    //     return cookieValue;
-	// }
-
-    // const fetchVideo = async (query) => {
-    //     const csrftoken = getCookie('csrftoken')
-
-    //     const res = await fetch(`/api/video/get/${query}`, {
-    //         method: "POST",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'X-CSRFToken': csrftoken
-    //         },
-    //     })
-	// 	if (res.status == 200) {
-	// 		const data = await res.json()
-	// 		return data
-	// 	} else if (res.status == 404) {
-	// 		return 404
-	// 	}
-    // }
 
 	const showAlert = (text) => {
 		setAlertShow(true)
