@@ -11,6 +11,14 @@ from .models import Account, Subscriptions, HistoryEntry, Playlist
 from videos.models import Video
 from .tokens import accounts_activation_token
 
+def setup_account(email='testuser@gmail.com', username='testuser', password='testpassword'):
+    account = Account(email=email, username=username)
+    account.set_password(password)
+    account.is_active = True
+    account.save()
+
+    return account
+
 class RegisterTestCase(TestCase):
     def test_register(self):
         response = self.client.post(reverse('register'), data={
@@ -36,10 +44,7 @@ class LoginTestCase(TestCase):
         self.client = Client()
         self.login_url = reverse('login')
         
-        account = Account(email='testuser@gmail.com', username='testuser')
-        account.set_password('testpassword')
-        account.is_active = True
-        account.save()
+        self.account = setup_account()    
 
     def test_login_good_data(self):
         response = self.client.post(self.login_url, data={
@@ -64,10 +69,7 @@ class LoginTestCase(TestCase):
 class GetUserViewTestCase(TestCase):
     def setUp(self):
         self.get_user_url = reverse('get_user')
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -103,10 +105,7 @@ class GetUserViewTestCase(TestCase):
 class EditProfileTestCase(TestCase):
     def setUp(self):
         self.url = reverse('edit_profile')
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -130,14 +129,9 @@ class EditProfileTestCase(TestCase):
 
 class SubscriptionsTestCase(TestCase):
     def setUp(self):
-        self.account1 = Account(email='testuser1@gmail.com', username='testuser1')
-        self.account1.set_password('testpassword1')
-        self.account1.is_active = True
-        self.account1.save()
+        self.account1 = setup_account('testuser1@gmail.com', 'testuser1', 'testpassword')
 
-        self.account2 = Account(email='testuser2@gmail.com', username='testuser2')
-        self.account2.set_password('testpassword2')
-        self.account2.is_active = True
+        self.account2 = setup_account('testuser2@gmail.com', 'testuser2', 'testpassword')
         self.account2.subscribers = 1
         self.account2.save()
 
@@ -148,7 +142,7 @@ class SubscriptionsTestCase(TestCase):
         self.unsubscribe_url = reverse('unsubscribe', args=[self.account2.id])
         self.subscriptions_url = reverse('get_subscriptions', kwargs={'page': 1})
 
-        self.client.login(email='testuser1@gmail.com', password='testpassword1')
+        self.client.login(email='testuser1@gmail.com', password='testpassword')
 
     def test_subscribe(self):
         response = self.client.get(self.subscribe_url)
@@ -194,10 +188,7 @@ class SubscriptionsTestCase(TestCase):
 class GetHistoryTestCase(TestCase):
     def setUp(self):
         self.get_history_url = reverse('get_history', kwargs={'page': 1})
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.video1 = Video(uploader=self.account, title='Test Video 1')
         self.video1.save()
@@ -244,10 +235,7 @@ class GetHistoryTestCase(TestCase):
 class GetPlaylistsTestCase(TestCase):
     def setUp(self):
         self.get_playlists_url = reverse('get_playlists')
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -314,10 +302,7 @@ class CreatePlaylistTestCase(TestCase):
 
 class UpdatePlaylistTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -360,10 +345,7 @@ class UpdatePlaylistTestCase(TestCase):
 
 class DeletePlaylistTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -394,10 +376,7 @@ class DeletePlaylistTestCase(TestCase):
 
 class ResetPasswordTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
     def test_reset_password(self):
     
@@ -414,10 +393,7 @@ class ResetPasswordTestCase(TestCase):
 
 class TestResetPassword(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.uidb64 = urlsafe_base64_encode(force_bytes(self.account.pk))
         self.token = accounts_activation_token.make_token(self.account)
@@ -450,10 +426,7 @@ class TestResetPassword(TestCase):
 
 class SendResetTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.url = reverse('send_reset')
 

@@ -5,15 +5,13 @@ import base64
 
 from accounts.models import Account, Playlist
 from .models import Tag, Video, Comment
+from accounts.tests import setup_account
 
 # Create your tests here.
 class UploadVideoTestCase(TestCase):
     def setUp(self):
         self.url = reverse('upload_video')
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         tag = Tag(name='Gaming')
         tag.save()
@@ -43,10 +41,7 @@ class UploadVideoTestCase(TestCase):
 class GetVideosTestCase(TestCase):
     def setUp(self):
         self.url = reverse('get_videos', kwargs={'page': 1})
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.video = Video.objects.create(
             uploader=self.account,
@@ -68,10 +63,7 @@ class GetVideosTestCase(TestCase):
 
 class SearchVideosTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.video = Video.objects.create(
             uploader=self.account,
@@ -95,10 +87,7 @@ class SearchVideosTestCase(TestCase):
 
 class PlaylistVideosTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.video = Video.objects.create(
             uploader=self.account,
@@ -133,10 +122,7 @@ class PlaylistVideosTestCase(TestCase):
 
 class GetVideoTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.video = Video.objects.create(
             uploader=self.account,
@@ -159,10 +145,7 @@ class GetVideoTestCase(TestCase):
 
 class GetCommentsTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.video = Video.objects.create(
             uploader=self.account,
@@ -208,13 +191,9 @@ class GetCommentsTestCase(TestCase):
 
 class DeleteVideoTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
-
 
         self.video = Video.objects.create(
             uploader=self.account,
@@ -244,10 +223,7 @@ class DeleteVideoTestCase(TestCase):
 
 class AddCommentTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -273,10 +249,7 @@ class AddCommentTestCase(TestCase):
 
 class VideoInteractTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -328,10 +301,7 @@ class VideoInteractTestCase(TestCase):
 
 class ChannelVideosTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -365,10 +335,7 @@ class ChannelVideosTestCase(TestCase):
 
 class CommentTestCase(TestCase):
     def setUp(self):
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
@@ -396,10 +363,7 @@ class CommentTestCase(TestCase):
 class VideoTestCase(TestCase):
     def setUp(self):
         # Create a user for testinguser
-        self.account = Account(email='testuser@gmail.com', username='testuser')
-        self.account.set_password('testpassword')
-        self.account.is_active = True
-        self.account.save()
+        self.account = setup_account()
 
         self.client.login(email='testuser@gmail.com', password='testpassword')
 
