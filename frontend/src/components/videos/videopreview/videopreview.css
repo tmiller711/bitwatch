@@ -27,6 +27,7 @@
 .profile-pic {
     object-fit: cover;
     border-radius: 6px;
+    margin-right: 5px;
 }
 
 .info {

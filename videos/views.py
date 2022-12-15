@@ -41,8 +41,6 @@ class SearchVideos(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         paginator = Paginator(Video.objects.filter(title__icontains=query).order_by('-views'), 12)
 
-        # if len(pagi) == 0:
-        #     return Response(status=status.HTTP_404_NOT_FOUND)
         try:
             videos = paginator.page(page)
             data = GetVideoSerializer(videos, many=True).data

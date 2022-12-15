@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { useParams } from "react-router-dom"
-import VideoPreview from "../components/videos/videopreview/VideoPreview";
+import LongVideoPreview from "../components/videos/longvideopreview/LongVideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
 
 const Search = ({ getCookie, showAlert }) => {
@@ -52,21 +52,21 @@ const Search = ({ getCookie, showAlert }) => {
 	const mapVideos = () => {
 		return (
 			<>
-			{videos.map((video) => (
-				<VideoPreview key={video.id} video={video} /> 
-			))}
+			
 			</>
 		)
 	}
 
     if (videos.length > 0) {
         return (
-            <>
+            <div className="history">
                 <h1>Search: {query}</h1>
-                <div className="homepage">
-                    {videos != undefined ? mapVideos() : null}
+                <div className="videos">
+                    {videos.map((video) => (
+                        <LongVideoPreview key={video.id} video={video} /> 
+                    ))}
                 </div>
-            </>
+            </div>
         )
     } else {
         return (

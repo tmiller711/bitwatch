@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import VideoPreview from "../../components/videos/videopreview/VideoPreview";
+import LongVideoPreview from "../../components/videos/longvideopreview/LongVideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
 import "./history.css"
 
@@ -11,16 +11,6 @@ const History = ({ fetchVideo, showAlert }) => {
         fetchHistory()
     }, [page])
 
-	const mapVideos = () => {
-		return (
-			<>
-			{videos.map((video) => (
-				<VideoPreview key={video.id} video={video} /> 
-			))}
-			</>
-		)
-	}
-    
     useEffect(() => {
 		window.addEventListener('scroll', handleScroll)
 
@@ -55,18 +45,18 @@ const History = ({ fetchVideo, showAlert }) => {
     }
 
     if (videos.length > 0) {
+        console.log("test")
         return (
-            <>
-            <h1>History</h1>
             <div className="history">
-                {mapVideos()}
+                <h1>History</h1>
+                {videos.map((video) => (
+                    <LongVideoPreview key={video.video_id} video={video} /> 
+                ))}
             </div>
-            </>
         )
     } else {
         return (
             <div className="loading">
-                {console.log("test")}
                 <Spinner animation="border" role="status" className="spinner">
 
                 </Spinner>

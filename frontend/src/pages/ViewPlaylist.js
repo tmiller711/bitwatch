@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
-import VideoPreview from "../components/videos/videopreview/VideoPreview"
+import LongVideoPreview from "../components/videos/longvideopreview/LongVideoPreview"
+import Spinner from 'react-bootstrap/Spinner'
 
 const ViewPlaylist = ({ showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState(searchParams.get('list'))
-    const [videos, setVideos] = useState()
+    const [videos, setVideos] = useState([])
 
     // add stuff to get all the videos in the playlist from the backend and display them like youtube
     useEffect(() => {
         const fetchVideos = async () => {
             const res = await fetch(`/api/video/playlist/${query}`)
             if (res.status == 200) {
-                const videos = await res.json()
-            setVideos(videos)
+                const data = await res.json()
+            setVideos([...videos, ...data])
             } else if (res.status == 204) {
                 showAlert("No videos to show")
             } else {
@@ -25,24 +26,24 @@ const ViewPlaylist = ({ showAlert }) => {
         fetchVideos()
     }, [])
 
-	const mapVideos = () => {
-		return (
-			<>
-			{videos.map((video) => (
-				<VideoPreview key={video.id} video={video} /> 
-			))}
-			</>
-		)
-	}
+    if (videos.length > 0) {
+        return (
+            <div className="history">
+                <h1>Playlist: {query}</h1>
+                {videos.map((video) => (
+                    <LongVideoPreview key={video.id} video={video} /> 
+                ))}
+            </div>
+        )
+    } else {
+        return (
+            <div className="loading">
+                <Spinner animation="border" role="status" className="spinner">
 
-    return (
-        <>
-        <h1>Playlist: {query}</h1>
-        <div className="homepage">
-            {videos != undefined ? mapVideos() : null}
-        </div>
-        </>
-    )
+                </Spinner>
+            </div>
+        )
+    }
 }
 
 export default ViewPlaylist

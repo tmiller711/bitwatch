@@ -154,16 +154,6 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         .catch(error => console.log(error))
     }
  
-	const mapVideos = () => {
-		return (
-			<>
-			{videos.map((video) => (
-				<VideoPreview key={video.id} video={video} edit={yourChannel} getCookie={getCookie} /> 
-			))}
-			</>
-		)
-	}
-    
     const mapPlaylists = () => {
         if (playlists) {
         return (
@@ -213,8 +203,9 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                     </Nav.Item>
                 </Nav>
                 <div className="channel-videos active">
-                    {/* map to all of their videos */}
-                    {mapVideos()}
+                    {videos.map((video) => (
+                        <VideoPreview key={video.id} video={video} edit={yourChannel} getCookie={getCookie} /> 
+                    ))}
                 </div>
 
                 <div className="channel-playlists">
