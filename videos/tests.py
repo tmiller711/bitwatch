@@ -70,7 +70,7 @@ class SearchVideosTestCase(TestCase):
             title='Test Video',
             description='This is a test video',
         )
-        self.url = reverse('search', kwargs={'query': str(self.video.title)})
+        self.url = reverse('search', kwargs={'query': 'Test', 'page': 1})
 
     def test_get_video_search(self):
         response = self.client.get(self.url)
@@ -79,8 +79,13 @@ class SearchVideosTestCase(TestCase):
         data = response.json()
         self.assertEqual(data[0]['title'], 'Test Video')
 
+        url = reverse('search', kwargs={'query': 'Test', 'page': 2})
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 204)
+
     def test_get_bad_search(self):
-        url = reverse('search', kwargs={'query': 'd1728f10-327c-40fb-be6b-01ba1233c5ee'})
+        url = reverse('search', kwargs={'query': 'slfjsa;flfjalsldjlajdlf;', 'page': 1})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 

@@ -36,16 +36,22 @@ class GetVideos(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SearchVideos(APIView):
-    def get(self, request, query=None):
+    def get(self, request, query=None, page=1):
         if query is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        videos = Video.objects.filter(title=query)
-        if len(videos) == 0:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        paginator = Paginator(Video.objects.filter(title__icontains=query).order_by('-views'), 12)
 
-        data = GetVideoSerializer(videos, many=True).data
+        # if len(pagi) == 0:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
+        try:
+            videos = paginator.page(page)
+            data = GetVideoSerializer(videos, many=True).data
+            if len(data) == 0:
+                return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(data, status=status.HTTP_200_OK)
+            return Response(data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 class PlaylistVideos(APIView):
     def get(self, request, playlist_id=None):
