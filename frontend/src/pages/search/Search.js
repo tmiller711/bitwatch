@@ -34,6 +34,7 @@ const Search = ({ getCookie, showAlert }) => {
     }, [page])
 
     useEffect(() => {
+        setVideos([])
 
         const fetchVideos = async () => {
             const res = await fetch(`/api/video/search/${searchParams.get('q')}/${searchParams.get('sb') || 'v'}/1`)
@@ -83,7 +84,7 @@ const Search = ({ getCookie, showAlert }) => {
                     <h1 className="search-options" onClick={changeOptionsClass}><i class='bx bx-filter'></i></h1>
                 </div>
                 <div className="options">
-                    <ListGroup className="sort-by" defaultActiveKey="v" horizontal>
+                    <ListGroup className="sort-by" defaultActiveKey={searchParams.get('sb') || 'v'} horizontal>
                         <ListGroup.Item action eventKey="v" onClick={() => navigate(`?q=${query}&sb=v`)}>
                             Views
                         </ListGroup.Item>

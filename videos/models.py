@@ -140,4 +140,14 @@ class Video(models.Model):
     @property
     def num_dislikes(self):
         return self.dislikes.count()
+    
+    @property
+    def like_ratio(self):
+        if self.dislikes.count() == 0 and self.likes.count() > 0:
+            return self.likes.count()
+
+        if self.likes.count() == 0:
+            return 0
+
+        return (self.likes.count()-self.dislikes.count()) / self.likes.count() 
 

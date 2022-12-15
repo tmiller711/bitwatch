@@ -42,12 +42,13 @@ class SearchVideos(APIView):
 
         if sort_by == 'v':
             sort = '-views'
+            paginator = Paginator(Video.objects.filter(title__icontains=query).order_by(sort), 12)
         elif sort_by == 'u':
             sort = '-uploaded'
+            paginator = Paginator(Video.objects.filter(title__icontains=query).order_by(sort), 12)
         elif sort_by == 'r':
-            pass
+            paginator = Paginator(sorted(Video.objects.filter(title__icontains=query), key=lambda v: v.like_ratio, reverse=True), 12)
 
-        paginator = Paginator(Video.objects.filter(title__icontains=query).order_by(sort), 12)
 
         try:
             videos = paginator.page(page)

@@ -70,7 +70,7 @@ class SearchVideosTestCase(TestCase):
             title='Test Video',
             description='This is a test video',
         )
-        self.url = reverse('search', kwargs={'query': 'Test', 'page': 1})
+        self.url = reverse('search', kwargs={'query': 'Test', 'page': 1, 'sort_by': 'v'})
 
     def test_get_video_search(self):
         response = self.client.get(self.url)
@@ -79,13 +79,13 @@ class SearchVideosTestCase(TestCase):
         data = response.json()
         self.assertEqual(data[0]['title'], 'Test Video')
 
-        url = reverse('search', kwargs={'query': 'Test', 'page': 2})
+        url = reverse('search', kwargs={'query': 'Test', 'page': 2, 'sort_by': 'v'})
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 204)
 
     def test_get_bad_search(self):
-        url = reverse('search', kwargs={'query': 'slfjsa;flfjalsldjlajdlf;', 'page': 1})
+        url = reverse('search', kwargs={'query': 'slfjsa;flfjalsldjlajdlf;', 'page': 1, 'sort_by': 'v'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
@@ -419,3 +419,15 @@ class VideoTestCase(TestCase):
         self.assertNotIn(self.account, self.video.dislikes.all())
         
         self.assertEqual(self.video.num_dislikes, 0)
+    
+    # def test_like_ratio(self):
+    #     self.video.likes = 10
+    #     self.video.dislikes = 5
+    #     self.assertEqual(self.video.like_ratio, 0.5)
+
+    #     self.video.likes = 0
+    #     self.assertEqual(self.video.like_ratio, 0)
+
+    #     self.video.likes = 10
+    #     self.video.dislikes = 0
+    #     self.assertEqual(self.video.like_ratio, 10)
