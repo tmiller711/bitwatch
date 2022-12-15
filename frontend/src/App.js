@@ -12,7 +12,7 @@ import Watch from "./pages/watch/Watch"
 import Channel from "./pages/channel/Channel";
 import Playlists from "./pages/Playlists";
 import ViewPlaylist from "./pages/ViewPlaylist";
-import Search from "./pages/Search";
+import Search from "./pages/search/Search";
 import { Alert } from 'react-bootstrap';
 // import "./css/sidebar.css"
 import 'bootstrap/dist/css/bootstrap.min.css'

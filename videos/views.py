@@ -36,10 +36,18 @@ class GetVideos(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SearchVideos(APIView):
-    def get(self, request, query=None, page=1):
+    def get(self, request, query=None, sort_by=None, page=1):
         if query is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        paginator = Paginator(Video.objects.filter(title__icontains=query).order_by('-views'), 12)
+
+        if sort_by == 'v':
+            sort = '-views'
+        elif sort_by == 'u':
+            sort = '-uploaded'
+        elif sort_by == 'r':
+            pass
+
+        paginator = Paginator(Video.objects.filter(title__icontains=query).order_by(sort), 12)
 
         try:
             videos = paginator.page(page)

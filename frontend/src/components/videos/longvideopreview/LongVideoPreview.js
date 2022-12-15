@@ -24,7 +24,7 @@ const LongVideoPreview = ({ key, video }) => {
 
         fetchUploader(video.uploader)
 
-    }, [])
+    }, [video])
 
     const fetchUploader = async (uploader_id) => {
         const res = await fetch(`/api/account/getuser/${uploader_id}`)

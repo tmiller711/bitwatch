@@ -1,0 +1,43 @@
+.search {
+    width: 80%;
+    margin: auto;
+    align-items: center;
+}
+
+.search .header {
+    height: 60px;
+}
+
+.search .header .search-query {
+    float: left;
+}
+
+.search .header .search-options {
+    float: right;
+    cursor: pointer;
+}
+
+div.options {
+    margin-bottom: 10px;
+    background-color: blue;
+    display: none;
+}
+
+div.options.active {
+    margin-bottom: 10px;
+    background-color: blue;
+    display: inline;
+}
+
+div.options .sort-by {
+    margin: auto;
+    text-align: center;
+    width: 90%;
+    margin-bottom: 10px;
+    font-size: large;
+}
+
+.search .videos {
+    display: inline;
+    margin: auto;
+}
