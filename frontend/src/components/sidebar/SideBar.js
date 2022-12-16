@@ -106,7 +106,6 @@ const SideNav = ({ getCurTime }) => {
 
     return (
         <div className="sidebar">
-            {console.log(subscriptions)}
             <div className="logo-details">
                 {/* <Link to="/" className="logo-link"> */}
                         <i className='bx bxl-c-plus-plus icon'></i>
