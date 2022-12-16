@@ -173,6 +173,11 @@ border-radius: 12px;
 .sidebar li.upload {
     transform: translateY(470px);
 }
+
+.sidebar.open li.upload {
+    transform: translateY(62px);
+}
+
 .sidebar li.profile{
 position: fixed;
 height: 60px;
@@ -184,14 +189,17 @@ background: #1d1b31;
 transition: all 0.5s ease;
 overflow: hidden;
 }
+
 .sidebar.open li.profile{
 width: 235px;
 }
+
 .sidebar li .profile-details{
 display: flex;
 align-items: center;
 flex-wrap: nowrap;
 }
+
 .sidebar li img{
 height: 45px;
 width: 45px;
@@ -200,6 +208,7 @@ border-radius: 6px;
 margin-right: 10px;
 border: solid white .5px;
 }
+
 .sidebar li.profile .name,
 .sidebar li.profile .username{
 opacity: 0;
@@ -209,9 +218,11 @@ color: #fff;
 white-space: nowrap;
 transition: all 0.5s ease;
 }
+
 .sidebar li.profile .username{
 font-size: 12px;
 }
+
 .sidebar .profile #log_out{
 position: absolute;
 top: 50%;
@@ -231,16 +242,82 @@ width: 50px;
 display: inline;
 background: none;
 }
+
 .sidebar.open li.profile .name,
 .sidebar.open li.profile .username{
     opacity: 1;
 }
+
 .sidebar.open ~ .content {
     /* width: calc(100% - 235px); */
     /* left: 235px; */
     filter: brightness(30%);
     pointer-events: none;
 }
+
+.sidebar .subscriptions {
+    height: 400px;
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar.open .subscriptions {
+    display: flex;
+}
+
+.sidebar .channel-link {
+    position: relative;
+    text-decoration: none;
+    width: 200px;
+    height: 40px;
+    text-align: center;
+    align-content: center;
+}
+
+.channel-map {
+    width: 200px;
+    height: 35px;
+    display: flex;
+    color: white;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.channel-map:hover {
+    background-color: #D2D2D4;
+    border-radius: 5px;
+}
+
+.channel-map .profile-pic {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    margin-left: 10px;
+}
+
+.channel-map p {
+    margin-left: 10px;
+}
+
+.subscriptions::-webkit-scrollbar {
+    width: 12px;
+}
+
+.subscriptions::-webkit-scrollbar-track {
+    background: #D2D2D4;
+    border-radius: 5px;
+}
+
+.subscriptions::-webkit-scrollbar-thumb {
+    background-color: #0C151C;
+    border-radius: 20px;
+    border: 2px solid #D2D2D4; 
+}
+
 @media (max-width: 420px) {
 .sidebar li .tooltip{
     display: none;

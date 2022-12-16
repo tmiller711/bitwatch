@@ -11,6 +11,7 @@ const SideNav = ({ getCurTime }) => {
     const [loggedIn, setLoggedIn] = useState(false)
     const [url, setUrl] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
+    const [subscriptions, setSubscriptions] = useState([])
 
     useEffect(() => {
         const getAccountDetails = async () => {
@@ -30,7 +31,17 @@ const SideNav = ({ getCurTime }) => {
 
         detectClick()
         getAccountDetails()
+        getSubscriptions()
     }, [])
+
+    const getSubscriptions = async () => {
+    const res = await fetch('/api/account/subscriptions/1')
+        if (res.ok) {
+            const data = await res.json()
+            
+            setSubscriptions(data.channels)
+        }
+    }
 
     const changeSideBarClass = () => {
         let sideBar = document.querySelector(".sidebar");
@@ -82,8 +93,20 @@ const SideNav = ({ getCurTime }) => {
         sideBar.classList.remove("open")
     }
 
+    const mapChannel = (channel) => {
+        return (
+            <Link to={`/channel?c=${channel.id}`} className="channel-link">
+                <div className="channel-map">
+                    <img src={channel.profile_pic} className="profile-pic" />
+                    <p className="test">{channel.username}</p>
+                </div>
+            </Link>
+        )
+    }
+
     return (
         <div className="sidebar">
+            {console.log(subscriptions)}
             <div className="logo-details">
                 {/* <Link to="/" className="logo-link"> */}
                         <i className='bx bxl-c-plus-plus icon'></i>
@@ -127,6 +150,18 @@ const SideNav = ({ getCurTime }) => {
                 </Link>
                 <span className="tooltip">Playlists</span>
                 </li>
+
+                <li>
+                    <div className="subscriptions">
+                        Subscriptions:
+                        {subscriptions.length > 0 ? 
+                            subscriptions.map((channel) => (
+                                mapChannel(channel)
+                            )) : null
+                        }
+                    </div>
+                </li>
+
                 <li className="upload">
                 <Link to="/upload" className="link">
                     <i className='bx bx-upload'></i>

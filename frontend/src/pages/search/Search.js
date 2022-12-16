@@ -80,7 +80,7 @@ const Search = ({ getCookie, showAlert }) => {
         return (
             <div className="search">
                 <div className="header">
-                    <h1 className="search-query">Search: {query}</h1>
+                    <h1 className="search-query">Search: {searchParams.get('q')}</h1>
                     <h1 className="search-options" onClick={changeOptionsClass}><i class='bx bx-filter'></i></h1>
                 </div>
                 <div className="options">
