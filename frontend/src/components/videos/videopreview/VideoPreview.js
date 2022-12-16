@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button"
 import CloseButton from "react-bootstrap/CloseButton"
 import Dropdown from "react-bootstrap/Dropdown"
 
-const VideoPreview = ({ video, edit=false, getCookie }) => {
+const VideoPreview = ({ video, edit=false, getCookie, uploader_info }) => {
     const [thumbnail, setThumbnail] = useState()
     const [title, setTitle] = useState('')
     const [uploader, setUploader] = useState('')
@@ -24,23 +24,12 @@ const VideoPreview = ({ video, edit=false, getCookie }) => {
         setLink(`/watch?v=${video.video_id}`)
         setChannelID(video.uploader)
 
-        fetchUploader(video.uploader)
-
-    }, [])
-
-    const fetchUploader = async (uploader_id) => {
-        const res = await fetch(`/api/account/getuser/${uploader_id}`)
-        if (res.ok) {
-            const data = await res.json()
-
-            setUploader(data.username)
-            setProfilePic(data.profile_pic)
-        }
-    }
-
+        setUploader(uploader_info.username)
+        setProfilePic(uploader_info.profile_pic)
+    }, [video])
+    
     const deleteVideo = async () => {
         const csrftoken = getCookie('csrftoken')
-        console.log("deleting")
         const res = await fetch(`/api/video/delete/${video.video_id}`, {
             method: "DELETE",
             headers: {

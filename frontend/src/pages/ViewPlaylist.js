@@ -31,7 +31,7 @@ const ViewPlaylist = ({ showAlert }) => {
             <div className="history">
                 <h1>Playlist: {query}</h1>
                 {videos.map((video) => (
-                    <LongVideoPreview key={video.id} video={video} /> 
+                    <LongVideoPreview key={video.id} video={video} uploader_info={video.uploader_info} /> 
                 ))}
             </div>
         )

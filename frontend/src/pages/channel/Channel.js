@@ -49,7 +49,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         }
 
         const getChannelVideos = async () => {
-            const res = await fetch(`/api/video/channelvideos/${query}/${page}`)
+            const res = await fetch(`/api/video/channelvideos/${searchParams.get('c')}/${page}`)
             const data = await res.json()
 
             setVideos(data)
@@ -69,7 +69,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
 
     useEffect(() => {
         const getChannelVideos = async () => {
-            const res = await fetch(`/api/video/channelvideos/${query}/${page}`)
+            const res = await fetch(`/api/video/channelvideos/${searchParams.get('c')}/${page}`)
             const data = await res.json()
 
             setVideos([...videos, ...data])
@@ -204,7 +204,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                 </Nav>
                 <div className="channel-videos active">
                     {videos.map((video) => (
-                        <VideoPreview key={video.id} video={video} edit={yourChannel} getCookie={getCookie} /> 
+                        <VideoPreview key={video.id} video={video} edit={yourChannel} getCookie={getCookie} uploader_info={video.uploader_info} /> 
                     ))}
                 </div>
 

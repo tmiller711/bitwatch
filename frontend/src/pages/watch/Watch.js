@@ -63,8 +63,6 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
 
     const changeDescriptionClass = () => {
         descriptionRef.current.classList.toggle('active')
-        // const description = document.querySelector('.description-section')
-        // description.classList.toggle('active')
     }
 
    if (video != undefined && comments != null) {

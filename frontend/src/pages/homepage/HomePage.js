@@ -38,20 +38,12 @@ const HomePage = (props) => {
 		}
 	}
 
-	const mapVideos = () => {
-		return (
-			<>
-			{videos.map((video) => (
-				<VideoPreview key={video.video_id} video={video} /> 
-			))}
-			</>
-		)
-	}
-
 	if (videos.length > 0) {
 		return (
 			<div className="homepage">
-				{mapVideos()}
+				{videos.map((video) => (
+					<VideoPreview key={video.video_id} video={video} uploader_info={video.uploader_info} /> 
+				))}
 			</div>
 		)
 	} else {

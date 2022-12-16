@@ -36,10 +36,19 @@ class UploadVideoSerializer(serializers.ModelSerializer):
 
 class GetVideoSerializer(serializers.ModelSerializer):
     uploaded_ago = serializers.ReadOnlyField()
+    uploader_info = serializers.SerializerMethodField()
     
     class Meta:
         model = Video
-        fields = ('video_id', 'uploader', 'title', 'description', 'video', 'thumbnail', 'views', 'num_likes', 'num_dislikes', 'uploaded_ago')
+        fields = ('video_id', 'uploader', 'title', 'description', 'video', 'thumbnail', 'views', 'num_likes', 'num_dislikes', 'uploaded_ago', 'uploader_info')
+
+    def get_uploader_info(self, obj):
+        user = obj.uploader
+        return {
+            'user_id': user.id,
+            'username': user.username,
+            'profile_pic': user.profile_pic.url
+        }
 
 class CommentsSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField(read_only=True)

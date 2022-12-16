@@ -45,12 +45,11 @@ const History = ({ fetchVideo, showAlert }) => {
     }
 
     if (videos.length > 0) {
-        console.log("test")
         return (
             <div className="history">
                 <h1>History</h1>
                 {videos.map((video) => (
-                    <LongVideoPreview key={video.video_id} video={video} /> 
+                    <LongVideoPreview key={video.video_id} video={video} uploader_info={video.uploader_info} /> 
                 ))}
             </div>
         )

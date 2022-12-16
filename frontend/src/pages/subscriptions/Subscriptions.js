@@ -48,38 +48,14 @@ const Subscriptions = ({ showAlert }) => {
 		}
 	}
 
-    const mapSubscriptions = () => {
-        return (
-            <>
-            {subscriptions.map((channel) => (
-                <div className="subscriptions">
-                    <Link to={`/channel?c=${channel.id}`} className='channel-link'>
-                        <img src={channel.profile_pic} className="profile-pic" />
-                        <h1>{channel.username}</h1>
-                    </Link>
-                </div>
-            ))}
-            </>
-        )
-    }
-    
-    const mapVideos = () => {
-		return (
-			<>
-			{videos.map((video) => (
-				<VideoPreview key={video.video_id} video={video} /> 
-			))}
-			</>
-		)
-	}
-
     if (subscriptions != undefined) {
         return (
             <>
             <h1>Subscriptions</h1>
-            {/* {mapSubscriptions()} */}
             <div className="videos">
-                {mapVideos()}
+                {videos.map((video) => (
+                    <VideoPreview key={video.video_id} video={video} uploader_info={video.uploader_info} /> 
+                ))}
             </div>
             </>
         )

@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import './longvideopreview.css'
 
-const LongVideoPreview = ({ key, video }) => {
+const LongVideoPreview = ({ key, video, uploader_info }) => {
     const [thumbnail, setThumbnail] = useState()
     const [title, setTitle] = useState('')
     const [uploader, setUploader] = useState('')
@@ -22,19 +22,10 @@ const LongVideoPreview = ({ key, video }) => {
         setChannelID(video.uploader)
         setDescription(video.description)
 
-        fetchUploader(video.uploader)
+        setUploader(uploader_info.username)
+        setProfilePic(uploader_info.profile_pic)
 
     }, [video])
-
-    const fetchUploader = async (uploader_id) => {
-        const res = await fetch(`/api/account/getuser/${uploader_id}`)
-        if (res.ok) {
-            const data = await res.json()
-
-            setUploader(data.username)
-            setProfilePic(data.profile_pic)
-        }
-    }
 
     return (
         <div className="long-video-preview">

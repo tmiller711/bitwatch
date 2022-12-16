@@ -7,7 +7,6 @@ const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => 
 
     const deletePlaylist = async () => {
         const csrftoken = getCookie('csrftoken')
-        console.log("deleting")
         const res = await fetch(`/api/account/deleteplaylist/${playlist.id}`, {
             method: "DELETE",
             headers: {
@@ -24,7 +23,6 @@ const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => 
             <Link to={`/playlist?list=${playlist.id}`} className="playlist-link">
                 <div className="img-container">
                     <img className="thumbnail" src={`/media/${playlist.thumbnail}`} />
-                    {console.log(playlist)}
                     <div className="overlay">
                         <p>{playlist.private == true ? "Private" : "Public"}</p>
                     </div>
