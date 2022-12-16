@@ -304,7 +304,7 @@ background: none;
 }
 
 .subscriptions::-webkit-scrollbar {
-    width: 12px;
+    width: 8px;
 }
 
 .subscriptions::-webkit-scrollbar-track {
