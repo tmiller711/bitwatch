@@ -16,7 +16,7 @@ const Subscriptions = ({ showAlert }) => {
                 const data = await res.json()
                 
                 setSubscriptions(data.channels)
-                setVideos(data.videos)
+                setVideos([...videos, ...data.videos])
             } else if (res.status == 403) {
                 showAlert("Must be signed in to view subscriptions")
             } else if (res.status == 404) {
