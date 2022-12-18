@@ -2,3 +2,4 @@ django
 djangorestframework
 six
 Pillow
+psycopg2-binary
