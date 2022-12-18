@@ -3,10 +3,10 @@ name: BitWatch CI/CD
 on:
   push:
     branches:
-      - main
+      - [main, staging, development]
   pull_request:
     branches:
-      - main
+      - [main, staging, development]
 
 jobs:
   build:
