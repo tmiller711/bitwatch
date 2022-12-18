@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
@@ -39,6 +39,9 @@ const Login = ({ showAlert }) => {
         })
     }
 
+    const responseGoogle = response => {
+        console.log(response);
+    };
 
     return (
         <div className="login-form">
@@ -59,6 +62,9 @@ const Login = ({ showAlert }) => {
                 <p>Reset Password <Link to="/sendreset">Here</Link></p>
                 <Button type='submit' className="btn btn-block">Login</Button>
             </Form>
+            <div id="signInButton">
+
+            </div>
         </div>
     )
 }

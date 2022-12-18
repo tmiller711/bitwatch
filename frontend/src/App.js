@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { render } from "react-dom";
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import SideBar from "./components/sidebar/SideBar"
@@ -32,7 +32,7 @@ function App() {
 	
 	return (
 		<>
-			<SideBar/>
+			<SideBar />
 			<div className="content">
 				{alertShow && (
 					<Alert variant="danger" className="alert" onClose={() => setAlertShow(false)} dismissible>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {Routes, Route, useNavigate, Link} from 'react-router-dom';
 import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
 import './sidebar.css';
 
-const SideNav = ({ getCurTime }) => {
+const SideNav = ({}) => {
     const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
@@ -12,6 +13,7 @@ const SideNav = ({ getCurTime }) => {
     const [url, setUrl] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
     const [subscriptions, setSubscriptions] = useState([])
+
 
     useEffect(() => {
         const getAccountDetails = async () => {
