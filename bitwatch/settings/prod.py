@@ -1,7 +1,7 @@
 import os 
 from .base import *
 
-SECRET_KEY = os.environ['DJANG_SECRET_KEY']
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
 ALLOWED_HOSTS = ['172.31.21.247']
 
@@ -17,6 +17,8 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_ACCESS_KEY_ID = os.environ['AWS_KEY']
 AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET']
