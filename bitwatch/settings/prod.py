@@ -6,6 +6,8 @@ DEBUG = False
 ALLOWED_HOSTS = ['172.31.21.247']
 STATIC_ROOT = '/home/ubuntu/static/'
 
+CSRF_TRUSTED_ORIGINS = ['http://18.223.98.240']
+
 INSTALLED_APPS.append('storages')
 
 DATABASES = {
