@@ -24,8 +24,6 @@ function getCookie(name) {
   return cookieValue;
 }
 const fetchVideo = async (query) => {
-  const csrftoken = getCookie('csrftoken')
-
   const res = await fetch(`/api/video/get/${query}`)
 
   if (res.status == 200) {
