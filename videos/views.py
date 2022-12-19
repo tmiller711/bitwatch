@@ -74,7 +74,7 @@ class PlaylistVideos(APIView):
         return Response(videos, status=status.HTTP_200_OK)
 
 class GetVideo(APIView):
-    def post(self, request, video_id=None):
+    def get(self, request, video_id=None):
         try:
             video = Video.objects.get(video_id=video_id)
         except:

@@ -137,7 +137,7 @@ class GetVideoTestCase(TestCase):
         self.url = reverse('get_video', kwargs={'video_id': self.video.video_id})
 
     def test_get_video_success(self):
-        response = self.client.post(self.url)
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
 
         data = response.json()
@@ -145,7 +145,7 @@ class GetVideoTestCase(TestCase):
 
     def test_get_video_bad_id(self):
         url = reverse('get_video', kwargs={'video_id': '6762da6b-fa11-42f8-accd-f95a5be15341'})
-        response = self.client.post(url)
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
 class GetCommentsTestCase(TestCase):
