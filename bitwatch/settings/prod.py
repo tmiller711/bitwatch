@@ -1,5 +1,7 @@
 import os 
 from .base import *
+
+SECRET_KEY = os.environ['DJANG_SECRET_KEY']
 DEBUG = False
 ALLOWED_HOSTS = ['172.31.21.247']
 
