@@ -4,6 +4,7 @@ from .base import *
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
 ALLOWED_HOSTS = ['172.31.21.247']
+STATIC_ROOT = '/home/ubuntu/static/'
 
 INSTALLED_APPS.append('storages')
 
