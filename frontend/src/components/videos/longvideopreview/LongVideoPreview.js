@@ -14,6 +14,7 @@ const LongVideoPreview = ({ key, video, uploader_info }) => {
     const [description, setDescription] = useState()
 
     useEffect(() => {
+        console.log(uploader_info)
         setThumbnail(video.thumbnail)
         setTitle(video.title)
         setViews(video.views)

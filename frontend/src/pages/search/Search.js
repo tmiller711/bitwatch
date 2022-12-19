@@ -97,9 +97,8 @@ const Search = ({ getCookie, showAlert }) => {
                     </ListGroup>
                 </div>
                 <div className="videos">
-                    {console.log(videos)}
                     {videos.map((video) => (
-                        <LongVideoPreview key={video.id} video={video} /> 
+                        <LongVideoPreview key={video.id} video={video} uploader_info={video.uploader_info} /> 
                     ))}
                 </div>
             </div>
