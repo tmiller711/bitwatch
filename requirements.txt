@@ -3,3 +3,5 @@ djangorestframework
 six
 Pillow
 psycopg2-binary
+django-storages
+boto3
