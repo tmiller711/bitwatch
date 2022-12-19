@@ -26,13 +26,8 @@ function getCookie(name) {
 const fetchVideo = async (query) => {
   const csrftoken = getCookie('csrftoken')
 
-  const res = await fetch(`/api/video/get/${query}`, {
-      method: "POST",
-      headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken
-      },
-  })
+  const res = await fetch(`/api/video/get/${query}`)
+
   if (res.status == 200) {
     const data = await res.json()
     return data
