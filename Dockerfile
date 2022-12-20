@@ -1,7 +1,8 @@
 FROM python:3.8-slim
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y sudo
+RUN apt-get update && apt-get install -y ufw nginx
+# RUN apt install -y ufw && apt-get install -y systemd
 
 # install dependencies
 COPY requirements.txt requirements.txt
@@ -9,19 +10,23 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-# setup database
-ENV DB_PASS='june302004'
+# setup environment variables
+ENV DJANGO_SETTINGS_MODULE='bitwatch.settings.prod'
+ARG AWS_KEY
+ARG AWS_SECRET
 
 RUN python3 manage.py makemigrations
 RUN python3 manage.py migrate
 
-# setup web servers
+# setup static files
+RUN python manage.py collectstatic --no-input
+
+# install gunicorn
 RUN pip install gunicorn
-RUN apt-get install -y nginx
 
+# configure nginx
+RUN ufw allow 'Nginx HTTP'
 COPY conf/nginx /etc/nginx/sites-enabled/
+RUN rm /etc/nginx/sites-enabled/default
 
-ENV DJANGO_SETTINGS_MODULE='bitwatch.settings.prod'
-ENV DJANGO_SECRET_KEY='lasdjfoisajf90sad9jf90sdajf0sda90fsad90f09sadf09sdaj90fj9s0af90j'
-
-CMD ["gunicorn", "bitwatch.wsgi", "-b", "0.0.0.0:8000"]
+CMD nginx && gunicorn bitwatch.wsgi -b 0.0.0.0:8000
