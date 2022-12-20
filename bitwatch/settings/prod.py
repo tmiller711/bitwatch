@@ -3,7 +3,7 @@ from .base import *
 
 SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = False
-ALLOWED_HOSTS = ['172.31.21.247']
+ALLOWED_HOSTS = ['172.31.21.247', '0.0.0.0']
 STATIC_ROOT = '/home/ubuntu/static/'
 
 CSRF_TRUSTED_ORIGINS = ['http://18.223.98.240']
@@ -16,7 +16,7 @@ DATABASES = {
         'NAME': 'bitwatch',
         'USER': 'postgres',
         'PASSWORD': os.environ['DB_PASS'],
-        'HOST': 'localhost',
+        'HOST': 'database-2.cwsv3haacda5.us-east-2.rds.amazonaws.com',
         'PORT': '',
     }
 }
