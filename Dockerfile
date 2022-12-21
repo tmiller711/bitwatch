@@ -1,8 +1,7 @@
 FROM python:3.8-slim
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y ufw nginx
-# RUN apt install -y ufw && apt-get install -y systemd
+RUN apt-get update && apt-get install -y ufw nginx sudo python3 pip
 
 # install dependencies
 COPY requirements.txt requirements.txt
@@ -19,7 +18,7 @@ RUN python3 manage.py makemigrations
 RUN python3 manage.py migrate
 
 # setup static files
-RUN python manage.py collectstatic --no-input
+RUN python3 manage.py collectstatic --no-input
 
 # install gunicorn
 RUN pip install gunicorn
