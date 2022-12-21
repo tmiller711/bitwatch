@@ -28,4 +28,4 @@ RUN ufw allow 'Nginx HTTP'
 COPY conf/nginx /etc/nginx/sites-enabled/
 RUN rm /etc/nginx/sites-enabled/default
 
-CMD nginx && gunicorn bitwatch.wsgi -b 0.0.0.0:8000
+CMD nginx && gunicorn bitwatch.wsgi -w 4 -b 0.0.0.0:8000
