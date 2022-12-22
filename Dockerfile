@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y ufw nginx sudo python3 pip
+RUN apt-get update && apt-get install -y ufw nginx sudo python3 pip certbot python3-certbot-nginx
 
 # install dependencies
 COPY requirements.txt requirements.txt
@@ -25,7 +25,12 @@ RUN pip install gunicorn
 
 # configure nginx
 RUN ufw allow 'Nginx HTTP'
+RUN ufw allow http
+RUN ufw allow https
 COPY conf/nginx /etc/nginx/sites-enabled/
 RUN rm /etc/nginx/sites-enabled/default
 
-CMD nginx && gunicorn bitwatch.wsgi -w 4 -b 0.0.0.0:8000
+
+EXPOSE 80 443
+
+CMD nginx && certbot --nginx --non-interactive --agree-tos -m tmille2004@gmail.com -d timeblokr.com -d www.timeblokr.com && gunicorn bitwatch.wsgi -w 4 -b 0.0.0.0:8000

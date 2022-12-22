@@ -1,10 +1,10 @@
 server {
         listen 80;
-        server_name 0.0.0.0;
+        server_name timeblokr.com www.timeblokr.com;
 
         location /static/ {
-                root /home/ubuntu;
-        }
+                        root /home/ubuntu;
+                }
 
         location / {
                 proxy_pass http://0.0.0.0:8000;

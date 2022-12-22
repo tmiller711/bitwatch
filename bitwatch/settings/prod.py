@@ -23,7 +23,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['172.31.21.247', '0.0.0.0', '127.0.0.1']
 STATIC_ROOT = '/home/ubuntu/static/'
 
-CSRF_TRUSTED_ORIGINS = ['http://18.222.194.21', 'http://127.0.0.1', 'http://0.0.0.0']
+CSRF_TRUSTED_ORIGINS = ['http://18.222.194.21', 'https://timeblokr.com', 'https://www.timeblokr.com']
 
 INSTALLED_APPS.append('storages')
 
