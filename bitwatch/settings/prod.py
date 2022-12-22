@@ -21,9 +21,9 @@ secrets = json.loads(secret_value)
 SECRET_KEY = secrets['DJANGO_SECRET_KEY']
 DEBUG = False
 ALLOWED_HOSTS = ['172.31.21.247', '0.0.0.0', '127.0.0.1']
-STATIC_ROOT = '/home/ubuntu/static/'
+STATIC_ROOT = '/app/static/'
 
-CSRF_TRUSTED_ORIGINS = ['http://18.222.194.21', 'https://timeblokr.com', 'https://www.timeblokr.com']
+CSRF_TRUSTED_ORIGINS = ['http://18.222.194.21', 'https://bitwatch.net', 'https://www.bitwatch.net']
 
 INSTALLED_APPS.append('storages')
 
