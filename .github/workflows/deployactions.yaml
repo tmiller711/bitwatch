@@ -25,4 +25,6 @@ jobs:
         with:
           username: tristinm
           password: ${{ secrets.DH_PASS }}
-          arguments: --build-arg AWS_KEY=${{ secrets.AWS_KEY }} --build-arg AWS_KEY=${{ secrets.AWS_SECRET }}
+          build_args: |
+            AWS_KEY = ${{ secrets.AWS_KEY }}
+            AWS_SECRET = ${{ secrets.AWS_SECRET }}
