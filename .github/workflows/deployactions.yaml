@@ -41,5 +41,5 @@ jobs:
           push: true
           tags: latest
           build-args: |
-            AWS_KEY = ${{ secrets.AWS_KEY }}
-            AWS_SECRET = ${{ secrets.AWS_SECRET }}
+            AWS_KEY=${{ secrets.AWS_KEY }}
+            AWS_SECRET=${{ secrets.AWS_SECRET }}
