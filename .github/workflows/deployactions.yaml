@@ -1,0 +1,28 @@
+name: BitWatch CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+      - run: pip install -r requirements.txt
+      - run: python manage.py test
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/build-push-action@v1
+        with:
+          username: tristinm
+          password: ${{ secrets.DH_PASS }}
+          arguments: --build-arg AWS_KEY=${{ secrets.AWS_KEY }} --build-arg AWS_KEY=${{ secrets.AWS_SECRET }}

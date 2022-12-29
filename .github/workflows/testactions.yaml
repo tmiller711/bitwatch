@@ -1,4 +1,4 @@
-name: BitWatch CI/CD
+name: BitWatch Tests
 
 on:
   push:

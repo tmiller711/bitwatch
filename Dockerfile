@@ -1,8 +1,7 @@
 FROM python:3.8-slim
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y ufw nginx
-# RUN apt install -y ufw && apt-get install -y systemd
+RUN apt-get update && apt-get install -y ufw nginx sudo python3 pip certbot
 
 # install dependencies
 COPY requirements.txt requirements.txt
@@ -19,14 +18,22 @@ RUN python3 manage.py makemigrations
 RUN python3 manage.py migrate
 
 # setup static files
-RUN python manage.py collectstatic --no-input
+RUN python3 manage.py collectstatic --no-input
 
 # install gunicorn
 RUN pip install gunicorn
 
 # configure nginx
 RUN ufw allow 'Nginx HTTP'
+RUN ufw allow http
+RUN ufw allow https
 COPY conf/nginx /etc/nginx/sites-enabled/
 RUN rm /etc/nginx/sites-enabled/default
 
-CMD nginx && gunicorn bitwatch.wsgi -b 0.0.0.0:8000
+# setup ssl
+COPY conf/certbot /app/certbot
+
+
+EXPOSE 80 443
+
+CMD nginx && gunicorn bitwatch.wsgi -w 4 -b 0.0.0.0:8000
