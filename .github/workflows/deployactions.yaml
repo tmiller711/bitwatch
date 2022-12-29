@@ -23,12 +23,12 @@ jobs:
   release:
     needs: [build]
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Setup Docker
-        - uses: docker/build-push-action@v1
-        - name: Build and push docker image
-          with:
-            username: tristinm
-            password: ${{ secrets.DH_PASS }}
-            arguments: --build-arg AWS_KEY=${{ secrets.AWS_KEY }} --build-arg AWS_KEY=${{ secrets.AWS_SECRET }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Docker
+      - uses: docker/build-push-action@v1
+      - name: Build and push docker image
+        with:
+          username: tristinm
+          password: ${{ secrets.DH_PASS }}
+          arguments: --build-arg AWS_KEY=${{ secrets.AWS_KEY }} --build-arg AWS_KEY=${{ secrets.AWS_SECRET }}
