@@ -25,10 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build and push docker image
-      - uses: docker/build-push-action@v1
+      - uses: docker/build-push-action@v3
         with:
-          registry: docker.io
           username: tristinm
           password: ${{ secrets.DH_PASS }}
           arguments: --build-arg AWS_KEY=${{ secrets.AWS_KEY }} --build-arg AWS_KEY=${{ secrets.AWS_SECRET }}
