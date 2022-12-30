@@ -49,7 +49,7 @@ jobs:
         with:
           host: ec2-18-222-194-21.us-east-2.compute.amazonaws.com
           username: ubuntu
-          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             docker stop tristinm/bitwatch
             docker rm tristinm/bitwatch
