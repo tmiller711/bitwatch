@@ -43,3 +43,15 @@ jobs:
           build-args: |
             AWS_KEY=${{ secrets.AWS_KEY }}
             AWS_SECRET=${{ secrets.AWS_SECRET }}
+      -
+        name: Deploy to EC2
+        uses: actions/ssh-action@v1
+        with:
+          host: ec2-18-222-194-21.us-east-2.compute.amazonaws.com
+          username: ubuntu
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          scripts: |
+            docker stop tristinm/bitwatch
+            docker rm tristinm/bitwatch
+            docker pull tristinm/bitwatch:latest
+            docker run -p 80:80 -p 443:443 -e AWS_KEY=${{ secrets.AWS_KEY }} -e AWS_SECRET=${{ secrets.AWS_SECRET }} -d bitwatch
