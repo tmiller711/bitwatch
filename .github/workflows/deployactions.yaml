@@ -48,7 +48,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker stop tristinm/bitwatch
-            docker rm tristinm/bitwatch
-            docker pull tristinm/bitwatch:latest
-            docker run -p 80:80 -p 443:443 -e AWS_KEY=${{ secrets.AWS_KEY }} -e AWS_SECRET=${{ secrets.AWS_SECRET }} -d bitwatch
+            sudo docker stop bitwatch
+            sudo docker rm bitwatch
+            sudo docker pull tristinm/bitwatch:latest
+            sudo docker run --name bitwatch -p 80:80 -p 443:443 -e AWS_KEY=${{ secrets.AWS_KEY }} -e AWS_SECRET=${{ secrets.AWS_SECRET }} -d tristinm/bitwatch
