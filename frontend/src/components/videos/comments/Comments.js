@@ -53,6 +53,9 @@ const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
 
     const addComment = async (e) => {
         e.preventDefault()
+        if (newComment.length < 5) {
+            return
+        }
         const csrftoken = getCookie('csrftoken')
 
         const res = await fetch(`/api/video/addcomment/${videoID}`, {
@@ -68,6 +71,7 @@ const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
             if (res.ok) {
                 const data = await res.json()
                 setComments([data, ...comments])
+                setNumOfComments(numOfComments + 1)
                 e.target.reset()
             } else if (res.status == 403) {
                 showAlert("Must be signed in to comment")
