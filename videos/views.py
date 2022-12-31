@@ -93,8 +93,10 @@ class GetComments(APIView):
 
         try:
             comments = paginator.page(page)
-            data = CommentsSerializer(comments, many=True).data
-            return Response(data, status=status.HTTP_200_OK)
+            comments = CommentsSerializer(comments, many=True).data
+            num_of_comments = len(video.comments.all())
+            
+            return Response({'comments': comments, 'numOfComments': num_of_comments}, status=status.HTTP_200_OK)
         
         except:
             return Response(status=status.HTTP_204_NO_CONTENT)

@@ -171,7 +171,7 @@ class GetCommentsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         
         data = response.json()
-        self.assertEqual(len(data), 5)
+        self.assertEqual(len(data['comments']), 5)
     
     def test_get_comments_paginated(self):
         # Add some comments to the video
@@ -185,14 +185,14 @@ class GetCommentsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         data = response.json()
-        self.assertEqual(len(data), 12)
+        self.assertEqual(len(data['comments']), 12)
         
         url = reverse('get_comments', kwargs={'video_id': str(self.video.video_id), 'page': 2})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
         data = response.json()
-        self.assertEqual(len(data), 3)
+        self.assertEqual(len(data['comments']), 3)
 
 class DeleteVideoTestCase(TestCase):
     def setUp(self):
