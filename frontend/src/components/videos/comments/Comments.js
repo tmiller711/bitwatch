@@ -15,8 +15,8 @@ const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
             const res = await fetch(`/api/video/getcomments/${videoID}/${page}`)
             const data = await res.json()
             
-            setComments([...comments, ...data])
-            setNumOfComments(comments.length += data.length)
+            setComments([...comments, ...data.comments])
+            setNumOfComments(data.numOfComments)
         }
 
         fetchComments()
@@ -40,16 +40,6 @@ const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
 			setPage(page + 1)
 		}
 	}
-
-    const mapComments = () => {
-        return (
-            <>
-                {comments.map((comment) => (
-                    <Comment key={comment.id} comment={comment} />
-                ))} 
-            </>
-        )
-    }
 
     const addComment = async (e) => {
         e.preventDefault()
@@ -99,7 +89,9 @@ const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
             />
             <Button type="submit" id="submit-button">Comment</Button>
         </Form>
-        {mapComments()}
+        {comments.map((comment) => (
+            <Comment key={comment.id} comment={comment} />
+        ))} 
         </>
     )
 }
