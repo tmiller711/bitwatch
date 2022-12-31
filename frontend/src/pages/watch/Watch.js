@@ -45,7 +45,7 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
             const res = await fetch(`/api/video/getcomments/${query}/1`)
             const data = await res.json()
             
-            setComments(data)
+            setComments(data.comments)
         }
 
         fetchComments()

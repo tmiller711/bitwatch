@@ -1,0 +1,32 @@
+server {
+        server_name bitwatch.net www.bitwatch.net;
+
+        location /static/ {
+                root /app;
+        }
+
+        location / {
+                proxy_pass http://0.0.0.0:8000;
+                proxy_read_timeout 60s;
+        }
+
+        listen 443 ssl;
+        ssl_certificate /app/certbot/fullchain.pem;
+        ssl_certificate_key /app/certbot/privkey.pem;
+        include /app/certbot/options-ssl-nginx.conf;
+        ssl_dhparam /app/certbot/ssl-dhparams.pem;
+        client_max_body_size 50m;
+}
+server {
+        if ($host = www.bitwatch.net) {
+                return 301 https://$host$request_uri;
+        }
+
+        if ($host = bitwatch.net) {
+                return 301 https://$host$request_uri;
+        }
+
+                listen 80;
+                server_name bitwatch.net www.bitwatch.net;
+        return 404;
+}

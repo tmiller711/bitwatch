@@ -1,14 +1,12 @@
-name: BitWatch CI/CD
+name: BitWatch Tests
 
 on:
   push:
     branches:
-      - main
       - staging
       - development
   pull_request:
     branches:
-      - main
       - staging
       - development
 
