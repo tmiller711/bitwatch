@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 import uuid
 from datetime import datetime
 from django.db.models import F
+from django.utils.timesince import timesince
 
 def video_path(instance, filename):
     filename = (f"{str(instance.video_id)}.mp4")
@@ -23,16 +24,8 @@ class Comment(models.Model):
 
     @property
     def created_ago(self):
-        time = datetime.now()
-        if self.created.day == time.day:
-            return str(time.hour - self.created.hour) + " hours ago"
-        else:
-            if self.created.month == time.month:
-                return str(time.day - self.created.day) + " days ago"
-            else:
-                if self.created.year == time.year:
-                    return str(time.month - self.created.month) + " months ago"
-        return self.created
+        timesince_str = timesince(self.created)
+        return timesince_str.split(',')[0] + ' ago'
 
 class Tag(models.Model):
     name = models.CharField(max_length=30)
@@ -63,16 +56,8 @@ class Video(models.Model):
     
     @property
     def uploaded_ago(self):
-        time = datetime.now()
-        if self.uploaded.day == time.day:
-            return str(time.hour - self.uploaded.hour) + " hours ago"
-        else:
-            if self.uploaded.month == time.month:
-                return str(time.day - self.uploaded.day) + " days ago"
-            else:
-                if self.uploaded.year == time.year:
-                    return str(time.month - self.uploaded.month) + " months ago"
-        return self.uploaded
+        timesince_str = timesince(self.uploaded)
+        return timesince_str.split(',')[0] + ' ago'
     
     @classmethod
     def add_comment(cls, video_id, user, text):
