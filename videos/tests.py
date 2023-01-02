@@ -355,7 +355,7 @@ class CommentTestCase(TestCase):
         # time = datetime.now()
         self.assertEqual(
             self.comment.created_ago,
-            '0 hours ago'
+            '0\xa0minutes ago'
         )
 
     def test_str(self):
@@ -382,7 +382,7 @@ class VideoTestCase(TestCase):
         # Test that the uploaded_ago property returns the correct string
         self.assertEqual(
             self.video.uploaded_ago,
-            '0 hours ago'
+            '0\xa0minutes ago'
         )
 
     def test_str(self):
