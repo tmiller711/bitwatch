@@ -7,3 +7,19 @@ div.upload {
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+
+div.uploading {
+    width: 80%;
+    margin: auto;
+    margin-top: 20%;
+    transform: translateY(-50%);
+    align-items: center;
+}
+
+.uploaded {
+    width: 80%;
+    margin: auto;
+    margin-top: 20%;
+    transform: translateY(-50%);
+    align-items: center;
+}

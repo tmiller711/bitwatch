@@ -171,11 +171,18 @@ border-radius: 12px;
 }
 
 .sidebar li.upload {
-    transform: translateY(470px);
+    position: fixed;
+    height: 60px;
+    width: 78px;
+    left: 0;
+    bottom: 70px;
+    transition: all 0.5s ease;
+    overflow: hidden;
+    padding: 4px 14px;
 }
 
 .sidebar.open li.upload {
-    transform: translateY(62px);
+    width: 235px;
 }
 
 .sidebar li.profile{
