@@ -18,7 +18,10 @@ class UploadVideo(APIView):
         serializer = UploadVideoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(uploader=request.user)
-            return Response({"Success": "Video Uploaded"}, status=status.HTTP_201_CREATED)
+
+            video = Video.objects.get(title=serializer['title'].value)
+            data = GetVideoSerializer(video).data
+            return Response(data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
