@@ -61,6 +61,7 @@ const SideNav = ({}) => {
             <div className="profile-details">
                 <Link to={url}>
                     <img src={profilePic} alt="bad" />
+                    {console.log(profilePic)}
                 </Link>
                 <div className="name_job">
                     <div className="name">{name}</div>
@@ -110,7 +111,7 @@ const SideNav = ({}) => {
         <div className="sidebar">
             <div className="logo-details">
                 {/* <Link to="/" className="logo-link"> */}
-                        <i className='bx bxl-c-plus-plus icon'></i>
+                            <img src="/media/favicon.png" className="icon"/>
                             <div className="logo_name">BitWatch</div>
                         <i className='bx bx-menu' id="btn" onClick={changeSideBarClass}></i>
                 {/* </Link> */}
