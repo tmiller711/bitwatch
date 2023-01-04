@@ -61,7 +61,6 @@ const SideNav = ({}) => {
             <div className="profile-details">
                 <Link to={url}>
                     <img src={profilePic} alt="bad" />
-                    {console.log(profilePic)}
                 </Link>
                 <div className="name_job">
                     <div className="name">{name}</div>
