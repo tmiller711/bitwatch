@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import VideoPreview from "../../components/videos/videopreview/VideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
 import "./homepage.css"
+import { useSelector } from "react-redux";
 
 const HomePage = (props) => {
 	const [videos, setVideos] = useState([])
 	const [page, setPage] = useState(1)
+	const user = useSelector((state) => state.auth.authenticated)
 
 	useEffect(() => {
         const fetchVideos = async () => {
@@ -41,6 +43,7 @@ const HomePage = (props) => {
 	if (videos.length > 0) {
 		return (
 			<div className="homepage">
+				{console.log(user)}
 				{videos.map((video) => (
 					<VideoPreview key={video.video_id} video={video} uploader_info={video.uploader_info} /> 
 				))}

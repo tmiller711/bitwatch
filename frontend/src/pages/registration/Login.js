@@ -1,14 +1,18 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux"
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { loginSuccess } from "../../features/userSlice";
 import "./registration.css"
+import auth from "../../features/userSlice";
 
 const Login = ({ showAlert }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -32,16 +36,15 @@ const Login = ({ showAlert }) => {
 
         fetch('/api/account/login/', requestOptions).then((response) => {
             if(response.ok){
+                dispatch(loginSuccess({
+                    email: email
+                }));
                 navigate("/", {replace: true})
             } else {
                 showAlert("Invalid Credentials")
             }
         })
     }
-
-    const responseGoogle = response => {
-        console.log(response);
-    };
 
     return (
         <div className="login-form">
