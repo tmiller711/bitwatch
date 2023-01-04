@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 const HomePage = (props) => {
 	const [videos, setVideos] = useState([])
 	const [page, setPage] = useState(1)
-	const user = useSelector((state) => state.auth.authenticated)
+	const authenticated = useSelector((state) => state.auth.authenticated)
 
 	useEffect(() => {
         const fetchVideos = async () => {
@@ -43,7 +43,7 @@ const HomePage = (props) => {
 	if (videos.length > 0) {
 		return (
 			<div className="homepage">
-				{console.log(user)}
+				{console.log(authenticated)}
 				{videos.map((video) => (
 					<VideoPreview key={video.video_id} video={video} uploader_info={video.uploader_info} /> 
 				))}

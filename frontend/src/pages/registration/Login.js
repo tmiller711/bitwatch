@@ -34,10 +34,16 @@ const Login = ({ showAlert }) => {
             })
         };
 
-        fetch('/api/account/login/', requestOptions).then((response) => {
+        fetch('/api/account/login/', requestOptions).then(async (response) => {
             if(response.ok){
+                const data = await response.json()
+                console.log(data)
                 dispatch(loginSuccess({
-                    email: email
+                    email: data.email,
+                    username: data.username,
+                    id: data.id,
+                    profilePic: data.profile_pic,
+                    theme: data.theme
                 }));
                 navigate("/", {replace: true})
             } else {

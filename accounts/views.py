@@ -59,7 +59,9 @@ class Login(APIView):
                 return Response({"Invalid Credentials": "Could not authenticate user"}, status=status.HTTP_404_NOT_FOUND)
 
             login(request, account)
-            return Response(status=status.HTTP_200_OK)
+            
+            data = UserSerializer(account).data
+            return Response(data, status=status.HTTP_200_OK)
 
         return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -3,17 +3,18 @@ import {Routes, Route, useNavigate, Link} from 'react-router-dom';
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import './sidebar.css';
+import { useDispatch, useSelector } from "react-redux";
 
 const SideNav = ({}) => {
     const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [profilePic, setProfilePic] = useState('')
-    const [loggedIn, setLoggedIn] = useState(false)
     const [url, setUrl] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
     const [subscriptions, setSubscriptions] = useState([])
 
+	const authenticated = useSelector((state) => state.auth.authenticated)
 
     useEffect(() => {
         const getAccountDetails = async () => {
@@ -55,6 +56,14 @@ const SideNav = ({}) => {
         searchBtn.classList.toggle("open");
     }
 
+
+    const logout = (e) => {
+        e.preventDefault()
+
+        const dispatch = useDispatch();
+        dispatch(logout())
+    }
+
     const profile = () => {
         return (
         <>
@@ -68,7 +77,7 @@ const SideNav = ({}) => {
                 </div>
             </div>
             <a href="/logout">
-                <i className='bx bx-log-out' id="log_out" ></i>
+                <i className='bx bx-log-out' id="log_out" onClick={(e) => logout(e)}></i>
             </a>
         </>
         )
@@ -171,7 +180,7 @@ const SideNav = ({}) => {
                 <span className="tooltip">Upload</span>
                 </li>
                 <li className="profile">
-                    {loggedIn == true ? profile() : <Link to="login/">Log In</Link>} 
+                    {authenticated == true ? profile() : <Link to="login/">Log In</Link>} 
                 </li>
             </ul>
         </div>
