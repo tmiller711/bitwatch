@@ -20,7 +20,11 @@ position: relative;
 }
 .sidebar .logo-details .icon{
 opacity: 0;
+width: 25px;
+object-fit: cover;
 transition: all 0.5s ease;
+margin-right: 10px;
+margin-left: 12px;
 }
 .sidebar .logo-details .logo_name{
 color: #fff;
