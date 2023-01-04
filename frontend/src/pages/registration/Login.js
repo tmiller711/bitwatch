@@ -41,6 +41,7 @@ const Login = ({ showAlert }) => {
                 dispatch(loginSuccess({
                     email: data.email,
                     username: data.username,
+                    name: data.name,
                     id: data.id,
                     profilePic: data.profile_pic,
                     theme: data.theme
