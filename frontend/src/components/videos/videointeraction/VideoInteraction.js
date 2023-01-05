@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import "./videointeraction.css"
 import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie, showAlert }) => {
     const [likes, setLikes] = useState(0)
@@ -12,6 +13,9 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
     const [profilePic, setProfilePic] = useState()
     const [subscriptionStatus, setSubscriptionStatus] = useState(false)
     const [show, setShow] = useState(false)
+    
+    const authenticated = useSelector((state) => state.auth.authenticated)
+    const user = useSelector((state) => state.auth.currentUser)
 
     const [uploader, setUploader] = useState('')
     const [subscribers, setSubscribers] = useState('')
@@ -49,7 +53,6 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
             setProfilePic(data.profile_pic)
             setSubscriptionStatus(data.subscription_status)
             setYourVideo(data.is_you)
-            console.log(data)
         }
     }
 
@@ -170,7 +173,7 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
                 <Link to={`/channel?c=${uploaderID}`} className="channel-link">
                     <h4 className="user">{uploader}<br /><p className="subscribers">{subscribers} Subscribers</p></h4>
                 </Link>
-                {yourVideo == false ?
+                {authenticated && user.id != uploaderID ?
                     subscriptionButton()
                     : null
                 }
