@@ -23,7 +23,6 @@ class GetUser(APIView):
         if user_id == None:
             if request.user.is_authenticated:
                 user = request.user
-                is_you = True
                 subscription_status = False
             
             else:
@@ -34,7 +33,6 @@ class GetUser(APIView):
             if user == None:
                 return Response(status=status.HTTP_404_NOT_FOUND)
 
-            is_you = request.user == user
 
             # check the subscription status if the user is logged in
             if request.user.is_authenticated:
@@ -42,7 +40,7 @@ class GetUser(APIView):
             else:
                 subscription_status = False
 
-        serializer = UserSerializer(user, context={"is_you": is_you, "subscription_status": subscription_status})
+        serializer = UserSerializer(user, context={"subscription_status": subscription_status})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class Login(APIView):
