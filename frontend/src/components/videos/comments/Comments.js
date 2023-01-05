@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react"
 import Comment from "./Comment"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+import { useSelector } from "react-redux"
 
 const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
     const [comments, setComments] = useState(firstComments)
     const [numOfComments, setNumOfComments] = useState(firstComments.length)
     const [page, setPage] = useState(2)
+
+    const authenticated = useSelector((state) => state.auth.authenticated)
 
     const [newComment, setNewComment] = useState("")
 
@@ -77,18 +80,24 @@ const Comments = ({ videoID, getCookie, firstComments, showAlert }) => {
         commentForm.classList.toggle('active')
     }
 
+    const addCommentForm = () => {
+        return (
+            <Form className="add-comment-form" onSubmit={addComment}>
+                <Form.Control
+                    type="text"
+                    placeholder="Add a comment..."
+                    onChange={(e) => {setNewComment(e.target.value)}}
+                    onFocus={(e) => changeFormClass()}
+                />
+                <Button type="submit" id="submit-button">Comment</Button>
+            </Form>
+        )
+    }
+
     return (
         <>
         <h1>{numOfComments} Comments:</h1>
-        <Form className="add-comment-form" onSubmit={addComment}>
-            <Form.Control
-                type="text"
-                placeholder="Add a comment..."
-                onChange={(e) => {setNewComment(e.target.value)}}
-                onFocus={(e) => changeFormClass()}
-            />
-            <Button type="submit" id="submit-button">Comment</Button>
-        </Form>
+        {authenticated ? addCommentForm() : null}
         {comments.map((comment) => (
             <Comment key={comment.id} comment={comment} />
         ))} 
