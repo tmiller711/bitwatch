@@ -8,6 +8,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import VideoPreview from "../../components/videos/videopreview/VideoPreview";
 import PlaylistPreview from "../../components/playlistpreview/PlaylistPreview";
 import { ChannelNotFound } from "../../components/notfound/NotFound";
+import { useSelector } from "react-redux";
 import "./channel.css"
 
 const Channel = ({ getCookie, subscribe, unsubscribe }) => {
@@ -25,6 +26,9 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [videos, setVideos] = useState([])
     const [playlists, setPlaylists] = useState()
     const [channelNotFound, setChannelNotFound] = useState(false)
+
+    const authenticated = useSelector((state) => state.auth.authenticated)
+    const user = useSelector((state) => state.auth.currentUser)
  
 	const [page, setPage] = useState(1)
 
@@ -185,11 +189,15 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                         <p className="subscribers">{subscribers} subscribers</p>
                     </div>
                     <div className="buttons">
-                        {yourChannel == true ? 
+                        {authenticated && user.id == channelID ? 
                             <>
                             <Button className="edit-channel" onClick={handleShow}>Edit Channel</Button> 
                             </>
-                            : subscriptionButton()
+                            : null 
+                        }
+                        {authenticated && user.id != channelID ?
+                            subscriptionButton()
+                            : null
                         }
                     </div>
                 </div>
