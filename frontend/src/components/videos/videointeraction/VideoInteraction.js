@@ -41,8 +41,14 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
     }, [])
     
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
+    const handleShow = () => {
+        if (authenticated === true) {
+            setShow(true);
+        } else {
+            showAlert("Must be signed in to save to playlist")
+            return
+        }
+    }
     const fetchUploader = async (id) => {
         const res = await fetch(`/api/account/getuser/${id}`)
         if (res.ok) {
