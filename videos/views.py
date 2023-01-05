@@ -151,8 +151,6 @@ class AddComment(APIView):
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class VideoInteract(APIView):
-    permission_classes = [IsAuthenticated]
-
     def post(self, request, video_id=None):
         if video_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -171,7 +169,8 @@ class VideoInteract(APIView):
             elif action == 'view':
                 video.add_view()
                 # add video to users history if they are logged in
-                HistoryEntry.add_video(request.user, video)
+                if request.user.is_authenticated:
+                    HistoryEntry.add_video(request.user, video)
             else:
                 return Response({"message": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
 

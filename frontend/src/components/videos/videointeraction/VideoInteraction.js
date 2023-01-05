@@ -57,6 +57,10 @@ const VideoInteraction = ({ uploaderID, subscribe, unsubscribe, query, getCookie
     }
 
     const interactVideo = async (action) => {
+        if (authenticated === false && (action == "like" || action == "dislike")) {
+            showAlert("Must be signed in to interact with video")
+            return
+        }
         const videoID = query
         const csrftoken = getCookie("csrftoken")
 

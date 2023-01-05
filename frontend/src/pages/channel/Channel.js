@@ -21,7 +21,6 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [subscribers, setSubscribers] = useState(0)
     const [subscriptionStatus, setSubscriptionStatus] = useState()
     const [channelID, setChannelID] = useState()
-    const [yourChannel, setYourChannel] = useState(false)
     const [show, setShow] = useState(false)
     const [videos, setVideos] = useState([])
     const [playlists, setPlaylists] = useState()
@@ -46,7 +45,6 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                 setSubscribers(user.subscribers)
                 setSubscriptionStatus(user.subscription_status)
                 setChannelID(user.id)
-                setYourChannel(user.is_you)
             } else if (res.status == 404) {
                 setChannelNotFound(true)
             }
