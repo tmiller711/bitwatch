@@ -33,7 +33,7 @@ class PlaylistSerializer(serializers.ModelSerializer):
 
     def get_thumbnail(self, obj):
         try:
-            return str(obj.videos.all()[0].thumbnail)
+            return str(obj.videos.all()[0].thumbnail.url)
         except:
             return None
 

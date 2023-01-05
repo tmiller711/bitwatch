@@ -22,7 +22,7 @@ const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => 
         <div className="playlist-preview">
             <Link to={`/playlist?list=${playlist.id}`} className="playlist-link">
                 <div className="img-container">
-                    <img className="thumbnail" src={`/media/${playlist.thumbnail}`} />
+                    <img className="thumbnail" src={playlist.thumbnail} />
                     <div className="overlay">
                         <p>{playlist.private == true ? "Private" : "Public"}</p>
                     </div>
