@@ -3,36 +3,24 @@ import {Routes, Route, useNavigate, Link} from 'react-router-dom';
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import './sidebar.css';
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess, logout } from "../../features/userSlice";
 
 const SideNav = ({}) => {
     const navigate = useNavigate()
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [profilePic, setProfilePic] = useState('')
-    const [loggedIn, setLoggedIn] = useState(false)
     const [url, setUrl] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
     const [subscriptions, setSubscriptions] = useState([])
 
+	const authenticated = useSelector((state) => state.auth.authenticated)
+    const user = useSelector((state) => state.auth.currentUser)
 
     useEffect(() => {
-        const getAccountDetails = async () => {
-            const res = await fetch('/api/account/getuser/')
-            if (res.ok) {
-                const data = await res.json()
-
-                setName(data.name)
-                setUsername(data.username)
-                setProfilePic(data.profile_pic)
-                setLoggedIn(true)
-                setUrl(`/channel?c=${data.id}`)
-            } else {
-                setName("Login")
-            }
-        }
-
         detectClick()
-        getAccountDetails()
         getSubscriptions()
     }, [])
 
@@ -59,16 +47,16 @@ const SideNav = ({}) => {
         return (
         <>
             <div className="profile-details">
-                <Link to={url}>
-                    <img src={profilePic} alt="bad" />
+                <Link to={`/channel?c=${user.id}`}>
+                    <img src={user.profilePic} alt="bad" />
                 </Link>
                 <div className="name_job">
-                    <div className="name">{name}</div>
-                    <div className="username">{username}</div>
+                    <div className="name">{user.name}</div>
+                    <div className="username">{user.username}</div>
                 </div>
             </div>
             <a href="/logout">
-                <i className='bx bx-log-out' id="log_out" ></i>
+                <i className='bx bx-log-out' id="log_out" onClick={() => dispatch(logout())}></i>
             </a>
         </>
         )
@@ -171,7 +159,7 @@ const SideNav = ({}) => {
                 <span className="tooltip">Upload</span>
                 </li>
                 <li className="profile">
-                    {loggedIn == true ? profile() : <Link to="login/">Log In</Link>} 
+                    {authenticated == true ? profile() : <Link to="login/">Log In</Link>} 
                 </li>
             </ul>
         </div>

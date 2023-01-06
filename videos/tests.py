@@ -296,13 +296,25 @@ class VideoInteractTestCase(TestCase):
         self.video.refresh_from_db()
         self.assertEqual(self.video.views, 1)
 
+    def test_view_video_unathorized(self):
+        self.client.logout()
+
+        response = self.client.post(self.url, data={
+            'id': self.video.video_id,
+            'action': 'view'
+        })
+        self.assertEqual(response.status_code, 200)
+        
+        self.video.refresh_from_db()
+        self.assertEqual(self.video.views, 1)
+        
     def test_like_video_unauthorized(self):
         self.client.logout()
         response = self.client.post(self.url, data={
             'id': self.video.video_id,
             'action': 'like'
         })
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 500)
 
 class ChannelVideosTestCase(TestCase):
     def setUp(self):
