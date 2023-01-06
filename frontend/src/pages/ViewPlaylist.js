@@ -6,6 +6,7 @@ import Spinner from 'react-bootstrap/Spinner'
 const ViewPlaylist = ({ showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState(searchParams.get('list'))
+    const [playlistName, setPlaylistName] = useState('')
     const [videos, setVideos] = useState([])
 
     // add stuff to get all the videos in the playlist from the backend and display them like youtube
@@ -14,7 +15,9 @@ const ViewPlaylist = ({ showAlert }) => {
             const res = await fetch(`/api/video/playlist/${query}`)
             if (res.status == 200) {
                 const data = await res.json()
-            setVideos([...videos, ...data])
+                console.log(data)
+                setVideos([...videos, ...data.videos])
+                setPlaylistName(data.playlistName)
             } else if (res.status == 204) {
                 showAlert("No videos to show")
             } else {
@@ -29,7 +32,7 @@ const ViewPlaylist = ({ showAlert }) => {
     if (videos.length > 0) {
         return (
             <div className="history">
-                <h1>Playlist: {query}</h1>
+                <h1>Playlist: {playlistName}</h1>
                 {videos.map((video) => (
                     <LongVideoPreview key={video.id} video={video} uploader_info={video.uploader_info} /> 
                 ))}
