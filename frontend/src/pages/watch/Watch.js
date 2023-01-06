@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import VideoInteraction from "../../components/videos/videointeraction/VideoInteraction";
 import Comments from "../../components/videos/comments/Comments";
 import { VideoNotFound } from "../../components/notfound/NotFound";
+import { useSelector } from "react-redux";
 
 const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAlert }) => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -19,6 +20,9 @@ const Watch = ({ getCookie, subscribe, unsubscribe, fetchVideoFunction, showAler
     const [uploaderID, setUploaderID] = useState()
     const [videoNotFound, setVideoNotFound] = useState(false)
     const descriptionRef = useRef(null);
+    
+    const authenticated = useSelector((state) => state.auth.authenticated)
+    const user = useSelector((state) => state.auth.currentUser)
 
     const [comments, setComments] = useState(null)
 

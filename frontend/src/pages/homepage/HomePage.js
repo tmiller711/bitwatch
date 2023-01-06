@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import VideoPreview from "../../components/videos/videopreview/VideoPreview";
 import Spinner from 'react-bootstrap/Spinner'
 import "./homepage.css"
+import { useSelector } from "react-redux";
 
 const HomePage = (props) => {
 	const [videos, setVideos] = useState([])
 	const [page, setPage] = useState(1)
-
+	
 	useEffect(() => {
         const fetchVideos = async () => {
             const res = await fetch(`/api/video/getvideos/${page}`)
