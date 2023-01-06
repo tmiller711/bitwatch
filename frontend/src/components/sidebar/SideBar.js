@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const SideNav = ({}) => {
     const navigate = useNavigate()
+    const dispatch = useDispatch();
     const [username, setUsername] = useState('')
     const [name, setName] = useState('')
     const [profilePic, setProfilePic] = useState('')
@@ -41,14 +42,6 @@ const SideNav = ({}) => {
         searchBtn.classList.toggle("open");
     }
 
-
-    const logout = (e) => {
-        e.preventDefault()
-
-        const dispatch = useDispatch();
-        dispatch(logout())
-    }
-
     const profile = () => {
         return (
         <>
@@ -62,7 +55,7 @@ const SideNav = ({}) => {
                 </div>
             </div>
             <a href="/logout">
-                <i className='bx bx-log-out' id="log_out" onClick={(e) => logout(e)}></i>
+                <i className='bx bx-log-out' id="log_out" onClick={() => dispatch(logout())}></i>
             </a>
         </>
         )
