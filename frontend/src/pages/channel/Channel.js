@@ -161,7 +161,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         return (
         <>
             {playlists.map((playlist) => (
-                <PlaylistPreview key={playlist.id} playlist={playlist} edit={yourChannel} getCookie={getCookie} />
+                <PlaylistPreview key={playlist.id} playlist={playlist} edit={authenticated && user.id === channelID} getCookie={getCookie} />
             ))} 
         </>
         )
@@ -210,7 +210,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                 </Nav>
                 <div className="channel-videos active">
                     {videos.map((video) => (
-                        <VideoPreview key={video.id} video={video} edit={yourChannel} getCookie={getCookie} uploader_info={video.uploader_info} /> 
+                        <VideoPreview key={video.id} video={video} edit={authenticated && user.id === channelID} getCookie={getCookie} uploader_info={video.uploader_info} /> 
                     ))}
                 </div>
 

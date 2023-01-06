@@ -37,7 +37,6 @@ const Login = ({ showAlert }) => {
         fetch('/api/account/login/', requestOptions).then(async (response) => {
             if(response.ok){
                 const data = await response.json()
-                console.log(data)
                 dispatch(loginSuccess({
                     email: data.email,
                     username: data.username,
