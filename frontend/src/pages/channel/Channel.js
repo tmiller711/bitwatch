@@ -8,10 +8,12 @@ import Spinner from 'react-bootstrap/Spinner'
 import VideoPreview from "../../components/videos/videopreview/VideoPreview";
 import PlaylistPreview from "../../components/playlistpreview/PlaylistPreview";
 import { ChannelNotFound } from "../../components/notfound/NotFound";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../features/userSlice";
 import "./channel.css"
 
 const Channel = ({ getCookie, subscribe, unsubscribe }) => {
+    const dispatch = useDispatch()
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState()
     const [username, setUsername] = useState('')
@@ -150,7 +152,15 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         }).then(async res => {
             if (res.ok) {
                 const data = await res.json()
-                setProfilePic(data.profilePic)
+                dispatch(loginSuccess({
+                    email: user.email,
+                    username: user.username,
+                    name: data.name,
+                    id: user.id,
+                    profilePic: data.profile_pic,
+                    theme: user.theme
+                }))
+                window.location.reload()
             }
         })
         .catch(error => console.log(error))

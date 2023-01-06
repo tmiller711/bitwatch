@@ -11,7 +11,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess(state, action) {
-      console.log('aofjasif')
       state.authenticated = true;
       state.currentUser = action.payload;
     },
@@ -19,7 +18,6 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     logout(state) {
-      console.log("logout")
       state.authenticated = false;
       state.currentUser = null;
     },
