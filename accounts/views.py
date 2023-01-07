@@ -328,8 +328,6 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         
-        login(request, user)
-
         return redirect('/')
     else:
         # alert the user of bad activation link

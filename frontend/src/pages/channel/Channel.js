@@ -161,6 +161,8 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                     theme: user.theme
                 }))
                 window.location.reload()
+            } else {
+                showAlert("Failed to save")
             }
         })
         .catch(error => console.log(error))
