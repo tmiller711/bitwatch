@@ -5,7 +5,9 @@ import "./playlistpreview.css"
 
 const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => {
 
-    const deletePlaylist = async () => {
+    const deletePlaylist = async (e) => {
+        e.preventDefault()
+
         const csrftoken = getCookie('csrftoken')
         const res = await fetch(`/api/account/deleteplaylist/${playlist.id}`, {
             method: "DELETE",
@@ -13,7 +15,9 @@ const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => 
                 'X-CSRFToken': csrftoken
             }
         })
-        if (!res.ok) {
+        if (res.ok) {
+            window.location.reload()
+        } else {
             showAlert("Error deleting playlist")
         }
     }
@@ -29,7 +33,7 @@ const PlaylistPreview = ({ id, playlist, getCookie, edit=false, showAlert }) => 
                 </div>
                 <div className="playlist-info">
                     <p className="name">{playlist.name}</p>
-                    {edit == true ? <Button className="delete-playlist-button" onClick={() => deletePlaylist()}>X</Button> : null}
+                    {edit == true ? <Button className="delete-playlist-button" onClick={(e) => deletePlaylist(e)}>X</Button> : null}
                     <p className="user">
                         <Link to={`/channel?c=${playlist.creator}`} className="channel-link">
                             {playlist.username}
