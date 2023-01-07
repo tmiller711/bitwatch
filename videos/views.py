@@ -74,7 +74,8 @@ class PlaylistVideos(APIView):
         if len(videos) == 0:
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(videos, status=status.HTTP_200_OK)
+        data = {'playlistName': playlist.name, 'videos': videos}
+        return Response(data, status=status.HTTP_200_OK)
 
 class GetVideo(APIView):
     def get(self, request, video_id=None):

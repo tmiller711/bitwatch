@@ -113,7 +113,7 @@ class PlaylistVideosTestCase(TestCase):
 
         data = response.json()
         self.assertNotEqual(len(data), 0)
-        self.assertEqual(data[0]['title'], 'Test Video')
+        self.assertEqual(data['videos'][0]['title'], 'Test Video')
 
     def test_playlist_videos_bad_id(self):
         url = reverse('playlist_videos', kwargs={'playlist_id': '4332acd8-f3a0-4ad7-9fef-57a835cb9c56'})

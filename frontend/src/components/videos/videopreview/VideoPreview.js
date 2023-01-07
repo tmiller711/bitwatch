@@ -28,7 +28,9 @@ const VideoPreview = ({ video, edit=false, getCookie, uploader_info }) => {
         setProfilePic(uploader_info.profile_pic)
     }, [video])
     
-    const deleteVideo = async () => {
+    const deleteVideo = async (e) => {
+        e.preventDefault()
+
         const csrftoken = getCookie('csrftoken')
         const res = await fetch(`/api/video/delete/${video.video_id}`, {
             method: "DELETE",
@@ -36,7 +38,9 @@ const VideoPreview = ({ video, edit=false, getCookie, uploader_info }) => {
                 'X-CSRFToken': csrftoken
             }
         })
-        if (!res.ok) {
+        if (res.ok) {
+            window.location.reload()
+        } else {
             alert("Error deleting video")
         }
 
@@ -49,7 +53,7 @@ const VideoPreview = ({ video, edit=false, getCookie, uploader_info }) => {
                 <div className="info">
                     <img src={profilePic} className="profile-pic" />
                     <p className="title">{title}</p>
-                    {edit == true ? <Button className="delete-vid-button" onClick={() => deleteVideo()}>X</Button> : null}
+                    {edit == true ? <Button className="delete-vid-button" onClick={(e) => deleteVideo(e)}>X</Button> : null}
                 </div>
                 <div className="uploader">
                     <Link to={`/channel?c=${channelID}`} className="channel-link">
