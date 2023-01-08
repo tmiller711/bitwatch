@@ -48,7 +48,7 @@ function App() {
 					<Route path="/upload" element={<Upload getCookie={getCookie} showAlert={showAlert} />} />
 					<Route path="/watch" element={<Watch getCookie={getCookie} subscribe={subscribe} 
 													unsubscribe={unsubscribe} fetchVideoFunction={fetchVideo} showAlert={showAlert} />} />
-					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} />} />
+					<Route path="/channel" element={<Channel getCookie={getCookie} subscribe={subscribe} unsubscribe={unsubscribe} showAlert={showAlert} />} />
 					<Route path="/playlists" element={<Playlists showAlert={showAlert} />} />
 					<Route path="/playlist" element={<ViewPlaylist showAlert={showAlert} />} />
 					<Route path="/search" element={<Search getCookie={getCookie} showAlert={showAlert} />} />

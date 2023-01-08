@@ -8,6 +8,11 @@ import { useSelector } from "react-redux";
 const HomePage = (props) => {
 	const [videos, setVideos] = useState([])
 	const [page, setPage] = useState(1)
+
+	useEffect(() => {
+		setVideos([])
+		setPage(1)
+	}, [])
 	
 	useEffect(() => {
         const fetchVideos = async () => {
