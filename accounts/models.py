@@ -100,8 +100,6 @@ class Account(AbstractBaseUser):
 
     @classmethod
     def update_profile_pic(cls, user, new_pic):
-        # if user.profile_pic.name != 'images/default.png':
-        #     os.remove(os.path.join(settings.MEDIA_ROOT, str(user.profile_pic.name)))
         user.profile_pic = new_pic
         user.save()
     
