@@ -160,7 +160,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe, showAlert }) => {
                     profilePic: data.profile_pic,
                     theme: user.theme
                 }))
-                window.location.reload()
+                window.location.reload(true)
             } else {
                 const data = await res.json()
                 console.log(data)
