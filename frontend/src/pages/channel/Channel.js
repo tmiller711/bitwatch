@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../features/userSlice";
 import "./channel.css"
 
-const Channel = ({ getCookie, subscribe, unsubscribe }) => {
+const Channel = ({ getCookie, subscribe, unsubscribe, showAlert }) => {
     const dispatch = useDispatch()
     const [searchParams, setSearchParams] = useSearchParams()
     const [query, setQuery] = useState()
@@ -24,7 +24,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [subscriptionStatus, setSubscriptionStatus] = useState()
     const [channelID, setChannelID] = useState()
     const [show, setShow] = useState(false)
-    const [videos, setVideos] = useState([])
+    const [videos, setVideos] = useState()
     const [playlists, setPlaylists] = useState()
     const [channelNotFound, setChannelNotFound] = useState(false)
 
@@ -162,6 +162,8 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
                 }))
                 window.location.reload()
             } else {
+                const data = await res.json()
+                console.log(data)
                 showAlert("Failed to save")
             }
         })
@@ -188,7 +190,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         channelVideos.classList.toggle('active')
     }
 
-    if (videos.length > 0 && username != ""){
+    if (videos != undefined && username != ""){
         return (
             <div className="channel">
                 <div className="channel-details">
