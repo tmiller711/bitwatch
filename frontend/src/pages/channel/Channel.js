@@ -24,7 +24,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
     const [subscriptionStatus, setSubscriptionStatus] = useState()
     const [channelID, setChannelID] = useState()
     const [show, setShow] = useState(false)
-    const [videos, setVideos] = useState([])
+    const [videos, setVideos] = useState()
     const [playlists, setPlaylists] = useState()
     const [channelNotFound, setChannelNotFound] = useState(false)
 
@@ -188,7 +188,7 @@ const Channel = ({ getCookie, subscribe, unsubscribe }) => {
         channelVideos.classList.toggle('active')
     }
 
-    if (videos.length > 0 && username != ""){
+    if (videos != undefined && username != ""){
         return (
             <div className="channel">
                 <div className="channel-details">

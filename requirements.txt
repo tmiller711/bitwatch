@@ -6,4 +6,3 @@ psycopg2-binary
 django-storages
 boto3
 django-cors-headers
-django-anymail
