@@ -1,7 +1,7 @@
 FROM python:3.8-slim
 
 WORKDIR /app
-RUN apt-get update && apt-get install -y ufw nginx sudo python3 pip certbot
+RUN apt-get update && apt-get install -y ufw nginx sudo python3 pip certbot supervisor
 
 # install dependencies
 COPY requirements.txt requirements.txt
