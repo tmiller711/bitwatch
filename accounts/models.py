@@ -86,14 +86,14 @@ class Account(AbstractBaseUser):
 
     @classmethod
     def get_activate_url(cls, request, user):
-        site = get_current_site(request)
+        site = "bitwatch.net"
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = accounts_activation_token.make_token(user)
         return f"{site}/api/account/activate/{uid}/{token}"
     
     @classmethod
     def get_password_reset_url(cls, request, user):
-        site = get_current_site(request)
+        site = "bitwatch.net"
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = accounts_activation_token.make_token(user)
         return f"{site}/resetpassword?uid={uid}&token={token}"
