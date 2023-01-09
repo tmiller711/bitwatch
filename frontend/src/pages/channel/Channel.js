@@ -162,8 +162,6 @@ const Channel = ({ getCookie, subscribe, unsubscribe, showAlert }) => {
                 }))
                 window.location.reload(true)
             } else {
-                const data = await res.json()
-                console.log(data)
                 showAlert("Failed to save")
             }
         })
