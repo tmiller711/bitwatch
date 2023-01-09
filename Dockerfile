@@ -13,6 +13,9 @@ COPY . .
 ENV DJANGO_SETTINGS_MODULE='bitwatch.settings.prod'
 ARG AWS_KEY
 ARG AWS_SECRET
+ARG CELERY_BROKER_URL
+
+ENV CELERY_BROKER_URL=$CELERY_BROKER_URL
 
 RUN python3 manage.py makemigrations
 RUN python3 manage.py migrate
