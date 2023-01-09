@@ -90,6 +90,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_FROM = 'timeappdjango@gmail.com'
 EMAIL_HOST_USER = 'timeappdjango@gmail.com'
+EMAIL_HOST_PASSWORD = 'pqsfetpzdafivyjj'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
@@ -117,3 +118,8 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CELERY_BROKER_URL = 'amqp://tristin:june302004@ec2-3-145-174-222.us-east-2.compute.amazonaws.com'
+# amqp://myuser:mypassword@localhost:5672/myvhost
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'

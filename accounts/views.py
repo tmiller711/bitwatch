@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.views import APIView
+from django.core import serializers
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login, get_user_model
@@ -10,12 +11,14 @@ from rest_framework.permissions import IsAuthenticated
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.paginator import Paginator
+import pickle
 
 from .models import Account, Subscriptions, Playlist, HistoryEntry
 from videos.models import Video
 from .serializers import LoginSerializer, RegisterAccountSerializer, EditProfileSerializer, SubscriptionsSerializer, PlaylistSerializer, UserSerializer
 from videos.serializers import GetVideoSerializer
 from .tokens import accounts_activation_token
+from .tasks import send_email_task
 
 # Create your views here.
 class GetUser(APIView):
@@ -290,8 +293,11 @@ class SendPasswordReset(APIView):
             "url": url
         })
         mail_subject = "Reset Your Password"
-        email = EmailMessage(mail_subject, message, to=[email])
-        email.send()
+        # email = EmailMessage(mail_subject, message, to=[email])
+        print("start")
+        send_email_task.delay(mail_subject, message, email)
+        print("DONE")
+        # email.send()
 
         return Response(status=status.HTTP_200_OK)
 
