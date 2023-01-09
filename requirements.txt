@@ -5,4 +5,5 @@ Pillow
 psycopg2-binary
 django-storages
 boto3
+celery
 django-cors-headers
