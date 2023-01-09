@@ -21,6 +21,8 @@ jobs:
   release:
     needs: [build]
     runs-on: ubuntu-latest
+    env:
+      CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER_URL }}
     steps:
       - uses: actions/checkout@v2
       -
