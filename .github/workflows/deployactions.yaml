@@ -44,6 +44,7 @@ jobs:
           build-args: |
             AWS_KEY=${{ secrets.AWS_KEY }}
             AWS_SECRET=${{ secrets.AWS_SECRET }}
+            CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
       -
         name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.6
