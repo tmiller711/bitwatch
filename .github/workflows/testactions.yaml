@@ -19,6 +19,5 @@ jobs:
         with:
           python-version: "3.x"
       - run: pip install -r requirements.txt
+      - run: export CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }}
       - run: python manage.py test
-      env:
-        CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER_URL }}
