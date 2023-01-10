@@ -10,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video, Tag
 from accounts.models import HistoryEntry, Account, Playlist
+# from .tasks import upload_video_task
 
 class UploadVideo(APIView):
     permission_classes = [IsAuthenticated]
@@ -17,7 +18,8 @@ class UploadVideo(APIView):
     def post(self, request, format=None):
         serializer = UploadVideoSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(uploader=request.user)
+            # serializer.save(uploader=request.user)
+            upload_video_task.delay(serializer, request.user)
 
             video = Video.objects.get(title=serializer['title'].value)
             data = GetVideoSerializer(video).data
