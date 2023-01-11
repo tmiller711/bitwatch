@@ -85,8 +85,9 @@ class Register(APIView):
                 "url": url
             })
             mail_subject = "Activate Your Account"
-            email = EmailMessage(mail_subject, message, to=[email])
-            email.send()
+            send_email_task.delay(mail_subject, message, email)
+            # email = EmailMessage(mail_subject, message, to=[email])
+            # email.send()
 
             return Response({"success": "Please confirm your email address"}, status=status.HTTP_201_CREATED)
 
@@ -293,11 +294,7 @@ class SendPasswordReset(APIView):
             "url": url
         })
         mail_subject = "Reset Your Password"
-        # email = EmailMessage(mail_subject, message, to=[email])
-        print("start")
         send_email_task.delay(mail_subject, message, email)
-        print("DONE")
-        # email.send()
 
         return Response(status=status.HTTP_200_OK)
 

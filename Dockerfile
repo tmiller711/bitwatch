@@ -39,4 +39,4 @@ COPY conf/certbot /app/certbot
 
 EXPOSE 80 443
 
-CMD nginx && gunicorn bitwatch.wsgi -w 4 -b 0.0.0.0:8000 && celery -A bitwatch worker -l info
+CMD nginx && gunicorn bitwatch.wsgi -w 4 -b 0.0.0.0:8000 --daemon && celery -A bitwatch worker -l info
