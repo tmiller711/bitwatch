@@ -86,8 +86,6 @@ class Register(APIView):
             })
             mail_subject = "Activate Your Account"
             send_email_task.delay(mail_subject, message, email)
-            # email = EmailMessage(mail_subject, message, to=[email])
-            # email.send()
 
             return Response({"success": "Please confirm your email address"}, status=status.HTTP_201_CREATED)
 
