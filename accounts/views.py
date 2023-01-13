@@ -86,8 +86,6 @@ class Register(APIView):
             })
             mail_subject = "Activate Your Account"
             send_email_task.delay(mail_subject, message, email)
-            # email = EmailMessage(mail_subject, message, to=[email])
-            # email.send()
 
             return Response({"success": "Please confirm your email address"}, status=status.HTTP_201_CREATED)
 
@@ -236,9 +234,6 @@ class GetSubscriptions(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         channels = UserSerializer(subscriptions, many=True).data
-        # videos = GetVideoSerializer(videos, many=True).data
-        
-        # return Response({'channels': channels, 'videos': videos}, status=status.HTTP_200_OK)
         
         paginator = Paginator(videos, 12)
 

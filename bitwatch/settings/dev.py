@@ -3,7 +3,7 @@ import os
 
 SECRET_KEY = 'django-insecure-1y8rq(3w90)@&#)!$-9-@j^dr3d24j^yvjfwqa-n1ml%l43!3t'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 DATABASES = {
     'default': {
