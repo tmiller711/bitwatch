@@ -142,5 +142,5 @@ class Video(models.Model):
     @classmethod
     def get_video_url(cls, request, video):
         site = get_current_site(request)
-        return f"https://bitwatch.net/watch?v={video.video_id}"
+        return f"bitwatch.net/watch?v={video.video_id}"
 
