@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'webpush',
 
     'frontend.apps.FrontendConfig',
     'accounts.apps.AccountsConfig',
@@ -86,12 +85,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-WEBPUSH_SETTINGS = {
-    "VAPID_PUBLIC_KEY": "BGxAGXKJRgWtQ6D1Ou6UKmGiY5lRBPmDtaPh8GLwZsrRwLYj4vitvw6P6sUJ5E0o6qihL9X1KAJM4QrYsg45mPw",
-    "VAPID_PRIVATE_KEY": "exbxuvDy0tqehTw5wJHAqN5l-xeOiEILVPcqOY1QHsI",
-    "VAPID_ADMIN_EMAIL": "timeappdjango@gmail.com"
-}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
