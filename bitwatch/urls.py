@@ -15,15 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from webpush import urls as webpush_urls
 
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('frontend.urls')),
     path('api/account/', include('accounts.urls')),
     path('api/video/', include('videos.urls')),
+    path(r'^webpush/', include(webpush_urls)),
 ]
 
 # if you go to /images/whatever it loads static files

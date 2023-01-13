@@ -4,6 +4,9 @@ import uuid
 from datetime import datetime
 from django.db.models import F
 from django.utils.timesince import timesince
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 
 def video_path(instance, filename):
     filename = (f"{str(instance.video_id)}.mp4")
@@ -135,4 +138,9 @@ class Video(models.Model):
             return 0
 
         return (self.likes.count()-self.dislikes.count()) / self.likes.count() 
+
+    @classmethod
+    def get_video_url(cls, request, video):
+        site = get_current_site(request)
+        return f"{site}/watch?v={video.video_id}"
 
