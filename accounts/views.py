@@ -234,9 +234,6 @@ class GetSubscriptions(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         channels = UserSerializer(subscriptions, many=True).data
-        # videos = GetVideoSerializer(videos, many=True).data
-        
-        # return Response({'channels': channels, 'videos': videos}, status=status.HTTP_200_OK)
         
         paginator = Paginator(videos, 12)
 
