@@ -6,10 +6,12 @@ from rest_framework import status
 from django.core.paginator import Paginator
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
+from django.template.loader import render_to_string
 
 from .serializers import UploadVideoSerializer, GetVideoSerializer, CommentsSerializer
 from .models import Video, Tag
-from accounts.models import HistoryEntry, Account, Playlist
+from accounts.models import HistoryEntry, Account, Playlist, Subscriptions
+from accounts.tasks import send_email_task
 
 class UploadVideo(APIView):
     permission_classes = [IsAuthenticated]
@@ -20,6 +22,9 @@ class UploadVideo(APIView):
             serializer.save(uploader=request.user)
 
             video = Video.objects.get(title=serializer['title'].value)
+            # send emails to everyone subscribed
+            send_upload_notis(request, video)
+
             data = GetVideoSerializer(video).data
             return Response(data, status=status.HTTP_201_CREATED)
         else:
@@ -200,3 +205,15 @@ class ChannelVideos(APIView):
 
         except:
             return Response(status=status.HTTP_204_NO_CONTENT)
+
+def send_upload_notis(request, video):
+    subscribers = [subs.user for subs in Subscriptions.objects.filter(subscriptions=request.user)]
+    for subscriber in subscribers:
+        url = Video.get_video_url(request, video)
+        to_email = subscriber.email
+
+        message = render_to_string("template_upload_noti.html", {
+            "url": url
+        })
+        mail_subject = f"{video.uploader} uploaded video '{video.title}'"
+        send_email_task.delay(mail_subject, message, to_email)
