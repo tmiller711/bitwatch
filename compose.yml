@@ -1,0 +1,17 @@
+version: '3'
+services:
+  bitwatch:
+    image: tristinm/bitwatch:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - AWS_KEY=${AWS_KEY}
+      - AWS_SECRET=${AWS_SECRET}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
